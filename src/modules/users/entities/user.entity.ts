@@ -13,7 +13,7 @@ email: string;
 password : string;
 @Column()
 address: string;
-@Column({default:"image_url"})
+@Column({default:"http://example.com"})
 image_url: string;
 @Column({type:"enum",enum:Roles,default:Roles.User})
 role: Roles;
