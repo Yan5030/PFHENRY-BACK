@@ -9,6 +9,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   username: process.env.DATABASE_USER || 'postgres',
   password: process.env.DATABASE_PASSWORD || '5030',
   database: process.env.DATABASE_NAME || 'hogwarts_bar',
+  autoLoadEntities:true,
   entities: [__dirname + '/../**/*.entity.{js,ts}'], // entites : [ 'dist/**/*.entity{.ts,.js}' ]
   migrations: ['dist/migrations/*{.js,.ts}'],
   synchronize: true,
