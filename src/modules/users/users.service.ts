@@ -5,64 +5,29 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { ResponseUserDto } from './dto/response-user.dto';
+import { Roles } from 'src/enum/roles.enum';
+import  * as dayjs from 'dayjs';
 
 @Injectable()
 export class UsersService {
   constructor(@InjectRepository(User) private readonly usersRepository: Repository<User>){}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto) : Promise<User>{ 
     const userDb = await this.usersRepository.findOne({where:{email:createUserDto.email}})
 
     if(userDb){
       throw new BadRequestException("El correo ya esta registrado");
     }
-    const newUser = this.usersRepository.create(createUserDto);
 
+    const newUser = this.usersRepository.create({
+      ...createUserDto,
+      create_at: dayjs().format("YYYY-MM-DD")});
     return this.usersRepository.save(newUser);
-  //const newUser = new CreateUserDto(createUserDto);
-//return newUser;
-  }
+    }
 
   async findAll() : Promise<ResponseUserDto[]>{
    const users = await this.usersRepository.find();
-   /*const users = [
-    {
-      id:1,
-      name: "John Doe",
-      email: "johndoe@example.com",
-      password: "password123",
-      address: "123 Elm Street, Springfield, IL",
-    },
-    {
-      id:2,
-      name: "Jane Smith",
-      email: "janesmith@example.com",
-      password: "securePass456",
-      address: "456 Oak Avenue, Metropolis, NY",
-    },
-    {
-      id:3,
-      name: "Alice Johnson",
-      email: "alicejohnson@example.com",
-      password: "alice789",
-      address: "789 Pine Lane, Riverdale, CA",
-    },
-    {
-      id:4,
-      name: "Bob Brown",
-      email: "bobbrown@example.com",
-      password: "bob1234",
-      address: "321 Maple Drive, Gotham, NJ",
-    },
-    {
-      id:5,
-      name: "Charlie White",
-      email: "charliewhite@example.com",
-      password: "charlie987",
-      address: "654 Cedar Road, Star City, TX",
-    },
-  ];
-  */
+  
     const usersNoPassword = users.map(user => new ResponseUserDto(user))
     return usersNoPassword;
   }

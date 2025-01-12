@@ -1,5 +1,6 @@
 import { Roles } from "src/enum/roles.enum";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Reservation } from "src/modules/reservations/entities/reservation.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { v4 as uuid} from "uuid";
 @Entity()
 export class User {
@@ -17,6 +18,9 @@ address: string;
 image_url: string;
 @Column({type:"enum",enum:Roles,default:Roles.User})
 role: Roles;
-@Column({type:"date"})
-create_at : Date
+@Column({type:"date", default: () => 'CURRENT_DATE' })
+create_at : string
+@OneToMany(()=>Reservation,(reservation)=>reservation.userId)
+reservations:Reservation[]
+    
 }
