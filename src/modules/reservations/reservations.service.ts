@@ -47,8 +47,8 @@ const user = await this.usersService.findOneById(id); //supongo que el usuario s
 //ACA TENGO QUE BUSCAR EL USUARIO POR ID, Y DESPUES AGREGARLO EN EL CREATE
 
 const newReservation = this.reservationRepository.create({...createReservationDto,create_at:create_at,userId:user});
-return newReservation;
-//return this.reservationRepository.save(newReservation); 
+
+return this.reservationRepository.save(newReservation); 
   }
 
   async findAll() {
