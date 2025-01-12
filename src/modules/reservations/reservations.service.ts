@@ -13,41 +13,14 @@ constructor(@InjectRepository(Reservation)private readonly reservationRepository
 private usersService:UsersService){}
 
  async create(id:string,createReservationDto:CreateReservationDto) {
- const {date, time} =createReservationDto
-
-if(!dayjs(date,"YYYY-MM-DD",true).isValid()){
-throw new BadRequestException("la fecha no esta en formato YYYY-MM-DD")
-}
-
-if(!dayjs().isBefore(dayjs(date)) && !dayjs().isSame(dayjs(date),"day") ){
-  throw new BadRequestException("La fecha ingresada no es valida")
-}
-if(time.length !== 5){
-  throw new BadRequestException("Error al ingresar la hora, debe tener hora y minutos");
-  }
-
-// guardo la hora actual, solo la hora y los minutos
-const now = dayjs().startOf('minute');  
-
-const horaClienteDayJs = dayjs().hour(parseInt(time.split(":")[0])).minute(parseInt(time.split(":")[1])).second(0);
-//ejemplo 16:45, el primer elemento es 16 y el segundo 45
-
-
-if(dayjs().isSame(dayjs(date),"day")){
-  if (horaClienteDayJs.isBefore(now)) {
-    throw new BadRequestException("La hora es anterior a la actual");
-  } 
-}
-console.log("paso la hora");
+ //todo el manejo de fecha y tiempo lo guarde en un middleware, y lo puse solo para este controlador
 
 const create_at = dayjs().format("YYYY-MM-DD");
 
-
-const user = await this.usersService.findOneById(id); //supongo que el usuario se enviara por param, sacando el del token el id de usuario logueado
-//ACA TENGO QUE BUSCAR EL USUARIO POR ID, Y DESPUES AGREGARLO EN EL CREATE
-
+const user = await this.usersService.findOneById(id); //supongo que el usuario se enviara por param, 
+// sacando el del token el id de usuario logueado
 const newReservation = this.reservationRepository.create({...createReservationDto,create_at:create_at,userId:user});
-
+//return newReservation; para pruebas
 return this.reservationRepository.save(newReservation); 
   }
 
