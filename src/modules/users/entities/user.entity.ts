@@ -2,6 +2,7 @@ import { Roles } from "src/enum/roles.enum";
 import { Reservation } from "src/modules/reservations/entities/reservation.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { v4 as uuid} from "uuid";
+ 
 @Entity()
 export class User {
 @PrimaryGeneratedColumn("uuid")
