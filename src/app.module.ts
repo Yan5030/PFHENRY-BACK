@@ -9,6 +9,8 @@ import { UsersModule } from './modules/users/users.module';
 import { ReservationsModule } from './modules/reservations/reservations.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeOrm.config';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { OrdersModule } from './modules/orders/orders.module';
 
 @Module({
   
@@ -19,7 +21,7 @@ import { typeOrmConfig } from './config/typeOrm.config';
       isGlobal: true,
     }),
     
-    UsersModule, ReservationsModule],
+    UsersModule, ReservationsModule, CategoriesModule, OrdersModule],
   controllers: [AppController],
   providers: [AppService, CloudinaryConfig],
 })
