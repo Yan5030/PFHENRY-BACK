@@ -1,10 +1,11 @@
+import { MenuItem } from 'src/modules/menuItems/entities/menuItems.entities';
 import {
     Entity,
     PrimaryGeneratedColumn,
     Column,
     OneToMany
   } from 'typeorm';
-  //import { MenuItem } from '../../menuItem/entities/MenuItem';
+ 
 
   
   @Entity('categories')
@@ -18,7 +19,7 @@ import {
     @Column({ type: 'varchar', length: 255 })
     description: string;
   
-    //@OneToMany(() => MenuItem, (menuItem) => menuItem.category)
-    //menuItems: MenuItem[];
+    @OneToMany(() => MenuItem, (menuItem) => menuItem.category)
+    menuItems: MenuItem[];
   }
   
