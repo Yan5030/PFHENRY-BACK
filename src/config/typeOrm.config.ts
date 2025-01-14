@@ -1,6 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
-dotenv.config(); // Carga las variables de entorno desde el archivo .env
+dotenv.config(); 
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'postgres',

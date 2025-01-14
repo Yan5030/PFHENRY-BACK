@@ -23,5 +23,4 @@ export class AuthGuard implements CanActivate{
         }catch(e){
             throw new UnauthorizedException('Token invalido');
         }
-  }
-}
+      }}
