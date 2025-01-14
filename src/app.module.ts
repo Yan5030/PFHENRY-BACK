@@ -26,6 +26,7 @@ import { CloudinaryService } from './service/cloudinary/cloudinary,service';
       envFilePath: '.env.development',  
       isGlobal: true,
     }),
+
     AuthModule, 
     JwtModule.register({
       global: true,
@@ -40,6 +41,7 @@ import { CloudinaryService } from './service/cloudinary/cloudinary,service';
     MenuItemModule,
     FileUploadModule
   ],
+
   controllers: [AppController],
   providers: [AppService, /*CloudinaryConfig*/ CloudinaryService],
 })

@@ -1,71 +1,68 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { UserAuthDto } from './dto/user-auth.dto';
 import { SigninAuthDto } from './dto/sigin-auth.dto';
-import { AuthRepository } from './auth.repository';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from "bcryptjs"
+import * as bcrypt from 'bcrypt';
+import { User } from '../users/entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly authRepository: AuthRepository,
-    private readonly jwtService: JwtService
+  constructor(
+    private readonly jwtService: JwtService,
+    @InjectRepository(User) private readonly userRepository: Repository<User>
   ) {}
 
-  getAllUsers() {
-    return this.authRepository.findAll();
-  }
-
-  async signup(userAuthDto: UserAuthDto) {
-    const useremail = this.authRepository.findByEmail(userAuthDto.email);
-
+  async signup(createUserDto: CreateUserDto) {
+    const useremail = await this.userRepository.findOne({where:{email: createUserDto.email}});
+    console.log('Correo de usuario:', useremail);
     if(useremail){
       throw new BadRequestException('El correo ya se encuentra registrado');
     }
 
-    if(userAuthDto.password !== userAuthDto.confirmPassword){
-      throw new BadRequestException('Las contraseñas no coinciden');
-    }
-
-   // const hashedPassword = await bcrypt.hash(userAuthDto.password, 10);
-    const hashedPassword = bcrypt.hashSync(userAuthDto.password, 10);
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     if(!hashedPassword){
       throw new BadRequestException('Error al encriptar la contraseña');
     }
 
     const userSave = {
-      ...userAuthDto,
+      ...createUserDto,
       password: hashedPassword,
+      create_at: dayjs().format('YYYY-MM-DD'),
     };
-    const { confirmPassword, ...userSaveWithoutPassword } = userSave;
-
-    const newUser = await this.authRepository.create(userSave as UserAuthDto);
-
-    return newUser
+    const newUser = this.userRepository.create(userSave);
+      return this.userRepository.save(newUser);
+    }
   
-  }
 
-  async signin(signinAuthDto: SigninAuthDto) {
-    const user = this.authRepository.findByEmail(signinAuthDto.email);
-    if(!user){
-      throw new BadRequestException('Usuario no encontrado');
-    }
-
-    //const validPassword = await bcrypt.compare(signinAuthDto.password, user.password);
-    const validPassword = bcrypt.compareSync(signinAuthDto.password, user.password);
-    if (!validPassword) {
-      return { message: 'Credenciales incorrectas' };
-    }
-
-    const userPayload = {
-      sub: user.id,
-      id: user.id,
-      email: user.email,
-      roles: [user.role]
-    }
-    console.log(userPayload)
-    const token = this.jwtService.sign(userPayload);
+    async signin(signinAuthDto: SigninAuthDto) {
+      try {
+        const { email, password } = signinAuthDto;
     
+        const user = await this.userRepository.findOne({ where: { email } });
+        if (!user) {
+          throw new BadRequestException('Usuario no existe');
+        }
     
-    return { message: 'Inicio de sesión exitoso', user , token};
-  }
+        const validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword) {
+          throw new BadRequestException('Credenciales incorrectas');
+        }
+    
+        const token = this.jwtService.sign({
+          sub: user.id,
+          email: user.email,
+          roles: [user.role],
+        });
+    
+        const { password: _, ...userWithoutPassword } = user;
+    
+        return { message: 'Inicio de sesión exitoso', user: userWithoutPassword, token };
+      } catch (error) {
+        console.error('Error en signin:', error.message);
+        throw new BadRequestException('Error al iniciar sesión');
+      }
+    }
 }
