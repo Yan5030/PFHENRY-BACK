@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { ResponseUserDto } from './dto/response-user.dto';
-import { Roles } from 'src/enum/roles.enum';
+import { Role } from 'src/enum/roles.enum';
 import  * as dayjs from 'dayjs';
 
 @Injectable()
