@@ -6,7 +6,7 @@ import { NextFunction, Request, Response } from 'express';
 export class DateValidationMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     const { date, time } = req.body;
-
+    if(date && time){
     // Validar formato de fecha
     if (!dayjs(date, 'YYYY-MM-DD', true).isValid()) {
       throw new BadRequestException('La fecha no está en formato YYYY-MM-DD');
@@ -36,5 +36,10 @@ export class DateValidationMiddleware implements NestMiddleware {
 
     // Continuar con la solicitud si todo es válido
     next();
+  }else{
+    next();
   }
+  }
+
+  
 }
