@@ -3,7 +3,7 @@ import { UserAuthDto } from './dto/user-auth.dto';
 import { SigninAuthDto } from './dto/sigin-auth.dto';
 import { AuthRepository } from './auth.repository';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from "bcryptjs"
 
 @Injectable()
 export class AuthService {
@@ -26,7 +26,8 @@ export class AuthService {
       throw new BadRequestException('Las contraseñas no coinciden');
     }
 
-    const hashedPassword = await bcrypt.hash(userAuthDto.password, 10);
+   // const hashedPassword = await bcrypt.hash(userAuthDto.password, 10);
+    const hashedPassword = bcrypt.hashSync(userAuthDto.password, 10);
     if(!hashedPassword){
       throw new BadRequestException('Error al encriptar la contraseña');
     }
@@ -49,7 +50,8 @@ export class AuthService {
       throw new BadRequestException('Usuario no encontrado');
     }
 
-    const validPassword = await bcrypt.compare(signinAuthDto.password, user.password);
+    //const validPassword = await bcrypt.compare(signinAuthDto.password, user.password);
+    const validPassword = bcrypt.compareSync(signinAuthDto.password, user.password);
     if (!validPassword) {
       return { message: 'Credenciales incorrectas' };
     }

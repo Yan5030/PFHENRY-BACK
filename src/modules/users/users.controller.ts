@@ -1,12 +1,18 @@
-import { Controller, Get, Post, Body, Param, Delete, BadRequestException, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, BadRequestException, Put, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FileUploadService } from '../file-upload/file-upload.service';
+
 @ApiTags("Users")
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly fileUploadService : FileUploadService
+  ) {}
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
@@ -42,4 +48,32 @@ export class UsersController {
       return {message: `Usuario eliminado`}
   }
       
+
+
+
+  @Post(':id/upload')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(
+    @Param('id') id: string,
+    @UploadedFile(/*new ImagesUploadPipe()*/) file: Express.Multer.File,
+  ) {
+    const uploadedImageUrl = await this.fileUploadService.uploadFile({
+      buffer: file.buffer,
+      fieldName: file.fieldname,
+      mimeType: file.mimetype,
+      originalName: file.originalname,
+      size: file.size,
+    });
+
+    const user = await this.usersService.update(id, { image_url: uploadedImageUrl });
+
+    return {
+      message: 'Imagen cargada con éxito',
+      data: user,
+    };
+  }
 }
+
+
+
+

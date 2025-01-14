@@ -3,9 +3,9 @@ import { AuthService } from './auth.service';
 import { UserAuthDto } from './dto/user-auth.dto';
 import { SigninAuthDto } from './dto/sigin-auth.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
-import { Role } from '../../enum/roles.enum';
+import { Roles } from 'src/enum/roles.enum';
 
 @Controller('auth')
 export class AuthController {
@@ -13,7 +13,7 @@ export class AuthController {
 
   @Get()
   @UseGuards(AuthGuard, RolesGuard)
-  @Roles(Role.Admin)
+  @Role(Roles.Admin)
   getall() {
     return this.authService.getAllUsers();
   }
