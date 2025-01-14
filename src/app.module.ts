@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config'; 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './modules/auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
+
 
 import { CloudinaryConfig } from './config/cloudinary.config';
 
@@ -20,6 +23,12 @@ import { OrdersModule } from './modules/orders/orders.module';
       envFilePath: '.env.development',  
       isGlobal: true,
     }),
+    AuthModule, 
+    JwtModule.register({
+      global: true,
+      signOptions: { expiresIn: '1h' },
+      secret: 'clavesecret'
+    })
     
     UsersModule, ReservationsModule, CategoriesModule, OrdersModule],
   controllers: [AppController],
