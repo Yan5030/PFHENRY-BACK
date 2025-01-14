@@ -1,18 +1,24 @@
 import { AuthService } from './auth.service';
-import { UserAuthDto } from './dto/user-auth.dto';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 import { SigninAuthDto } from './dto/sigin-auth.dto';
+import { Role } from 'src/enum/roles.enum';
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
-    getall(): UserAuthDto[];
-    signup(userAuthDto: UserAuthDto): Promise<UserAuthDto>;
-    signin(siginInDto: SigninAuthDto): Promise<{
+    signup(createUserDto: CreateUserDto): Promise<import("../users/entities/user.entity").User>;
+    signin(signinDto: SigninAuthDto): Promise<{
         message: string;
-        user?: undefined;
-        token?: undefined;
-    } | {
-        message: string;
-        user: UserAuthDto;
+        user: {
+            id: string;
+            name: string;
+            email: string;
+            address: string;
+            image_url: string;
+            role: Role;
+            create_at: string;
+            reservations: import("../reservations/entities/reservation.entity").Reservation[];
+            orders: import("../orders/entities/order.entity").Order[];
+        };
         token: string;
     }>;
 }

@@ -11,11 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserAuthDto = void 0;
 const class_validator_1 = require("class-validator");
+const roles_enum_1 = require("../../../enum/roles.enum");
 class UserAuthDto {
 }
 exports.UserAuthDto = UserAuthDto;
 __decorate([
-    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsUUID)(),
     __metadata("design:type", String)
 ], UserAuthDto.prototype, "id", void 0);
 __decorate([
@@ -26,34 +28,41 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsEmail)(),
     (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UserAuthDto.prototype, "email", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.Matches)(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,15}$/, { message: 'La contraseña debe tener al menos una letra minúscula, una mayúscula, un número y un carácter especial de entre !@#$%^&*.' }),
-    (0, class_validator_1.MinLength)(5),
+    (0, class_validator_1.Matches)(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,15}$/, {
+        message: 'La contraseña debe tener al menos una letra minúscula, una mayúscula, un número y un carácter especial de entre !@#$%^&*.',
+    }),
+    (0, class_validator_1.MinLength)(8),
     __metadata("design:type", String)
 ], UserAuthDto.prototype, "password", void 0);
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.MinLength)(5),
+    (0, class_validator_1.MinLength)(8),
     __metadata("design:type", String)
 ], UserAuthDto.prototype, "confirmPassword", void 0);
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UserAuthDto.prototype, "address", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsUrl)(),
     __metadata("design:type", String)
 ], UserAuthDto.prototype, "image", void 0);
 __decorate([
-    (0, class_validator_1.IsEnum)(['admin', 'user']),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsEnum)(roles_enum_1.Role, {
+        message: 'El rol debe ser "admin" o "user".',
+    }),
     __metadata("design:type", String)
 ], UserAuthDto.prototype, "role", void 0);
 __decorate([
-    (0, class_validator_1.IsDate)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsISO8601)(),
     __metadata("design:type", String)
-], UserAuthDto.prototype, "createad", void 0);
+], UserAuthDto.prototype, "created", void 0);
 //# sourceMappingURL=user-auth.dto.js.map

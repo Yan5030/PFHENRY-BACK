@@ -11,62 +11,58 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
-const auth_repository_1 = require("./auth.repository");
 const jwt_1 = require("@nestjs/jwt");
 const bcrypt = require("bcrypt");
-const users_repository_1 = require("../users/users.repository");
 const roles_enum_1 = require("../../enum/roles.enum");
 const create_user_partial_dto_1 = require("../users/dto/create-user-partial.dto");
+const users_service_1 = require("../users/users.service");
 let AuthService = class AuthService {
-    constructor(authRepository, jwtService, userRepository) {
-        this.authRepository = authRepository;
+    constructor(jwtService, usersService) {
         this.jwtService = jwtService;
-        this.userRepository = userRepository;
+        this.usersService = usersService;
     }
-    getAllUsers() {
-        return this.authRepository.findAll();
-    }
-    async signup(userAuthDto) {
-        const useremail = this.authRepository.findByEmail(userAuthDto.email);
+    async signup(createUserDto) {
+        const useremail = await this.usersService.getOneByEmail(createUserDto.email);
+        console.log('Correo de usuario:', useremail);
         if (useremail) {
             throw new common_1.BadRequestException('El correo ya se encuentra registrado');
         }
-        if (userAuthDto.password !== userAuthDto.confirmPassword) {
-            throw new common_1.BadRequestException('Las contraseñas no coinciden');
-        }
-        const hashedPassword = await bcrypt.hash(userAuthDto.password, 10);
+        const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
         if (!hashedPassword) {
             throw new common_1.BadRequestException('Error al encriptar la contraseña');
         }
         const userSave = {
-            ...userAuthDto,
+            ...createUserDto,
             password: hashedPassword,
         };
-        const { confirmPassword, ...userSaveWithoutPassword } = userSave;
-        const newUser = await this.authRepository.create(userSave);
-        return newUser;
+        return await this.usersService.create(userSave);
     }
     async signin(signinAuthDto) {
-        const user = this.authRepository.findByEmail(signinAuthDto.email);
-        if (!user) {
-            throw new common_1.BadRequestException('Usuario no encontrado');
+        try {
+            const { email, password } = signinAuthDto;
+            const user = await this.usersService.getOneByEmail(signinAuthDto.email);
+            if (!user) {
+                throw new common_1.BadRequestException('Usuario no existe');
+            }
+            const validPassword = await bcrypt.compare(password, user.password);
+            if (!validPassword) {
+                throw new common_1.BadRequestException('Credenciales incorrectas');
+            }
+            const token = this.jwtService.sign({
+                sub: user.id,
+                email: user.email,
+                roles: [user.role],
+            });
+            const { password: _, ...userWithoutPassword } = user;
+            return { message: 'Inicio de sesión exitoso', user: userWithoutPassword, token };
         }
-        const validPassword = await bcrypt.compare(signinAuthDto.password, user.password);
-        if (!validPassword) {
-            return { message: 'Credenciales incorrectas' };
+        catch (error) {
+            console.error('Error en signin:', error.message);
+            throw new common_1.BadRequestException('Error al iniciar sesión');
         }
-        const userPayload = {
-            sub: user.id,
-            id: user.id,
-            email: user.email,
-            roles: [user.role]
-        };
-        console.log(userPayload);
-        const token = this.jwtService.sign(userPayload);
-        return { message: 'Inicio de sesión exitoso', user, token };
     }
     async validateUserWithAuth0(payload) {
-        let user = await this.userRepository.findOneByEmail(payload.email);
+        let user = await this.usersService.getOneByEmail(payload.email);
         if (!user) {
             const createUserDto = new create_user_partial_dto_1.CreateUserPartialDto({
                 name: payload.name,
@@ -76,7 +72,7 @@ let AuthService = class AuthService {
                 image_url: payload.picture || 'http://example.com',
                 role: roles_enum_1.Role.User,
             });
-            await this.userRepository.saveUser(user);
+            await this.usersService.create(user);
         }
         return user;
     }
@@ -84,8 +80,7 @@ let AuthService = class AuthService {
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [auth_repository_1.AuthRepository,
-        jwt_1.JwtService,
-        users_repository_1.UserRepository])
+    __metadata("design:paramtypes", [jwt_1.JwtService,
+        users_service_1.UsersService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

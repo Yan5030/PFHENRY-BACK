@@ -1,11 +1,12 @@
+import { Role } from '../../../enum/roles.enum';
 export declare class UserAuthDto {
-    id: string;
+    id?: string;
     name: string;
     email: string;
     password: string;
-    confirmPassword: string;
+    confirmPassword?: string;
     address: string;
-    image: string;
-    role: string;
-    createad: string;
+    image?: string;
+    role: Role;
+    created?: string;
 }

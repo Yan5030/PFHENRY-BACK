@@ -1,7 +1,9 @@
-import { ExecutionContext } from '@nestjs/common';
-declare const AuthGuard_base: import("@nestjs/passport").Type<import("@nestjs/passport").IAuthGuard>;
-export declare class AuthGuard extends AuthGuard_base {
-    canActivate(context: ExecutionContext): boolean | Promise<boolean> | import("rxjs").Observable<boolean>;
-    handleRequest(err: any, user: any, info: any): any;
+import { ExecutionContext } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { Observable } from "rxjs";
+import { CanActivate } from "@nestjs/common";
+export declare class AuthGuard implements CanActivate {
+    private readonly jwtService;
+    constructor(jwtService: JwtService);
+    canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean>;
 }
-export {};

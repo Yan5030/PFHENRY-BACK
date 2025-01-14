@@ -1,5 +1,4 @@
-import { UserAuthDto } from './user-auth.dto';
-export declare class SigninAuthDto extends UserAuthDto {
+export declare class SigninAuthDto {
     email: string;
     password: string;
 }

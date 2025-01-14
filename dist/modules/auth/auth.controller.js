@@ -15,40 +15,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
-const user_auth_dto_1 = require("./dto/user-auth.dto");
+const create_user_dto_1 = require("../users/dto/create-user.dto");
 const sigin_auth_dto_1 = require("./dto/sigin-auth.dto");
-const auth_guard_1 = require("../../guards/auth.guard");
-const roles_decorator_1 = require("../../decorators/roles.decorator");
-const roles_guard_1 = require("../../guards/roles.guard");
-const roles_enum_1 = require("../../enum/roles.enum");
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
-    getall() {
-        return this.authService.getAllUsers();
+    signup(createUserDto) {
+        return this.authService.signup(createUserDto);
     }
-    signup(userAuthDto) {
-        return this.authService.signup(userAuthDto);
-    }
-    signin(siginInDto) {
-        return this.authService.signin(siginInDto);
+    signin(signinDto) {
+        return this.authService.signin(signinDto);
     }
 };
 exports.AuthController = AuthController;
 __decorate([
-    (0, common_1.Get)(),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard, roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Roles)(roles_enum_1.Role.Admin),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "getall", null);
-__decorate([
     (0, common_1.Post)('signup'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [user_auth_dto_1.UserAuthDto]),
+    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "signup", null);
 __decorate([
