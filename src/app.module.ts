@@ -24,6 +24,7 @@ import { MenuItemModule } from './modules/menuItems/menuItem.module';
       envFilePath: '.env.development',  
       isGlobal: true,
     }),
+
     AuthModule, 
     JwtModule.register({
       global: true,
@@ -37,6 +38,7 @@ import { MenuItemModule } from './modules/menuItems/menuItem.module';
     OrdersModule,
     MenuItemModule
   ],
+
   controllers: [AppController],
   providers: [AppService, CloudinaryConfig],
 })
