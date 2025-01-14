@@ -5,7 +5,8 @@ import {
     ManyToOne,
   } from 'typeorm';
   import { Order } from '../../orders/entities/order.entity'; 
- // import { MenuItem } from '../../menu-items/entities/menu-item.entity'; 
+import { MenuItem } from 'src/modules/menuItems/entities/menuItems.entities';
+ 
   
   @Entity('orders_details')
   export class OrderDetail {
@@ -15,8 +16,8 @@ import {
     @ManyToOne(() => Order, (order) => order.orderDetails, { onDelete: 'CASCADE' })
     order: Order; // Relación con la orden principal
   
-   // @ManyToOne(() => MenuItem, { eager: true, onDelete: 'SET NULL' }) // Menú relacionado
-   // menuItem: MenuItem; // Relación con el ítem del menú
+ /*    @ManyToOne(() => MenuItem, (menuItem) => menuItem.orderDetails, { onDelete: 'CASCADE' })
+     menuItem: MenuItem; */
   
     @Column({ type: 'int' })
     quantity: number; // Cantidad del ítem

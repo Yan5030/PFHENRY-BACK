@@ -14,6 +14,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeOrm.config';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { OrdersModule } from './modules/orders/orders.module';
+import { MenuItemModule } from './modules/menuItems/menuItem.module';
 
 @Module({
   
@@ -30,7 +31,12 @@ import { OrdersModule } from './modules/orders/orders.module';
       secret: 'clavesecret'
     })
     
-    UsersModule, ReservationsModule, CategoriesModule, OrdersModule],
+    UsersModule,
+    ReservationsModule,
+    CategoriesModule,
+    OrdersModule,
+    MenuItemModule
+  ],
   controllers: [AppController],
   providers: [AppService, CloudinaryConfig],
 })
