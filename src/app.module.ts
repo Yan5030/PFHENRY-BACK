@@ -19,14 +19,12 @@ import { FileUploadModule } from './modules/file-upload/file-upload.module';
 import { CloudinaryService } from './service/cloudinary/cloudinary,service';
 
 @Module({
-  
   imports: [
-    TypeOrmModule.forRoot(typeOrmConfig),
+    TypeOrmModule.forRoot(typeOrmConfig), // Configuración de TypeORM
     ConfigModule.forRoot({
       envFilePath: '.env.development',  
-      isGlobal: true,
+      isGlobal: true, // Hace las variables de entorno globales
     }),
-
     AuthModule, 
     JwtModule.register({
       global: true,
@@ -46,4 +44,5 @@ import { CloudinaryService } from './service/cloudinary/cloudinary,service';
   providers: [AppService, /*CloudinaryConfig*/ CloudinaryService],
 })
 export class AppModule {}
+
 
