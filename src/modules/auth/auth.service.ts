@@ -29,12 +29,14 @@ export class AuthService {
       throw new BadRequestException('El correo ya se encuentra registrado');
     }
 
+    
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     if(!hashedPassword){
       throw new BadRequestException('Error al encriptar la contraseña');
     }
 
     const userSave = {
+      ...createUserDto,
       ...createUserDto,
       password: hashedPassword,
       

@@ -22,7 +22,7 @@ import { MenuItemModule } from './modules/menuItems/menuItem.module';
       envFilePath: '.env.development',  
       isGlobal: true, // Hace las variables de entorno globales
     }),
-    AuthModule, // Importa el AuthModule para usar la autenticación
+    AuthModule, 
     JwtModule.register({
       global: true,
       signOptions: { expiresIn: '1h' },
@@ -34,6 +34,7 @@ import { MenuItemModule } from './modules/menuItems/menuItem.module';
     OrdersModule,
     MenuItemModule,
   ],
+
   controllers: [AppController],
   providers: [AppService, CloudinaryConfig], // Proveedores del módulo
 })

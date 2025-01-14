@@ -14,6 +14,7 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) : Promise<User>{ 
     const userDb = await this.usersRepository.findOne({where:{email:createUserDto.email}})
+    console.log("Valor de user", userDb)
 
     if(userDb){
       throw new BadRequestException("El correo ya esta registrado");
