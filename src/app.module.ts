@@ -23,13 +23,7 @@ import { OrdersModule } from './modules/orders/orders.module';
       envFilePath: '.env.development',  
       isGlobal: true,
     }),
-    AuthModule, 
-    JwtModule.register({
-      global: true,
-      signOptions: { expiresIn: '1h' },
-      secret: 'clavesecret'
-    })
-    
+    AuthModule,
     UsersModule, ReservationsModule, CategoriesModule, OrdersModule],
   controllers: [AppController],
   providers: [AppService, CloudinaryConfig],
