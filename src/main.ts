@@ -28,7 +28,7 @@ async function bootstrap() {
     .setTitle('Hogwarts API')
     .setDescription('Documentación de la API para manejar datos de la app de Hogwarts')
     .setVersion('1.0')
-    .addBearerAuth() // Agrega soporte para autenticación con Bearer
+    .addBearerAuth() 
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
