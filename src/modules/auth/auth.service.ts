@@ -2,11 +2,14 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserAuthDto } from './dto/user-auth.dto';
 import { SigninAuthDto } from './dto/sigin-auth.dto';
 import { AuthRepository } from './auth.repository';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly authRepository: AuthRepository) {}
+  constructor(private readonly authRepository: AuthRepository,
+    private readonly jwtService: JwtService
+  ) {}
 
   getAllUsers() {
     return this.authRepository.findAll();
@@ -42,13 +45,25 @@ export class AuthService {
 
   async signin(signinAuthDto: SigninAuthDto) {
     const user = this.authRepository.findByEmail(signinAuthDto.email);
-    // if (!user || user.password !== signinAuthDto.password) {
-    //   return { message: 'Credenciales incorrectas' };
-    // }
+    if(!user){
+      throw new BadRequestException('Usuario no encontrado');
+    }
+
     const validPassword = await bcrypt.compare(signinAuthDto.password, user.password);
     if (!validPassword) {
       return { message: 'Credenciales incorrectas' };
     }
-    return { message: 'Inicio de sesión exitoso', user };
+
+    const userPayload = {
+      sub: user.id,
+      id: user.id,
+      email: user.email,
+      roles: [user.role]
+    }
+    console.log(userPayload)
+    const token = this.jwtService.sign(userPayload);
+    
+    
+    return { message: 'Inicio de sesión exitoso', user , token};
   }
 }
