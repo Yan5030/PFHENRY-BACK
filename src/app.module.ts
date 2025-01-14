@@ -14,6 +14,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeOrm.config';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { OrdersModule } from './modules/orders/orders.module';
+import { MenuItemModule } from './modules/menuItems/menuItem.module';
 
 @Module({
   
@@ -23,8 +24,21 @@ import { OrdersModule } from './modules/orders/orders.module';
       envFilePath: '.env.development',  
       isGlobal: true,
     }),
-    AuthModule,
-    UsersModule, ReservationsModule, CategoriesModule, OrdersModule],
+
+    AuthModule, 
+    JwtModule.register({
+      global: true,
+      signOptions: { expiresIn: '1h' },
+      secret: 'clavesecret'
+    })
+    
+    UsersModule,
+    ReservationsModule,
+    CategoriesModule,
+    OrdersModule,
+    MenuItemModule
+  ],
+
   controllers: [AppController],
   providers: [AppService, CloudinaryConfig],
 })
