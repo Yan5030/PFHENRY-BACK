@@ -33,6 +33,7 @@ let AuthService = class AuthService {
         }
         const userSave = {
             ...createUserDto,
+            ...createUserDto,
             password: hashedPassword,
         };
         return await this.usersService.create(userSave);

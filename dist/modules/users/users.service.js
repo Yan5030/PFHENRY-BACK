@@ -25,6 +25,7 @@ let UsersService = class UsersService {
     }
     async create(createUserDto) {
         const userDb = await this.usersRepository.findOne({ where: { email: createUserDto.email } });
+        console.log("Valor de user", userDb);
         if (userDb) {
             throw new common_1.BadRequestException("El correo ya esta registrado");
         }
