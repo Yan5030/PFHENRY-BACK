@@ -36,6 +36,19 @@ export class CreateUserDto{
     @MinLength(8)
     password:string;
 
+
+    @ApiProperty({
+      description:"Debe contener una mayuscula, un numero y caracter especial, Debe ser igual a password",
+      example:"Ejemplo91"
+    })
+    @IsString()
+    @IsNotEmpty()
+    //@IsStrongPassword()
+    @IsOptional()
+    @MinLength(8)
+    ConfirmPassword?:string;
+
+
    
     @ApiProperty({
       description:"Debe contener entre 3 y 80 caracteres",

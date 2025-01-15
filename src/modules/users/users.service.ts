@@ -63,9 +63,6 @@ return await this.usersRepository.save(updateUser);;
 
 async getOneByEmail(email:string) : Promise<User>{
 const userDb = await this.usersRepository.findOne({where:{email}})
-if(!userDb){
-  throw new BadRequestException("No se encontraron usuarios con ese email");
-}
 return userDb;
 }
 

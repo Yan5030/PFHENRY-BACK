@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.typeOrmConfig = void 0;
-const dotenv = require("dotenv");
-dotenv.config();
+const dotenv_1 = require("dotenv");
+(0, dotenv_1.config)({ path: '.env.development' });
 exports.typeOrmConfig = {
     type: 'postgres',
     host: process.env.DATABASE_HOST || 'localhost',

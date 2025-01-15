@@ -17,9 +17,13 @@ const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
 const create_user_dto_1 = require("./dto/create-user.dto");
 const update_user_dto_1 = require("./dto/update-user.dto");
+const swagger_1 = require("@nestjs/swagger");
+const platform_express_1 = require("@nestjs/platform-express");
+const file_upload_service_1 = require("../file-upload/file-upload.service");
 let UsersController = class UsersController {
-    constructor(usersService) {
+    constructor(usersService, fileUploadService) {
         this.usersService = usersService;
+        this.fileUploadService = fileUploadService;
     }
     async create(createUserDto) {
         const newUser = await this.usersService.create(createUserDto);
@@ -40,6 +44,20 @@ let UsersController = class UsersController {
     async remove(id) {
         const user = await this.usersService.remove(id);
         return { message: `Usuario eliminado` };
+    }
+    async uploadFile(id, file) {
+        const uploadedImageUrl = await this.fileUploadService.uploadFile({
+            buffer: file.buffer,
+            fieldName: file.fieldname,
+            mimeType: file.mimetype,
+            originalName: file.originalname,
+            size: file.size,
+        });
+        const user = await this.usersService.update(id, { image_url: uploadedImageUrl });
+        return {
+            message: 'Imagen cargada con éxito',
+            data: user,
+        };
     }
 };
 exports.UsersController = UsersController;
@@ -78,8 +96,19 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Post)(':id/upload'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "uploadFile", null);
 exports.UsersController = UsersController = __decorate([
+    (0, swagger_1.ApiTags)("Users"),
     (0, common_1.Controller)('users'),
-    __metadata("design:paramtypes", [users_service_1.UsersService])
+    __metadata("design:paramtypes", [users_service_1.UsersService,
+        file_upload_service_1.FileUploadService])
 ], UsersController);
 //# sourceMappingURL=users.controller.js.map

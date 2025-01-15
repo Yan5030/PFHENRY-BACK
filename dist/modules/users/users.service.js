@@ -63,9 +63,6 @@ let UsersService = class UsersService {
     }
     async getOneByEmail(email) {
         const userDb = await this.usersRepository.findOne({ where: { email } });
-        if (!userDb) {
-            throw new common_1.BadRequestException("No se encontraron usuarios con ese email");
-        }
         return userDb;
     }
 };
