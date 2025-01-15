@@ -10,6 +10,7 @@ dotenvConfig({path:'.env'})
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+
 app.use(auth(auth0Config));
 
   app.useGlobalPipes(new ValidationPipe({
@@ -36,7 +37,12 @@ app.use(auth(auth0Config));
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
 
-  // Inicio del servidor
+  app.enableCors({
+    origin: 'http://localhost:3001', 
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: 'Content-type, Authorization',
+    credentials: true, 
+  });  
 
   await app.listen(process.env.PORT ?? 3000);
 }
