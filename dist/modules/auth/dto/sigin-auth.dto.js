@@ -10,17 +10,30 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SigninAuthDto = void 0;
+const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class SigninAuthDto {
 }
 exports.SigninAuthDto = SigninAuthDto;
 __decorate([
-    (0, class_validator_1.IsEmail)({}, { message: 'El correo no es valido' }),
+    (0, swagger_1.ApiProperty)({
+        description: "El email debe contener entre 3 y 80 caracteres y ser formato email",
+        example: "maximiliano@email.com"
+    }),
+    (0, class_validator_1.IsEmail)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.MinLength)(3),
+    (0, class_validator_1.MaxLength)(80),
     __metadata("design:type", String)
 ], SigninAuthDto.prototype, "email", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)({ message: 'La contraseña es requerida' }),
-    (0, class_validator_1.Length)(6, 20),
+    (0, swagger_1.ApiProperty)({
+        description: "Debe contener una mayuscula, un numero y caracter especial",
+        example: "Ejemplo91"
+    }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.MinLength)(8),
     __metadata("design:type", String)
 ], SigninAuthDto.prototype, "password", void 0);
 //# sourceMappingURL=sigin-auth.dto.js.map

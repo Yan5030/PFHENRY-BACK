@@ -1,6 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import * as dotenv from 'dotenv';
-dotenv.config(); 
+import {config as dotenvConfig} from 'dotenv';
+//dotenv.config(); // Carga las variables de entorno desde el archivo .env
+dotenvConfig({ path: '.env.development' });
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -10,7 +11,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   password: process.env.DATABASE_PASSWORD || '123456',
   database: process.env.DATABASE_NAME || 'hogwarts_bar',
   autoLoadEntities:true,
-  entities: [__dirname + '/../**/*.entity.{js,ts}'], // entites : [ 'dist/**/*.entity{.ts,.js}' ]
+  entities: [__dirname + '/../**/*.entity.{js,ts}'], // entities : [ 'dist/**/*.entity{.ts,.js}' ]
   migrations: ['dist/migrations/*{.js,.ts}'],
   synchronize: true,
   logging: true,

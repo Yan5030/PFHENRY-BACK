@@ -13,7 +13,6 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const auth_module_1 = require("./modules/auth/auth.module");
 const jwt_1 = require("@nestjs/jwt");
-const cloudinary_config_1 = require("./config/cloudinary.config");
 const users_module_1 = require("./modules/users/users.module");
 const reservations_module_1 = require("./modules/reservations/reservations.module");
 const typeorm_1 = require("@nestjs/typeorm");
@@ -21,6 +20,8 @@ const typeOrm_config_1 = require("./config/typeOrm.config");
 const categories_module_1 = require("./modules/categories/categories.module");
 const orders_module_1 = require("./modules/orders/orders.module");
 const menuItem_module_1 = require("./modules/menuItems/menuItem.module");
+const file_upload_module_1 = require("./modules/file-upload/file-upload.module");
+const cloudinary_service_1 = require("./service/cloudinary/cloudinary,service");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -36,16 +37,17 @@ exports.AppModule = AppModule = __decorate([
             jwt_1.JwtModule.register({
                 global: true,
                 signOptions: { expiresIn: '1h' },
-                secret: process.env.JWT_SECRET || 'defaultsecret',
+                secret: 'clavesecret'
             }),
             users_module_1.UsersModule,
             reservations_module_1.ReservationsModule,
             categories_module_1.CategoriesModule,
             orders_module_1.OrdersModule,
             menuItem_module_1.MenuItemModule,
+            file_upload_module_1.FileUploadModule
         ],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService, cloudinary_config_1.CloudinaryConfig],
+        providers: [app_service_1.AppService, cloudinary_service_1.CloudinaryService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

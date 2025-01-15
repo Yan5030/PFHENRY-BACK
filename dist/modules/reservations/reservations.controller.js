@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const reservations_service_1 = require("./reservations.service");
 const update_reservation_dto_1 = require("./dto/update-reservation.dto");
 const create_reservation_dto_1 = require("./dto/create-reservation.dto");
+const swagger_1 = require("@nestjs/swagger");
 let ReservationsController = class ReservationsController {
     constructor(reservationsService) {
         this.reservationsService = reservationsService;
@@ -80,6 +81,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ReservationsController.prototype, "remove", null);
 exports.ReservationsController = ReservationsController = __decorate([
+    (0, swagger_1.ApiTags)("Reservations"),
     (0, common_1.Controller)('reservations'),
     __metadata("design:paramtypes", [reservations_service_1.ReservationsService])
 ], ReservationsController);
