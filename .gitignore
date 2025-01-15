@@ -3,3 +3,5 @@
 
 # dotenv environment variable file
 .env.development
+
+/dist
