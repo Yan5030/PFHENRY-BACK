@@ -13,6 +13,13 @@ export declare class MenuItemService implements OnModuleInit {
     create(createMenuItemDto: CreateMenuItemDto): Promise<MenuItem>;
     update(id: string, updateMenuItemDto: UpdateMenuItemDto): Promise<MenuItem>;
     deactivate(id: string): Promise<MenuItem>;
+    updateStock(updates: {
+        menuItemId: string;
+        stock: number;
+    }[]): Promise<{
+        success: boolean;
+        message: string;
+    }>;
     findAll(): Promise<MenuItem[]>;
     findOne(id: string): Promise<MenuItem>;
 }

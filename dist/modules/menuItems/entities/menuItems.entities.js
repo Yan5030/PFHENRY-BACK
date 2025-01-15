@@ -36,6 +36,10 @@ __decorate([
     __metadata("design:type", String)
 ], MenuItem.prototype, "image_url", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Number)
+], MenuItem.prototype, "stock", void 0);
+__decorate([
     (0, typeorm_1.ManyToOne)(() => category_entity_1.Category, (category) => category.menuItems, { onDelete: 'SET NULL' }),
     __metadata("design:type", category_entity_1.Category)
 ], MenuItem.prototype, "category", void 0);

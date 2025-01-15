@@ -81,6 +81,27 @@ export class MenuItemService implements OnModuleInit {
     menuItem.isActive = false; 
     return await this.menuItemRepository.save(menuItem);
   }
+  
+  async updateStock(
+    updates: { menuItemId: string; stock: number }[],
+  ): Promise<{ success: boolean; message: string }> {
+    for (const update of updates) {
+      const menuItem = await this.menuItemRepository.findOne({
+        where: { id: update.menuItemId },
+      });
+
+      if (!menuItem) {
+        throw new NotFoundException(
+          `Menu item with ID ${update.menuItemId} not found`,
+        );
+      }
+
+      menuItem.stock = update.stock;
+      await this.menuItemRepository.save(menuItem);
+    }
+
+    return { success: true, message: 'Stock updated successfully' };
+  }
 
   async findAll(): Promise<MenuItem[]> {
     return await this.menuItemRepository.find({

@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Pizza Margarita",
+    "price": 10.99,
+    "stock": 7,
+    "description": "Classic pizza with cheese and tomato",
+    "image_url": "https://example.com/pizza.jpg",
+    "category": "Pizza"
+  },
+  {
+    "name": "Burger",
+    "price": 8.99,
+    "stock": 3,
+    "description": "Delicious beef burger",
+    "image_url": "https://example.com/burger.jpg",
+    "category": "Burgers"
+  }
+]

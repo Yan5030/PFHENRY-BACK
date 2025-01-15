@@ -7,6 +7,15 @@ export declare class MenuItemController {
     create(createMenuItemDto: CreateMenuItemDto): Promise<import("./entities/menuItems.entities").MenuItem>;
     update(id: string, updateMenuItemDto: UpdateMenuItemDto): Promise<import("./entities/menuItems.entities").MenuItem>;
     deactivate(id: string): Promise<import("./entities/menuItems.entities").MenuItem>;
+    updateStock(body: {
+        updates: {
+            menuItemId: string;
+            stock: number;
+        }[];
+    }): Promise<{
+        success: boolean;
+        message: string;
+    }>;
     findAll(): Promise<import("./entities/menuItems.entities").MenuItem[]>;
     findOne(id: string): Promise<import("./entities/menuItems.entities").MenuItem>;
 }

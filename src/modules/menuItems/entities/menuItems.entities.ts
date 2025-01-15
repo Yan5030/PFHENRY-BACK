@@ -24,6 +24,9 @@ import {
   
     @Column({ type: 'varchar', length: 255, nullable: true })
     image_url?: string; 
+
+    @Column({nullable:true})
+    stock: number;
   
     @ManyToOne(() => Category, (category) => category.menuItems, { onDelete: 'SET NULL' })
     category: Category; 

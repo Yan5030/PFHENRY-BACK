@@ -71,6 +71,19 @@ let MenuItemService = class MenuItemService {
         menuItem.isActive = false;
         return await this.menuItemRepository.save(menuItem);
     }
+    async updateStock(updates) {
+        for (const update of updates) {
+            const menuItem = await this.menuItemRepository.findOne({
+                where: { id: update.menuItemId },
+            });
+            if (!menuItem) {
+                throw new common_1.NotFoundException(`Menu item with ID ${update.menuItemId} not found`);
+            }
+            menuItem.stock = update.stock;
+            await this.menuItemRepository.save(menuItem);
+        }
+        return { success: true, message: 'Stock updated successfully' };
+    }
     async findAll() {
         return await this.menuItemRepository.find({
             where: { isActive: true },

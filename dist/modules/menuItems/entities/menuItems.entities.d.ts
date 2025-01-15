@@ -5,6 +5,7 @@ export declare class MenuItem {
     description?: string;
     price: number;
     image_url?: string;
+    stock: number;
     category: Category;
     isActive: boolean;
 }

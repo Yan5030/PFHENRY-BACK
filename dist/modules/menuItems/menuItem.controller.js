@@ -31,6 +31,9 @@ let MenuItemController = class MenuItemController {
     deactivate(id) {
         return this.menuItemService.deactivate(id);
     }
+    async updateStock(body) {
+        return this.menuItemService.updateStock(body.updates);
+    }
     findAll() {
         return this.menuItemService.findAll();
     }
@@ -67,6 +70,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], MenuItemController.prototype, "deactivate", null);
+__decorate([
+    (0, common_1.Patch)('update-stock'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], MenuItemController.prototype, "updateStock", null);
 __decorate([
     (0, common_1.Get)(),
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Lista de todos los ítems del menú' }),
