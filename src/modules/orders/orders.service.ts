@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,10 +10,12 @@ import { PaymentStatus } from 'src/enum/payment-status.enum';
 import * as dayjs from 'dayjs';
 import { OrderDetailsService } from '../order-details/order-details.service';
 import { CreateOrderDetailDto } from '../order-details/dto/create-order-detail.dto';
+import { OrderRepository } from './orders.repository';
 
 @Injectable()
 export class OrdersService {
-  constructor(@InjectRepository(Order) private readonly orderRepository : Repository<Order>,
+  constructor(@InjectRepository(Order) 
+  private readonly orderRepository: OrderRepository,
   private readonly userService : UsersService,
   private readonly orderDetailsService: OrderDetailsService
 ){}
@@ -46,19 +48,45 @@ return this.orderRepository.save(order);
 
   }
 
-  findAll() {
-    return `This action returns all orders`;
+  async findAll(): Promise<Order[]> {
+    return this.orderRepository.findOrders();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} order`;
+  async findOne(id: string, user: any): Promise<Order> {
+    const order = await this.orderRepository.findOrderById(id);
+
+    if (!order) {
+      throw new NotFoundException(`La orden con ID ${id} no existe.`);
+    }
+    if (user.role !== 'admin' && order.user !== user.id) {
+      throw new NotFoundException('No tienes permisos para ver esta orden.');
+    }
+
+    return order;
   }
 
-  update(id: number, updateOrderDto: UpdateOrderDto) {
-    return `This action updates a #${id} order`;
-  }
+  // async update(id: string, updateOrderDto: UpdateOrderDto): Promise<Order> {
+  //   const order = await this.findOne(id);
 
-  remove(id: number) {
-    return `This action removes a #${id} order`;
+  //   if (updateOrderDto.MenuItems) {
+  //     const updatedDetails =
+  //       await this.orderDetailsService.validateAndUpdateOrderDetails(
+  //         id,
+  //         updateOrderDto.MenuItems,
+  //       );
+  //     order.orderDetails = updatedDetails;
+  //     order.totalPrice = updatedDetails.reduce(
+  //       (total, detail) => total + detail.totalPrice,
+  //       0,
+  //     );
+  //   }
+
+  //   Object.assign(order, updateOrderDto);
+  //   return this.orderRepository.save(order);
+  // }
+
+  async remove(id: string): Promise<void> {
+    const order = await this.orderRepository.findOrderById(id);
+    await this.orderRepository.remove(order);
   }
 }

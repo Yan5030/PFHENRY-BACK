@@ -76,25 +76,18 @@ return { token:token, user:responseUser,loggin};
 }
 
 async validateUserWithAuth0(payload: JwtPayload): Promise<User> {
-
   let user = await this.usersService.getOneByEmail(payload.email);
 
-  // Si no existe, crea el usuario usando la información del payload de Auth0
   if (!user) {
-    const createUserDto = new CreateUserPartialDto({
-      name: payload.name,
+    const createUserDto: CreateUserDto = ({
+      name: payload.name, 
       email: payload.email,
-      password: '', // Como es autenticado por Auth0, no necesitamos la contraseña
-      address: 'default address', // Puedes recibir este dato de Auth0 si es necesario
-      image_url: payload.picture || 'http://example.com', // Imagen proporcionada por Auth0
-      role: Role.User, // Puedes establecer el rol que desees o lo que venga desde Auth0
+      password: '',
+      address: '', 
+      image_url: payload.picture || 'http://example.com',
     });
-
-    // Guarda el nuevo usuario en la base de datos
-  await this.usersService.create(user);
-
-  }
-
+    user = await this.usersService.create(createUserDto);
+  } 
   return user;
 }
 }

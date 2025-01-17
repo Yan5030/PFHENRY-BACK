@@ -29,6 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     // Extraer el dominio de AUTH0_ISSUER_BASE_URL
     const AUTH0_DOMAIN = process.env.AUTH0_ISSUER_BASE_URL?.replace('https://', '').replace('http://', '');
+    //const AUTH0_DOMAIN = new URL(process.env.AUTH0_ISSUER_BASE_URL).hostname;
     
     // Configuración del cliente JWKS
     this.jwksClient = new JwksClient({
