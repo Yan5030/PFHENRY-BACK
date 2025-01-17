@@ -7,7 +7,7 @@ import {
     CreateDateColumn,
   } from 'typeorm';
   import { User } from '../../users/entities/user.entity'; 
-  import { OrderDetail } from './Order-detail.entity'; 
+  import { OrderDetail } from 'src/modules/order-details/entities/order-detail.entity'; 
   import { PaymentMethod } from 'src/enum/payment-method.enum';
   import { PaymentStatus } from 'src/enum/payment-status.enum';
   import { OrderStatus } from 'src/enum/order-status.enum';
