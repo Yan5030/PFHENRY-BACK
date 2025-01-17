@@ -1,7 +1,5 @@
+# compiled output
 /dist
-
-# Node modules
 /node_modules
-
-# dotenv environment variable file
+/build
 .env.development

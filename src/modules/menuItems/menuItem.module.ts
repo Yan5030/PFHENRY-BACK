@@ -5,7 +5,7 @@ import { MenuItemService } from './menuItem.service';
 import { MenuItemController } from './menuItem.controller';
 import { CategoriesModule } from '../categories/categories.module';
 import { Category } from '../categories/entities/category.entity';
-import { OrderDetail } from '../orders/entities/Order-detail.entity';
+import { OrderDetail } from '../order-details/entities/order-detail.entity'; 
 
 
 @Module({
