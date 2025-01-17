@@ -1,10 +1,15 @@
-import { Controller, Get, Post, Body, Param, Delete, BadRequestException, Put, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, BadRequestException, Put, UseInterceptors, UploadedFile, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileUploadService } from '../file-upload/file-upload.service';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { RolesDecorator } from 'src/decorators/roles.decorator';
+import { Role } from 'src/enum/roles.enum';
+import { UpdateRoleUserDto } from './dto/update-role-user.dto';
 
 @ApiTags("Users")
 @Controller('users')
@@ -14,13 +19,16 @@ export class UsersController {
     private readonly fileUploadService : FileUploadService
   ) {}
 
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
-      const newUser= await this.usersService.create(createUserDto);
-      return {message:"Usuario creado con exito",data:newUser}
+ // @Post()
+ // async create(@Body() createUserDto: CreateUserDto) {
+ //     const newUser= await this.usersService.create(createUserDto);
+  //    return {message:"Usuario creado con exito",data:newUser}
 
-  }
-
+ // }
+ 
+  @RolesDecorator(Role.User)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
   @Get()
   async findAll() {
     const users= await this.usersService.findAll();
@@ -42,11 +50,11 @@ export class UsersController {
    
   }
 
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
-      const user= await this.usersService.remove(id);
-      return {message: `Usuario eliminado`}
-  }
+ // @Delete(':id')
+  //async remove(@Param('id') id: string) {
+   //   const user= await this.usersService.remove(id);
+    //  return {message: `Usuario eliminado`}
+ // }
       
 
 
@@ -71,7 +79,19 @@ export class UsersController {
       message: 'Imagen cargada con éxito',
       data: user,
     };
+
   }
+
+  @RolesDecorator(Role.Admin)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
+  @Put("updateRole/:id")
+  async updateRoleUser(@Param("id") id: string, @Body() updateRole :UpdateRoleUserDto ){
+    const updateUser = await this.usersService.updateRol(id,updateRole.role);
+    return {message:"El rol del usuario fue cambiado con exito", data:updateUser}
+      }
+
+
 }
 
 
