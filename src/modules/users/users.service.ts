@@ -27,7 +27,7 @@ export class UsersService {
     }
 
   async findAll() : Promise<ResponseUserDto[]>{
-   const users = await this.usersRepository.find();
+   const users = await this.usersRepository.find({where:{isActive:true}});
   
     const usersNoPassword = users.map(user => new ResponseUserDto(user))
     return usersNoPassword;
@@ -41,6 +41,11 @@ export class UsersService {
 const userNoPassword = new ResponseUserDto(userDb);
 return userNoPassword;
   }
+
+  async findAllAdmin() : Promise<User[]>{
+    const users = await this.usersRepository.find();
+     return users;
+   };
 
   async update(id: string, updateUserDto: UpdateUserDto)  {
     const userDb = await this.usersRepository.findOne({where:{id}});
@@ -94,5 +99,12 @@ console.log(updateRoleUser);
 return await this.usersRepository.save(updateRoleUser);;
 
 }
+
+ async desactivate(id: string): Promise<User> {
+    const user = await this.usersRepository.findOne({where:{id}});
+
+    user.isActive = false; 
+    return await this.usersRepository.save(user);
+  }
 
 }
