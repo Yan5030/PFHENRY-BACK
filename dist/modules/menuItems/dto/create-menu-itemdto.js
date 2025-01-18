@@ -36,7 +36,6 @@ __decorate([
     __metadata("design:type", String)
 ], CreateMenuItemDto.prototype, "image_url", void 0);
 __decorate([
-    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsUUID)(),
     __metadata("design:type", String)
 ], CreateMenuItemDto.prototype, "categoryId", void 0);

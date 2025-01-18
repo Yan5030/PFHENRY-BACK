@@ -11,10 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReservationsService = void 0;
 const common_1 = require("@nestjs/common");
-const dayjs = require("dayjs");
+const dayjs_1 = __importDefault(require("dayjs"));
 const typeorm_1 = require("@nestjs/typeorm");
 const reservation_entity_1 = require("./entities/reservation.entity");
 const typeorm_2 = require("typeorm");
@@ -25,7 +28,7 @@ let ReservationsService = class ReservationsService {
         this.usersService = usersService;
     }
     async create(id, createReservationDto) {
-        const create_at = dayjs().format("YYYY-MM-DD");
+        const create_at = (0, dayjs_1.default)().format("YYYY-MM-DD");
         const user = await this.usersService.findOneById(id);
         const newReservation = this.reservationRepository.create({ ...createReservationDto, create_at: create_at, userId: user });
         return this.reservationRepository.save(newReservation);

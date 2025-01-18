@@ -5,8 +5,11 @@ export declare class CategoriesController {
     private readonly categoriesService;
     constructor(categoriesService: CategoriesService);
     findAll(): Promise<import("./entities/category.entity").Category[]>;
+    seedCategories(): Promise<string>;
     findOne(id: string): Promise<import("./entities/category.entity").Category>;
     create(createCategoryDto: CreateCategoryDto): Promise<import("./entities/category.entity").Category>;
     update(id: string, updateCategoryDto: UpdateCategoryDto): Promise<import("./entities/category.entity").Category>;
-    delete(id: string): Promise<void>;
+    delete(id: string): {
+        message: string;
+    };
 }

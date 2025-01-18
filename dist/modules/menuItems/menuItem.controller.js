@@ -22,6 +22,17 @@ let MenuItemController = class MenuItemController {
     constructor(menuItemService) {
         this.menuItemService = menuItemService;
     }
+    async seedMenuItems() {
+        try {
+            return await this.menuItemService.seedMenuItems();
+        }
+        catch (error) {
+            throw new common_1.HttpException({
+                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
+                error: 'Los elementos del menú ya han sido cargados con anterioridad',
+            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     create(createMenuItemDto) {
         return this.menuItemService.create(createMenuItemDto);
     }
@@ -39,6 +50,12 @@ let MenuItemController = class MenuItemController {
     }
 };
 exports.MenuItemController = MenuItemController;
+__decorate([
+    (0, common_1.Get)('seeder'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], MenuItemController.prototype, "seedMenuItems", null);
 __decorate([
     (0, common_1.Post)(),
     (0, swagger_1.ApiResponse)({ status: 201, description: 'Ítem del menú creado exitosamente' }),

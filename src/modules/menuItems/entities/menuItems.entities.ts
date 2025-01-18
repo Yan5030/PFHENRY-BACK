@@ -4,6 +4,7 @@ import {
     Column,
     ManyToOne,
     OneToMany,
+    JoinColumn,
   } from 'typeorm';
   import { OrderDetail } from '../../orders/entities/order-detail.entity';
   import { Category } from '../../categories/entities/category.entity';
@@ -26,6 +27,7 @@ import {
     image_url?: string; 
   
     @ManyToOne(() => Category, (category) => category.menuItems, { onDelete: 'SET NULL' })
+    @JoinColumn({ name: 'category_id' })//jhon
     category: Category; 
   
 /*     @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.menuItem)

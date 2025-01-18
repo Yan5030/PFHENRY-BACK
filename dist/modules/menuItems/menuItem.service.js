@@ -11,49 +11,57 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuItemService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const fs = require("fs");
 const menuItems_entities_1 = require("./entities/menuItems.entities");
 const category_entity_1 = require("../categories/entities/category.entity");
+const data_json_1 = __importDefault(require("../utils/data.json"));
 let MenuItemService = class MenuItemService {
     constructor(menuItemRepository, categoryRepository) {
         this.menuItemRepository = menuItemRepository;
         this.categoryRepository = categoryRepository;
     }
+    async seedMenuItems() {
+        const categories = await this.categoryRepository.find();
+        const missingCategories = new Set();
+        for (const item of data_json_1.default) {
+            const category = categories.find(cat => cat.name === item.category);
+            if (!category) {
+                missingCategories.add(item.category);
+                continue;
+            }
+            const menuItemExists = await this.menuItemRepository.findOne({ where: { name: item.name } });
+            if (!menuItemExists) {
+                const newMenuItem = this.menuItemRepository.create({
+                    name: item.name,
+                    description: item.description,
+                    price: item.price,
+                    image_url: item.image_url,
+                    category: category,
+                });
+                await this.menuItemRepository.save(newMenuItem);
+            }
+        }
+        if (missingCategories.size > 0) {
+            return `Las siguientes categorías no existen: ${[...missingCategories].join(', ')}`;
+        }
+        return 'Menú cargado con éxito';
+    }
     async onModuleInit() {
         await this.seedMenuItems();
     }
-    async seedMenuItems() {
-        try {
-            const menuItemsData = JSON.parse(fs.readFileSync('menuItem.json', 'utf8'));
-            for (const menuItemData of menuItemsData) {
-                const { categoryId, ...menuItemDto } = menuItemData;
-                let category;
-                if (categoryId) {
-                    category = await this.categoryRepository.findOne({ where: { id: categoryId } });
-                    if (!category) {
-                        console.log(`Category with ID ${categoryId} not found. Skipping menu item.`);
-                        continue;
-                    }
-                }
-                const menuItem = this.menuItemRepository.create({
-                    ...menuItemDto,
-                    category,
-                });
-                await this.menuItemRepository.save(menuItem);
-            }
-            console.log('Menu items seeded successfully.');
-        }
-        catch (error) {
-            console.error('Error seeding menu items:', error);
-        }
-    }
     async create(createMenuItemDto) {
-        const menuItem = this.menuItemRepository.create(createMenuItemDto);
+        const category = await this.categoryRepository.findOne({ where: { id: createMenuItemDto.categoryId } });
+        if (!category) {
+            throw new common_1.NotFoundException('Category not found');
+        }
+        const menuItem = this.menuItemRepository.create({ ...createMenuItemDto, category });
         return await this.menuItemRepository.save(menuItem);
     }
     async update(id, updateMenuItemDto) {

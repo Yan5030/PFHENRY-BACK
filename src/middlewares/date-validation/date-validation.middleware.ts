@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable, NestMiddleware } from '@nestjs/common';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
+
 import { NextFunction, Request, Response } from 'express';
 
 @Injectable()

@@ -1,0 +1,26 @@
+[
+    {
+        "category": "Bebida",
+        "categoryDescription": "Categoría para bebidas refrescantes y deliciosas.",
+        "name": "Cerveza de mantequilla",
+        "description": "La clásica bebida dulce de Hogsmeade",
+        "price": 4.99,
+        "image_url": "https://example.com/cerveza_mantequilla.jpg"
+    },
+    {
+        "category": "Bebidas",
+        "categoryDescription": "Categoría para bebidas especiales y únicas.",
+        "name": "Poción multijugos",
+        "description": "Una bebida especial que cambia de sabor",
+        "price": 6.99,
+        "image_url": "https://example.com/pocion_multijugos.jpg"
+    },
+    {
+        "category": "Platos",
+        "categoryDescription": "Platos principales y suculentos para disfrutar.",
+        "name": "Estofado del Gran Comedor",
+        "description": "Un suculento plato servido durante los banquetes",
+        "price": 12.99,
+        "image_url": "https://example.com/estofado_gran_comedor.jpg"
+    }
+]

@@ -6,7 +6,8 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { ResponseUserDto } from './dto/response-user.dto';
 import { Role } from 'src/enum/roles.enum';
-import  * as dayjs from 'dayjs';
+// import  * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 @Injectable()
 export class UsersService {

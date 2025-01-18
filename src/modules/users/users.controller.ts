@@ -1,10 +1,14 @@
-import { Controller, Get, Post, Body, Param, Delete, BadRequestException, Put, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, BadRequestException, Put, UseInterceptors, UploadedFile, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileUploadService } from '../file-upload/file-upload.service';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { Role } from 'src/enum/roles.enum';
+import { RolesDecorator } from 'src/decorators/roles.decorator';
 
 @ApiTags("Users")
 @Controller('users')
@@ -21,6 +25,8 @@ export class UsersController {
 
   }
 
+  // @RolesDecorator(Role.Admin)
+  // @UseGuards(RolesGuard)
   @Get()
   async findAll() {
     const users= await this.usersService.findAll();

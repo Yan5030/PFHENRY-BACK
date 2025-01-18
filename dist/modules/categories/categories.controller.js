@@ -24,6 +24,17 @@ let CategoriesController = class CategoriesController {
     findAll() {
         return this.categoriesService.findAllCategories();
     }
+    async seedCategories() {
+        try {
+            return await this.categoriesService.seedCategories();
+        }
+        catch (error) {
+            throw new common_1.HttpException({
+                status: common_1.HttpStatus.INTERNAL_SERVER_ERROR,
+                error: 'Las categorías han sido cargadas con anterioridad',
+            }, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     findOne(id) {
         return this.categoriesService.findCategoryById(id);
     }
@@ -34,7 +45,8 @@ let CategoriesController = class CategoriesController {
         return this.categoriesService.updateCategory(id, updateCategoryDto);
     }
     delete(id) {
-        return this.categoriesService.deleteCategory(id);
+        const delet = this.categoriesService.deleteCategory(id);
+        return { message: `Categoria con id: ${id} se elimino exitosamente` };
     }
 };
 exports.CategoriesController = CategoriesController;
@@ -44,6 +56,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], CategoriesController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('seeder'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], CategoriesController.prototype, "seedCategories", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),

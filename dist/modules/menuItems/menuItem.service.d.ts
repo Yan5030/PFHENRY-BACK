@@ -8,8 +8,8 @@ export declare class MenuItemService implements OnModuleInit {
     private readonly menuItemRepository;
     private readonly categoryRepository;
     constructor(menuItemRepository: Repository<MenuItem>, categoryRepository: Repository<Category>);
+    seedMenuItems(): Promise<string>;
     onModuleInit(): Promise<void>;
-    private seedMenuItems;
     create(createMenuItemDto: CreateMenuItemDto): Promise<MenuItem>;
     update(id: string, updateMenuItemDto: UpdateMenuItemDto): Promise<MenuItem>;
     deactivate(id: string): Promise<MenuItem>;

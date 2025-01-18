@@ -37,6 +37,7 @@ __decorate([
 ], MenuItem.prototype, "image_url", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => category_entity_1.Category, (category) => category.menuItems, { onDelete: 'SET NULL' }),
+    (0, typeorm_1.JoinColumn)({ name: 'category_id' }),
     __metadata("design:type", category_entity_1.Category)
 ], MenuItem.prototype, "category", void 0);
 __decorate([

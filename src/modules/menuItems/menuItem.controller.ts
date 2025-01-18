@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Param, Get, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Get, Delete, HttpException, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger'; 
 import { MenuItemService } from './menuItem.service';
 import { CreateMenuItemDto } from './dto/create-menu-itemdto';
@@ -9,6 +9,20 @@ import { UpdateMenuItemDto } from './dto/update-product-dto';
 export class MenuItemController {
   constructor(private readonly menuItemService: MenuItemService) {}
 
+  @Get('seeder')
+  async seedMenuItems() {
+    try {
+      return await this.menuItemService.seedMenuItems();
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Los elementos del menú ya han sido cargados con anterioridad',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
   @Post()
   @ApiResponse({ status: 201, description: 'Ítem del menú creado exitosamente' })
   @ApiBody({ type: CreateMenuItemDto })
