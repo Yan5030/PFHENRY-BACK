@@ -17,6 +17,7 @@ import { OrdersModule } from './modules/orders/orders.module';
 import { MenuItemModule } from './modules/menuItems/menuItem.module';
 import { FileUploadModule } from './modules/file-upload/file-upload.module';
 import { CloudinaryService } from './service/cloudinary/cloudinary,service';
+import { OrderDetailsModule } from './modules/order-details/order-details.module';
 
 @Module({
   imports: [
@@ -37,7 +38,8 @@ import { CloudinaryService } from './service/cloudinary/cloudinary,service';
     CategoriesModule,
     OrdersModule,
     MenuItemModule,
-    FileUploadModule
+    FileUploadModule,
+    OrderDetailsModule
   ],
 
   controllers: [AppController],

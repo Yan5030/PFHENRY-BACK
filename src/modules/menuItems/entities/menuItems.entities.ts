@@ -6,7 +6,7 @@ import {
     OneToMany,
     JoinColumn,
   } from 'typeorm';
-  import { OrderDetail } from '../../orders/entities/order-detail.entity';
+  import { OrderDetail } from 'src/modules/order-details/entities/order-detail.entity'; 
   import { Category } from '../../categories/entities/category.entity';
   
   @Entity('menu_items')

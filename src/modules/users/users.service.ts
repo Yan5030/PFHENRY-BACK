@@ -67,6 +67,33 @@ const userDb = await this.usersRepository.findOne({where:{email}})
 return userDb;
 }
 
+async updateRol(id: string, newRole: string)  {
+  const userDb = await this.usersRepository.findOne({where:{id}});
+if(!userDb){
+  throw new BadRequestException("No se encontraron usuarios con la id ingresada");
+}
+console.log(newRole);
 
+let rol:Role;
+if(newRole === "admin"){
+rol = Role.Admin
+} else if(newRole=== "worker"){
+rol = Role.Worker
+} else if (newRole === "user"){
+  rol = Role.User
+}
+else{
+  throw new BadRequestException("El rol ingresado es incorrecto, ingrese otro rol");
+}
+
+const updateRoleUser = {
+  ...userDb,
+role:rol
+}
+console.log(updateRoleUser);
+
+return await this.usersRepository.save(updateRoleUser);;
+
+}
 
 }
