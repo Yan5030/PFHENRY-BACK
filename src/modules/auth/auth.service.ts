@@ -49,7 +49,6 @@ async signin(signinAuthDto: SigninAuthDto) {
     const user = await this.usersService.getOneByEmail(email);
     if (!user) {
       throw new BadRequestException('Credenciales incorrectas');
-
     }
 
     //const validPassword = await bcrypt.compare(password, user.password);
@@ -64,6 +63,7 @@ const payload = {
   email: user.email,
   roles: [user.role],
 }
+console.log(payload)
 const loggin = true;
 const token = this.jwtService.sign(payload);
 const responseUser = new ResponseUserDto(user)

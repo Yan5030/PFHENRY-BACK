@@ -12,11 +12,25 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { RolesDecorator } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Role } from 'src/enum/roles.enum';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService,
+    private readonly jwtService: JwtService,
+  ) {}
 
+  @Post('validate-token')
+  async validateToken(@Body('token') token: string) {
+  try {
+    const payload = this.jwtService.verify(token, {
+      secret: process.env.JWT_SECRET || 'clavesecret',
+    });
+    return { isValid: true, payload };
+  } catch (error) {
+    return { isValid: false, message: 'Token inválido' };
+  }
+}
 
   @Post('signup')
   async signup(@Body() createUserDto: CreateUserDto) {

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, BadRequestException, Put, UseInterceptors, UploadedFile, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, BadRequestException, Put, UseInterceptors, UploadedFile, UseGuards, Request, UseFilters } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -7,21 +7,18 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { FileUploadService } from '../file-upload/file-upload.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
-<<<<<<< HEAD
-import { Role } from 'src/enum/roles.enum';
-import { RolesDecorator } from 'src/decorators/roles.decorator';
-=======
 import { RolesDecorator } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
 import { UpdateRoleUserDto } from './dto/update-role-user.dto';
->>>>>>> develop
+import { JwtService } from '@nestjs/jwt';
 
 @ApiTags("Users")
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly fileUploadService : FileUploadService
+    private readonly fileUploadService : FileUploadService,
+    private readonly jwtService: JwtService
   ) {}
 
  // @Post()
@@ -29,16 +26,29 @@ export class UsersController {
  //     const newUser= await this.usersService.create(createUserDto);
   //    return {message:"Usuario creado con exito",data:newUser}
 
-<<<<<<< HEAD
   // @RolesDecorator(Role.Admin)
   // @UseGuards(RolesGuard)
-=======
  // }
- 
+ @Post('validate-token')
+  async validateToken(@Body('token') token: string) {
+  try {
+    const payload = this.jwtService.verify(token, {
+      secret: process.env.JWT_SECRET || 'clavesecret',
+    });
+    const user = await this.usersService.findOneById(payload.sub);
+    if (!user) {
+      return { isValid: false, message: 'Usuario no encontrado' };
+    }
+    return { isValid: true, user };
+  } catch (error) {
+    return { isValid: false, message: 'Token inválido' };
+  }
+}
+
+
   @RolesDecorator(Role.User)
   @UseGuards(AuthGuard,RolesGuard)
   @ApiBearerAuth()
->>>>>>> develop
   @Get()
   async findAll() {
     const users= await this.usersService.findAll();
@@ -59,6 +69,8 @@ export class UsersController {
       return {message:"Usuario modificado", data:updateUser};
    
   }
+
+
 
  // @Delete(':id')
   //async remove(@Param('id') id: string) {
