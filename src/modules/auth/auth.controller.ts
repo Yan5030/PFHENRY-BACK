@@ -2,7 +2,9 @@ import {
   Controller, 
   Get, 
   Post, 
-  Body, 
+  Body,
+  Headers,
+  Request,
   UseGuards 
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -20,17 +22,39 @@ export class AuthController {
     private readonly jwtService: JwtService,
   ) {}
 
+  
   @Post('validate-token')
-  async validateToken(@Body('token') token: string) {
-  try {
-    const payload = this.jwtService.verify(token, {
-      secret: process.env.JWT_SECRET || 'clavesecret',
-    });
-    return { isValid: true, payload };
-  } catch (error) {
-    return { isValid: false, message: 'Token inválido' };
+  async validateToken(
+    @Headers('authorization') authHeader: string,
+    @Request() req,
+  ) {
+    let token = authHeader ? authHeader.split(' ')[1] : null;
+ 
+    if (!token) {
+      const cookies = req.headers.cookie;
+      if (cookies) {
+        const tokenCookie = cookies
+          .split('; ')
+          .find((cookie) => cookie.startsWith('token='));
+        if (tokenCookie) {
+          token = tokenCookie.split('=')[1];
+        }
+      }
+    }
+ 
+    if (!token) {
+      return { isValid: false, message: 'Token no proporcionado o inválido' };
+    }
+ 
+    try {
+      const payload = this.jwtService.verify(token, {
+        secret: process.env.JWT_SECRET || 'clavesecret',
+      });
+      return { isValid: true, payload };
+    } catch (error) {
+      return { isValid: false, message: 'Token inválido' };
+    }
   }
-}
 
   @Post('signup')
   async signup(@Body() createUserDto: CreateUserDto) {

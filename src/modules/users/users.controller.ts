@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, BadRequestException, Put, UseInterceptors, UploadedFile, UseGuards, Request, UseFilters } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, BadRequestException, Req, Put, UseInterceptors, UploadedFile, UseGuards, UseFilters } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -11,6 +11,7 @@ import { RolesDecorator } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
 import { UpdateRoleUserDto } from './dto/update-role-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { Request } from 'express';
 
 @ApiTags("Users")
 @Controller('users')
@@ -29,22 +30,6 @@ export class UsersController {
   // @RolesDecorator(Role.Admin)
   // @UseGuards(RolesGuard)
  // }
- @Post('validate-token')
-  async validateToken(@Body('token') token: string) {
-  try {
-    const payload = this.jwtService.verify(token, {
-      secret: process.env.JWT_SECRET || 'clavesecret',
-    });
-    const user = await this.usersService.findOneById(payload.sub);
-    if (!user) {
-      return { isValid: false, message: 'Usuario no encontrado' };
-    }
-    return { isValid: true, user };
-  } catch (error) {
-    return { isValid: false, message: 'Token inválido' };
-  }
-}
-
 
   @RolesDecorator(Role.User)
   @UseGuards(AuthGuard,RolesGuard)
