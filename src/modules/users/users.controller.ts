@@ -110,6 +110,14 @@ async desactivateUser(@Param("id") id:string){
  return await this.usersService.desactivate(id);
 }
 
+@Get(":id/reservations")
+async findReservationsByUser(@Param("id") id:string){
+const reservations = await this.usersService.findReservationsByUserService(id);
+return {data:reservations}
+
+}
+
+
 }
 
 

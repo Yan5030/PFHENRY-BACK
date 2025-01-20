@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Reservation } from './entities/reservation.entity';
 import { Repository } from 'typeorm';
 import { UsersService } from '../users/users.service';
+import { ReservationStatus } from 'src/enum/reservationStatus.enum';
 
 @Injectable()
 export class ReservationsService {
@@ -46,8 +47,9 @@ throw new BadRequestException("El id ingresado no es correcto");
     return this.reservationRepository.save(updateReservation);
   }
 
-  async remove(id: string) {
-    const reservation = await this.reservationRepository.findOne({where:{id}})
-    return this.reservationRepository.delete(id);
+  async cancelled(id: string) {
+    const reservation = await this.findOneById(id);
+    const updateRes = {...reservation,status:ReservationStatus.Cancelled};
+    return this.reservationRepository.save(updateRes);
   }
 }

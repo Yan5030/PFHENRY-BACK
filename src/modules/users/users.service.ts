@@ -107,4 +107,16 @@ return await this.usersRepository.save(updateRoleUser);;
     return await this.usersRepository.save(user);
   }
 
+
+  async findReservationsByUserService(id : string){
+    const user = await this.usersRepository.findOne({where:{id},relations:{reservations:true}});
+    const reservations = user?.reservations;
+    if(!reservations){
+      throw new BadRequestException("El usuario no tiene reservas");
+    }
+  return reservations;
+  }
+
+
+
 }
