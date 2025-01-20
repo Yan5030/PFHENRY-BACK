@@ -1,25 +1,22 @@
 import { 
   Controller, 
+  Get, 
   Post, 
   Body, 
-  BadRequestException,
   Headers,
   Request,
-  UseGuards 
+  UseGuards
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { SigninAuthDto } from './dto/sigin-auth.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { JwtService } from '@nestjs/jwt';
-
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService, 
-    private readonly jwtService: JwtService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
-  @Post('validate-token')
+   @Post('validate-token')
   async validateToken(
     @Headers('authorization') authHeader: string,
     @Request() req,
@@ -51,6 +48,7 @@ export class AuthController {
       return { isValid: false, message: 'Token inválido' };
     }
   }
+
 
   @Post('signup')
   async signup(@Body() createUserDto: CreateUserDto) {
