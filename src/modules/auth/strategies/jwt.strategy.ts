@@ -37,13 +37,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: JwtPayload) {
-    // Verifica si el usuario existe en la base de datos o lo crea
-    const user = await this.authService.validateUserWithAuth0(payload);
-
-    // Retorna el usuario con la información que necesitas
-    return { userId: user.id, email: user.email, roles: user.role };
-  }
 }
 
 
