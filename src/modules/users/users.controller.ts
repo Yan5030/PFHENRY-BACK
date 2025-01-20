@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, BadRequestException, Req, Put, UseInterceptors, UploadedFile, UseGuards, Request ,UseFilters } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, BadRequestException, Put, UseInterceptors, UploadedFile, UseGuards, Patch } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -34,10 +34,22 @@ export class UsersController {
   @UseGuards(AuthGuard,RolesGuard)
   @ApiBearerAuth()
   @Get()
-  async findAll() {
+  async findAllActivate() {
     const users= await this.usersService.findAll();
       return  {data: users}
   }
+
+
+  @RolesDecorator(Role.Admin)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
+  @Get("/findAllUsers")
+  async findAllAdmin() {
+    const users= await this.usersService.findAllAdmin();
+      return  {data: users}
+  }
+
+
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
@@ -98,7 +110,22 @@ export class UsersController {
       }
 
 
+
+    @Patch("desactivate/:id")
+async desactivateUser(@Param("id") id:string){
+ return await this.usersService.desactivate(id);
 }
+
+@Get(":id/reservations")
+async findReservationsByUser(@Param("id") id:string){
+const reservations = await this.usersService.findReservationsByUserService(id);
+return {data:reservations}
+
+}
+
+
+}
+
 
 
 

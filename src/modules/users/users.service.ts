@@ -106,8 +106,17 @@ return await this.usersRepository.save(updateRoleUser);;
     user.isActive = false; 
     return await this.usersRepository.save(user);
   }
-  
-  async getOneByAuth0Id(auth0Id: string): Promise<User | undefined> {
-    return this.usersRepository.findOne({ where: { auth0Id } });
+
+
+  async findReservationsByUserService(id : string){
+    const user = await this.usersRepository.findOne({where:{id},relations:{reservations:true}});
+    const reservations = user?.reservations;
+    if(!reservations){
+      throw new BadRequestException("El usuario no tiene reservas");
+    }
+  return reservations;
   }
+
+
+
 }

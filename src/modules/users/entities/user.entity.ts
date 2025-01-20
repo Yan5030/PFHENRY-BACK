@@ -29,9 +29,10 @@ create_at : string
 @OneToMany(()=>Reservation,(reservation)=>reservation.userId)
 reservations:Reservation[]
 @OneToMany(() => Order, (order) => order.user) // Relación con Order
-orders: Order[]; // Un usuario puede tener varias órdenes  
+orders: Order[]; // Un usuario puede tener varias órdenes
+
 @Column({ type: 'boolean', default: true })
-    isActive: boolean; //borrado logico  
+    isActive: boolean; //borrado logico
 }
 
 
