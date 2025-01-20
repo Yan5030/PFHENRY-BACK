@@ -8,13 +8,20 @@ import {
   UseGuards
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from '../users/dto/create-user.dto';
+import { CreateUserDto } from '../users/dto/create-user.dto'; // Mantener el DTO de Jhon
 import { SigninAuthDto } from './dto/sigin-auth.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { RolesDecorator } from 'src/decorators/roles.decorator';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { Role } from 'src/enum/roles.enum';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { JwtService } from '@nestjs/jwt';
+
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService,
+    private readonly jwtService: JwtService,
+  ) {}
 
    @Post('validate-token')
   async validateToken(
@@ -48,7 +55,6 @@ export class AuthController {
       return { isValid: false, message: 'Token inválido' };
     }
   }
-
 
   @Post('signup')
   async signup(@Body() createUserDto: CreateUserDto) {
