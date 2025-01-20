@@ -13,22 +13,20 @@ import { AuthMiddleware } from 'src/middlewares/Auth.middleware';
 
 @Module({
   imports: [
-    ConfigModule, // Variables de entorno
+    ConfigModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
    JwtModule.register({
      global: true,
      signOptions: { expiresIn: '1h' },
-      secret: process.env.JWT_SECRET || 'clavesecret', // Manejo de secretos desde entorno
+      secret: process.env.JWT_SECRET || 'clavesecret', 
    }),
-    TypeOrmModule.forFeature([User]), // Configuración de TypeORM
+    TypeOrmModule.forFeature([User]), 
     UsersModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
   exports: [PassportModule, JwtModule],
 })
-
-
 export class AuthModule implements NestModule {
   configure (consumer:MiddlewareConsumer) {
     consumer

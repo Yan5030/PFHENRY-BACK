@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, HttpException, HttpStatus } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import {  UpdateCategoryDto } from './dto/update-category.dto';
@@ -10,6 +10,21 @@ export class CategoriesController {
   @Get()
   findAll() {
     return this.categoriesService.findAllCategories();
+  }
+
+  @Get('seeder')
+  async seedCategories() {
+    try {
+      return await this.categoriesService.seedCategories();
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Las categorías han sido cargadas con anterioridad',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Get(':id')
@@ -29,7 +44,7 @@ export class CategoriesController {
 
   @Delete(':id')
   delete(@Param('id') id: string) {
-    return this.categoriesService.deleteCategory(id);
+    const delet = this.categoriesService.deleteCategory(id);
+    return {message: `Categoria con id: ${id} se elimino exitosamente`};
   }
 }
-

@@ -7,42 +7,58 @@ import { Repository } from 'typeorm';
 import { UsersService } from '../users/users.service';
 import { OrderStatus } from 'src/enum/order-status.enum';
 import { PaymentStatus } from 'src/enum/payment-status.enum';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { OrderDetailsService } from '../order-details/order-details.service';
 import { CreateOrderDetailDto } from '../order-details/dto/create-order-detail.dto';
 import { OrderRepository } from './orders.repository';
 
 @Injectable()
 export class OrdersService {
-  constructor(@InjectRepository(Order) 
-  private readonly orderRepository: OrderRepository,
+  constructor(
+  private readonly orderRepository : OrderRepository,
   private readonly userService : UsersService,
   private readonly orderDetailsService: OrderDetailsService
 ){}
 async create(createOrderDto: CreateOrderDto) {
   const{idUser,MenuItems,paymentMethod} = createOrderDto;
+console.log(createOrderDto, "create order ");
 
   const user = await this.userService.findOneById(idUser);
   if(!user){
     throw new BadRequestException("No se encontro ese usuario");
   }
+  if (!Array.isArray(MenuItems) || MenuItems.length === 0) {
+    throw new BadRequestException("MenuItems debe ser un array no vacío");
+  }
 
-  const order = this.orderRepository.create({
+  const createOrder = this.orderRepository.create({
     user,
     paymentMethod,
     status: OrderStatus.EN_PREPARACION,
     payment_status:PaymentStatus.PENDIENTE,
-    createdAt: dayjs().format("YYYY-MM-DD")
+    createdAt: dayjs().format("YYYY-MM-DD"),
+    totalPrice:0
   })
-this.orderRepository.save(order);
+const order = await this.orderRepository.save(createOrder);
+console.log(order, "order");
 
-const detalleOrden = await Promise.all(MenuItems.map( async menu=>{ return await this.orderDetailsService.create(menu,order)}))
+const detalleOrden = await Promise.all(MenuItems.map( async menu=>{ 
+  console.log("menu, map", menu);
+  
+  const result = await this.orderDetailsService.create(menu,order)
+  console.log("result map",result);
+  
+  return result;
+}))
+console.log(detalleOrden,"det or");
 
-let total = 0;
-detalleOrden.forEach(det=> {return total = total + det.subtotal} )
+const total = detalleOrden.reduce((sum, det) => sum + det.subtotal, 0);
+  console.log(total, "total calculado");
 
 order.totalPrice = total;
 order.orderDetails = detalleOrden;
+
+console.log("order final", order);
 
 return this.orderRepository.save(order);
 
@@ -56,36 +72,14 @@ return this.orderRepository.save(order);
     const order = await this.orderRepository.findOrderById(id);
 
     if (!order) {
-      throw new NotFoundException(`La orden con ID ${id} no existe.`);
+      throw new NotFoundException("La orden con ID ${id} no existe.");
     }
     if (user.role !== 'admin' && order.user !== user.id) {
       throw new NotFoundException('No tienes permisos para ver esta orden.');
     }
 
     return order;
-  }
-
-  // async update(id: string, updateOrderDto: UpdateOrderDto): Promise<Order> {
-  //   const order = await this.findOne(id);
-
-  //   if (updateOrderDto.MenuItems) {
-  //     const updatedDetails =
-  //       await this.orderDetailsService.validateAndUpdateOrderDetails(
-  //         id,
-  //         updateOrderDto.MenuItems,
-  //       );
-  //     order.orderDetails = updatedDetails;
-  //     order.totalPrice = updatedDetails.reduce(
-  //       (total, detail) => total + detail.totalPrice,
-  //       0,
-  //     );
-  //   }
-
-  //   Object.assign(order, updateOrderDto);
-  //   return this.orderRepository.save(order);
-  // }
-
-  async remove(id: string): Promise<void> {
+  }async remove(id: string): Promise<void> {
     const order = await this.orderRepository.findOrderById(id);
     await this.orderRepository.remove(order);
   }

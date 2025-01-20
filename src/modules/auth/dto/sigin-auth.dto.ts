@@ -4,6 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString, Length, MaxLength, MinLength } from 'class-validator';
 import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
 
+
 // export class UpdateAuthDto extends PartialType(CreateAuthDto) {}
 export class SigninAuthDto{
     @ApiProperty({
@@ -15,6 +16,8 @@ export class SigninAuthDto{
         @MinLength(3)
         @MaxLength(80)
     email: string;
+
+
 
 
     @ApiProperty({

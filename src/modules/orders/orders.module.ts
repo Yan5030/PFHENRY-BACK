@@ -10,10 +10,11 @@ import { OrderDetailsService } from '../order-details/order-details.service';
 import { User } from '../users/entities/user.entity';
 import { MenuItemService } from '../menuItems/menuItem.service';
 import { Category } from '../categories/entities/category.entity';
+import { OrderRepository } from './orders.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([OrderDetail, MenuItem,Order,User,Category])],
 controllers: [OrdersController],
-  providers: [OrdersService,UsersService,OrderDetailsService,MenuItemService],
+  providers: [OrdersService,UsersService,OrderDetailsService,MenuItemService,OrderRepository],
 })
 export class OrdersModule {}

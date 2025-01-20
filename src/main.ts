@@ -1,8 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import {BadRequestException, ValidationPipe } from '@nestjs/common';
-import { auth } from 'express-openid-connect';
-import { auth0Config } from './config/auth0.config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import{config as dotenvConfig} from "dotenv"
 dotenvConfig({path:'.env'})
