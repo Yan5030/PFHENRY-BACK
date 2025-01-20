@@ -6,6 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrderDetail } from './entities/order-detail.entity';
 import { Order } from '../orders/entities/order.entity';
+import { UpdateMenuItemDto } from '../menuItems/dto/update-product-dto';
 
 @Injectable()
 export class OrderDetailsService {
@@ -18,12 +19,12 @@ constructor(private readonly menuItemService : MenuItemService,
     const menu = await this.menuItemService.findOne(idMenuItem)
 
     let subtotal= 0;
-    // stock , remplazar price por stock
-    if(menu.price > 0 && menu.price > quantity ){
-     menu.price = menu.price - quantity
+    if(menu.stock > 0 && menu.stock > quantity ){
+     menu.stock = menu.stock - quantity
 
      subtotal = menu.price * quantity;//este no se reemplaza es para el precio
-     //this.menuItemService.update(menu.id, stock: menu.price)
+    const updateData: UpdateMenuItemDto = { stock: menu.stock };
+    await this.menuItemService.update(menu.id,updateData)
     }else{
       throw new BadRequestException("No hay suficiente stock para realizar la orden")
     }
@@ -33,6 +34,8 @@ constructor(private readonly menuItemService : MenuItemService,
       quantity,
       subtotal
     })
+    console.log("create det ord",orderDetail);
+    
     return this.orderDetailRepository.save(orderDetail);
   }
 

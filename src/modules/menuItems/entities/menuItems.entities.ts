@@ -28,11 +28,14 @@ import {
     @ManyToOne(() => Category, (category) => category.menuItems, { onDelete: 'SET NULL' })
     category: Category; 
   
-/*     @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.menuItem)
-    orderDetails: OrderDetail[]; */
+     @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.menuItem)
+    orderDetails: OrderDetail[]
 
     @Column({ type: 'boolean', default: true })
     isActive: boolean;
+
+    @Column()
+    stock: number
 
   }
   
