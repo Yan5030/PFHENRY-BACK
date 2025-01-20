@@ -3,7 +3,10 @@ import {
   Get, 
   Post, 
   Body, 
-  UseGuards 
+  UseGuards,
+  Headers,
+  Request,
+  UseGuards
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto'; // Mantener el DTO de Jhon
@@ -16,6 +19,39 @@ import { Role } from 'src/enum/roles.enum';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+   @Post('validate-token')
+  async validateToken(
+    @Headers('authorization') authHeader: string,
+    @Request() req,
+  ) {
+    let token = authHeader ? authHeader.split(' ')[1] : null;
+ 
+    if (!token) {
+      const cookies = req.headers.cookie;
+      if (cookies) {
+        const tokenCookie = cookies
+          .split('; ')
+          .find((cookie) => cookie.startsWith('token='));
+        if (tokenCookie) {
+          token = tokenCookie.split('=')[1];
+        }
+      }
+    }
+ 
+    if (!token) {
+      return { isValid: false, message: 'Token no proporcionado o inválido' };
+    }
+ 
+    try {
+      const payload = this.jwtService.verify(token, {
+        secret: process.env.JWT_SECRET || 'clavesecret',
+      });
+      return { isValid: true, payload };
+    } catch (error) {
+      return { isValid: false, message: 'Token inválido' };
+    }
+  }
 
 
   @Post('signup')
