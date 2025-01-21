@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
-import * as dayjs from "dayjs"
+import dayjs from "dayjs";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reservation } from './entities/reservation.entity';
 import { Repository } from 'typeorm';

@@ -10,13 +10,15 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { RolesDecorator } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
 import { UpdateRoleUserDto } from './dto/update-role-user.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @ApiTags("Users")
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly fileUploadService : FileUploadService
+    private readonly fileUploadService : FileUploadService,
+    private readonly jwtService: JwtService
   ) {}
 
  // @Post()
@@ -24,8 +26,10 @@ export class UsersController {
  //     const newUser= await this.usersService.create(createUserDto);
   //    return {message:"Usuario creado con exito",data:newUser}
 
+  // @RolesDecorator(Role.Admin)
+  // @UseGuards(RolesGuard)
  // }
- 
+
   @RolesDecorator(Role.User)
   @UseGuards(AuthGuard,RolesGuard)
   @ApiBearerAuth()
@@ -61,6 +65,8 @@ export class UsersController {
       return {message:"Usuario modificado", data:updateUser};
    
   }
+
+
 
  // @Delete(':id')
   //async remove(@Param('id') id: string) {

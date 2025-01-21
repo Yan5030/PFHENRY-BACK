@@ -6,7 +6,7 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { ResponseUserDto } from './dto/response-user.dto';
 import { Role } from 'src/enum/roles.enum';
-import  * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 @Injectable()
 export class UsersService {
@@ -117,6 +117,8 @@ return await this.usersRepository.save(updateRoleUser);;
   return reservations;
   }
 
-
+  async getOneByAuth0Id(auth0Id: string): Promise<User | undefined> {
+    return this.usersRepository.findOne({ where: { auth0Id } });
+  }
 
 }

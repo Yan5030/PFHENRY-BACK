@@ -31,8 +31,8 @@ import {
      @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.menuItem)
     orderDetails: OrderDetail[]
 
-    @Column({ type: 'boolean', default: true })
-    isActive: boolean;
+  @Column({ type: 'boolean', default: true })
+  isActive: boolean;
 
     @Column()
     stock: number

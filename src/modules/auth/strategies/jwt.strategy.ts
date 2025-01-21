@@ -29,6 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     // Extraer el dominio de AUTH0_ISSUER_BASE_URL
     const AUTH0_DOMAIN = process.env.AUTH0_ISSUER_BASE_URL?.replace('https://', '').replace('http://', '');
+    //const AUTH0_DOMAIN = new URL(process.env.AUTH0_ISSUER_BASE_URL).hostname;
     
     // Configuración del cliente JWKS
     this.jwksClient = new JwksClient({
@@ -36,13 +37,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: JwtPayload) {
-    // Verifica si el usuario existe en la base de datos o lo crea
-    const user = await this.authService.validateUserWithAuth0(payload);
-
-    // Retorna el usuario con la información que necesitas
-    return { userId: user.id, email: user.email, roles: user.role };
-  }
 }
 
 

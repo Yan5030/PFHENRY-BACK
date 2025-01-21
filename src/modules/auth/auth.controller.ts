@@ -3,7 +3,6 @@ import {
   Get, 
   Post, 
   Body, 
-  UseGuards,
   Headers,
   Request,
   UseGuards
@@ -15,10 +14,14 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { RolesDecorator } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Role } from 'src/enum/roles.enum';
+import { UpdateProfileDto } from './dto/update-profile.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService,
+    private readonly jwtService: JwtService,
+  ) {}
 
    @Post('validate-token')
   async validateToken(
@@ -53,11 +56,16 @@ export class AuthController {
     }
   }
 
-
   @Post('signup')
   async signup(@Body() createUserDto: CreateUserDto) {
-    const newUser= await this.authService.signup(createUserDto);
-    return {message:"Registro exitoso",data:newUser}
+    // Verifica si el registro es manual o proviene de Auth0
+    if (createUserDto.auth0Id) {
+      const user = await this.authService.registerWithAuth0(createUserDto);
+      return { message: 'Usuario registrado con Auth0', data: user };
+    } else {
+      const user = await this.authService.signup(createUserDto);
+      return { message: 'Registro exitoso', data: user };
+    }
   }
 
   @Post('signin')
@@ -67,5 +75,11 @@ export class AuthController {
 
     return {data:responseLogin}
   }
-}
 
+
+@Post('complete-profile') 
+async completeProfile(@Body() updateProfileDto: UpdateProfileDto) { 
+  const user = await this.authService.completeUserProfile(updateProfileDto); 
+  return { message: 'Perfil completado', data: user }; }
+
+}

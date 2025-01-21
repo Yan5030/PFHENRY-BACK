@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 import { UsersService } from '../users/users.service';
 import { OrderStatus } from 'src/enum/order-status.enum';
 import { PaymentStatus } from 'src/enum/payment-status.enum';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { OrderDetailsService } from '../order-details/order-details.service';
 import { CreateOrderDetailDto } from '../order-details/dto/create-order-detail.dto';
 import { OrderRepository } from './orders.repository';

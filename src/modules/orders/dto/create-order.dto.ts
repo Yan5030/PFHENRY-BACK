@@ -10,4 +10,3 @@ paymentMethod : PaymentMethod; //order
 @IsArray()
 MenuItems: CreateOrderDetailDto[] //orderDet
 }
-
