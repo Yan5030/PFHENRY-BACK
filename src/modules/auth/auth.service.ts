@@ -66,6 +66,9 @@ async registerWithAuth0(createUserDto: CreateUserDto) {
     image_url: createUserDto.image_url ?? 'http://example.com', 
   });
 
+  await this.nodemailerService.sendEmail(createUserDto.email);
+  
+
   return newUser;
 }
 
