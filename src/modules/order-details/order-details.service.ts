@@ -15,7 +15,7 @@ constructor(private readonly menuItemService : MenuItemService,
 ){}
 
   async create(createOrderDetailDto: CreateOrderDetailDto, order : Order) {
-    const{quantity,idMenuItem,comment} = createOrderDetailDto;
+    const{quantity,idMenuItem} = createOrderDetailDto;
     const menu = await this.menuItemService.findOne(idMenuItem)
 
     let subtotal= 0;
@@ -32,8 +32,7 @@ constructor(private readonly menuItemService : MenuItemService,
     const orderDetail = this.orderDetailRepository.create({
       order,
       quantity,
-      subtotal,
-      comment
+      subtotal
     })
     console.log("create det ord",orderDetail);
     

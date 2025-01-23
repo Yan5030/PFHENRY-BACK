@@ -49,4 +49,9 @@ export class Order {
       default: PaymentStatus.PENDIENTE, // Valor predeterminado
     })
     payment_status: PaymentStatus; // Estado de pago como enum
+
+    
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    comment?: string; // Personalización opcional
+
 }

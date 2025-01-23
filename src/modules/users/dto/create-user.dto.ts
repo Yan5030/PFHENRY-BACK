@@ -35,10 +35,10 @@ auth0Id: string
    
     @ApiProperty({
       description:"Debe contener una mayuscula, un numero y caracter especial",
-      example:"Ejemplo91"
+      example:"Ejemplo91."
     })
     @IsString()
-    @IsStrongPassword()
+    //@IsStrongPassword()
     @IsOptional()
     @MinLength(8)
     password?:string;
@@ -46,11 +46,11 @@ auth0Id: string
 
     @ApiProperty({
       description:"Debe contener una mayuscula, un numero y caracter especial, Debe ser igual a password",
-      example:"Ejemplo91"
+      example:"Ejemplo91."
     })
     @IsString()
     @IsNotEmpty()
-    @IsStrongPassword()
+    //@IsStrongPassword()
     @IsOptional()
     @MinLength(8)
     ConfirmPassword?:string;
