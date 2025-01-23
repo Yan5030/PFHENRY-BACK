@@ -1,6 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import {config as dotenvConfig} from 'dotenv';
-//dotenv.config(); // Carga las variables de entorno desde el archivo .env
+
 dotenvConfig({ path: '.env.development' });
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
