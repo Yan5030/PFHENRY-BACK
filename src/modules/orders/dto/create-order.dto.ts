@@ -30,6 +30,12 @@ export class CreateOrderDto {
   @IsArray()
   MenuItems: CreateOrderDetailDto[]; // orderDet
 
+  @ApiProperty({
+    description:"Añade algun comentario para el pedido",
+    example:"Quiero la hamburguesa sin lechuga"
+  })
+  @IsString()
+  comment: string
 
 
 
