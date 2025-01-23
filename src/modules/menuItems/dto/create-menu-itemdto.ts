@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsNumber, IsUUID, IsDecimal, IsUrl, Length } from 'class-validator';
+import { IsString, IsOptional, IsNumber, IsUUID, IsDecimal, IsUrl, Length, isNumber } from 'class-validator';
 
 export class CreateMenuItemDto {
   @IsString()
@@ -15,6 +15,8 @@ export class CreateMenuItemDto {
   
   @IsNumber()
   stock:number
+
+
 
   @IsOptional()
   @IsUrl()

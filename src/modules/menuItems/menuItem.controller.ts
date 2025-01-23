@@ -32,6 +32,13 @@ export class MenuItemController {
   deactivate(@Param('id') id: string) {
     return this.menuItemService.deactivate(id);
   }
+  
+  @Patch('update-stock')
+  async updateStock(
+    @Body() body: { updates: { menuItemId: string; stock: number }[] },
+  ) {
+    return this.menuItemService.updateStock(body.updates);
+  }
 
   @Get()
   @ApiResponse({ status: 200, description: 'Lista de todos los ítems del menú' })
