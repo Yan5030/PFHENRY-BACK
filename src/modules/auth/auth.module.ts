@@ -10,7 +10,7 @@ import { UsersModule } from '../users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
 import { AuthMiddleware } from 'src/middlewares/Auth.middleware';
-//import { AuthMiddleware } from 'src/middlewares/Auth.middleware';
+
 
 @Module({
   imports: [
