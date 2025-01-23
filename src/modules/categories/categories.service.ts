@@ -24,7 +24,7 @@ export class CategoriesService {
     const categories = data
       .map(item => ({
         name: item.category,
-        description: item.categoryDescription || `DModifica esta descripcion ${item.category}`, //En caso de no contar con descripcion añade el texto
+        icon: item.categoryDescription || `DModifica esta descripcion ${item.category}`, //En caso de no contar con descripcion añade el texto
       }))
       .filter(
         (value, index, self) =>
@@ -39,7 +39,7 @@ export class CategoriesService {
       if (!categoryExists) {
         const newCategory = this.categoriesRepository.create({
           name: category.name,
-          description: category.description,
+          icon: category.icon,
         });
         await this.categoriesRepository.save(newCategory);
       }

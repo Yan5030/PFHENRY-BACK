@@ -16,8 +16,8 @@ import {
     @Column({ type: 'varchar', length: 100 })
     name: string;
   
-    @Column({ type: 'varchar', length: 255 })
-    description: string;
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    icon: string;
   
     @OneToMany(() => MenuItem, (menuItem) => menuItem.category)
     menuItems: MenuItem[];
