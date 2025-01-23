@@ -4,9 +4,11 @@ import {
     Column,
     ManyToOne,
     OneToMany,
+    ManyToMany,
   } from 'typeorm';
   import { OrderDetail } from 'src/modules/order-details/entities/order-detail.entity'; 
   import { Category } from '../../categories/entities/category.entity';
+import { Combo } from 'src/modules/combos/entities/combos.entities';
   
   @Entity('menu_items')
   export class MenuItem {
@@ -30,6 +32,8 @@ import {
   
     @ManyToOne(() => Category, (category) => category.menuItems, { onDelete: 'SET NULL' })
     category: Category; 
+
+
   
      @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.menuItem)
     orderDetails: OrderDetail[]
