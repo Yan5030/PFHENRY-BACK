@@ -5,15 +5,19 @@ import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 
-import { CloudinaryConfig } from './config/cloudinary.config';
 
-import { UsersModule } from './modules/users/users.module'; // Importar UsersModule
+//import { CloudinaryConfig } from './config/cloudinary.config';
+
+import { UsersModule } from './modules/users/users.module';
 import { ReservationsModule } from './modules/reservations/reservations.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeOrm.config';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { MenuItemModule } from './modules/menuItems/menuItem.module';
+import { FileUploadModule } from './modules/file-upload/file-upload.module';
+import { CloudinaryService } from './service/cloudinary/cloudinary,service';
+import { OrderDetailsModule } from './modules/order-details/order-details.module';
 
 @Module({
   imports: [
@@ -26,17 +30,20 @@ import { MenuItemModule } from './modules/menuItems/menuItem.module';
     JwtModule.register({
       global: true,
       signOptions: { expiresIn: '1h' },
-      secret: process.env.JWT_SECRET || 'defaultsecret', // Usa una variable de entorno para el secret
+      secret: 'clavesecret'
     }),
-    UsersModule, // Importa el UsersModule para utilizar el repositorio y lógica de usuarios
+    
+    UsersModule,
     ReservationsModule,
     CategoriesModule,
     OrdersModule,
     MenuItemModule,
+    FileUploadModule,
+    OrderDetailsModule
   ],
 
   controllers: [AppController],
-  providers: [AppService, CloudinaryConfig], // Proveedores del módulo
+  providers: [AppService, /*CloudinaryConfig*/ CloudinaryService],
 })
 export class AppModule {}
 

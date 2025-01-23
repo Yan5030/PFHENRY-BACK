@@ -15,17 +15,24 @@ import { Role } from 'src/enum/roles.enum';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    
+  ) {}
 
 
   @Post('signup')
-  signup(@Body() createUserDto: CreateUserDto) {
-    return this.authService.signup(createUserDto);
+  async signup(@Body() createUserDto: CreateUserDto) {
+    const newUser= await this.authService.signup(createUserDto);
+    return {message:"Registro exitoso",data:newUser}
   }
 
   @Post('signin')
-  signin(@Body() signinDto: SigninAuthDto) {
-    return this.authService.signin(signinDto);
+  async signin(@Body() signinDto: SigninAuthDto) {
+    const responseLogin = await this.authService.signin(signinDto);
+    //response trae un objeto, donde tiene el token, y los datos del usuario
+
+    return {data:responseLogin}
   }
 }
 

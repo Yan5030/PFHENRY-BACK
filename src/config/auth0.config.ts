@@ -1,4 +1,4 @@
-import { config as dotenvConfig } from 'dotenv';
+/* import { config as dotenvConfig } from 'dotenv';
 
 // Cargar las variables de entorno desde el archivo .env.development
 dotenvConfig({ path: '.env.development' });
@@ -17,3 +17,4 @@ export const auth0Config = {
     clientID: process.env.AUTH0_CLIENT_ID,
     issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
 };
+ */

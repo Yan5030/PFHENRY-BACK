@@ -1,6 +1,8 @@
-# Node modules
+# compiled output
+/dist
 /node_modules
-
-# dotenv environment variable file
+/build
 .env.development
+
+/dist
 .env
