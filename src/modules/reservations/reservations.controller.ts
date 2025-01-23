@@ -32,9 +32,9 @@ export class ReservationsController {
     return {message: "Reserva modificada",data:updateReservation}
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    this.reservationsService.remove(id);
-    return {message: "Reserva eliminada"}
+  @Put('cancelled/:id')
+ async cancelledReservation(@Param("id") id: string) {
+   const updateReservation = await this.reservationsService.cancelled(id);
+    return {message: "Reserva cancelada",data:updateReservation}
   }
 }

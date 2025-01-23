@@ -14,10 +14,8 @@ export class AuthGuard implements CanActivate{
             throw new UnauthorizedException('Token no auotorizado');
         }
         try{
-            const secret = 'clavesecret';
+            const secret = process.env.JWT_SECRET || 'clavesecret';
             const payload = this.jwtService.verify(token,{secret});
-            // payload.iat = new Date(payload.iat * 1000);
-            // payload.exp = new Date(payload.exp * 1000);
             request.user = payload;
             return true;
         }catch(e){

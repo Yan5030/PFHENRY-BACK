@@ -12,9 +12,11 @@ export class CreateMenuItemDto {
 
   @IsNumber({ maxDecimalPlaces: 2 })
   price: number; 
-
+  
   @IsNumber()
-  stock: number;
+  stock:number
+
+
 
   @IsOptional()
   @IsUrl()

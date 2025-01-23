@@ -17,14 +17,13 @@ import { OrdersModule } from './modules/orders/orders.module';
 import { MenuItemModule } from './modules/menuItems/menuItem.module';
 import { FileUploadModule } from './modules/file-upload/file-upload.module';
 import { CloudinaryService } from './service/cloudinary/cloudinary,service';
-import { OrderDetailsModule } from './modules/order-details/order-details.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(typeOrmConfig), // Configuración de TypeORM
+    TypeOrmModule.forRoot(typeOrmConfig), 
     ConfigModule.forRoot({
       envFilePath: '.env.development',  
-      isGlobal: true, // Hace las variables de entorno globales
+      isGlobal: true, 
     }),
     AuthModule, 
     JwtModule.register({
@@ -38,8 +37,7 @@ import { OrderDetailsModule } from './modules/order-details/order-details.module
     CategoriesModule,
     OrdersModule,
     MenuItemModule,
-    FileUploadModule,
-    OrderDetailsModule
+    FileUploadModule
   ],
 
   controllers: [AppController],

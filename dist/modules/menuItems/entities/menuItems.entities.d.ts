@@ -1,3 +1,4 @@
+import { OrderDetail } from 'src/modules/order-details/entities/order-detail.entity';
 import { Category } from '../../categories/entities/category.entity';
 export declare class MenuItem {
     id: string;
@@ -7,5 +8,6 @@ export declare class MenuItem {
     image_url?: string;
     stock: number;
     category: Category;
+    orderDetails: OrderDetail[];
     isActive: boolean;
 }

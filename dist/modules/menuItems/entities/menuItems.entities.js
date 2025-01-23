@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MenuItem = void 0;
 const typeorm_1 = require("typeorm");
+const order_detail_entity_1 = require("../../order-details/entities/order-detail.entity");
 const category_entity_1 = require("../../categories/entities/category.entity");
 let MenuItem = class MenuItem {
 };
@@ -43,6 +44,10 @@ __decorate([
     (0, typeorm_1.ManyToOne)(() => category_entity_1.Category, (category) => category.menuItems, { onDelete: 'SET NULL' }),
     __metadata("design:type", category_entity_1.Category)
 ], MenuItem.prototype, "category", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => order_detail_entity_1.OrderDetail, (orderDetail) => orderDetail.menuItem),
+    __metadata("design:type", Array)
+], MenuItem.prototype, "orderDetails", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'boolean', default: true }),
     __metadata("design:type", Boolean)
