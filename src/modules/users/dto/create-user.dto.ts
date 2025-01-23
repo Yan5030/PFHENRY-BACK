@@ -38,7 +38,7 @@ auth0Id: string
       example:"Ejemplo91"
     })
     @IsString()
-    @IsStrongPassword()
+    //@IsStrongPassword()
     @IsOptional()
     @MinLength(8)
     password?:string;
@@ -50,7 +50,7 @@ auth0Id: string
     })
     @IsString()
     @IsNotEmpty()
-    @IsStrongPassword()
+   // @IsStrongPassword()
     @IsOptional()
     @MinLength(8)
     ConfirmPassword?:string;
