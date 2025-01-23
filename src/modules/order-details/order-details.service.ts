@@ -15,14 +15,14 @@ constructor(private readonly menuItemService : MenuItemService,
 ){}
 
   async create(createOrderDetailDto: CreateOrderDetailDto, order : Order) {
-    const{quantity,idMenuItem} = createOrderDetailDto;
+    const{quantity,idMenuItem,comment} = createOrderDetailDto;
     const menu = await this.menuItemService.findOne(idMenuItem)
 
     let subtotal= 0;
     if(menu.stock > 0 && menu.stock > quantity ){
      menu.stock = menu.stock - quantity
 
-     subtotal = menu.price * quantity;//este no se reemplaza es para el precio
+     subtotal = menu.price * quantity;
     const updateData: UpdateMenuItemDto = { stock: menu.stock };
     await this.menuItemService.update(menu.id,updateData)
     }else{
@@ -32,7 +32,8 @@ constructor(private readonly menuItemService : MenuItemService,
     const orderDetail = this.orderDetailRepository.create({
       order,
       quantity,
-      subtotal
+      subtotal,
+      comment
     })
     console.log("create det ord",orderDetail);
     
