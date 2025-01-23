@@ -74,10 +74,11 @@ auth0Id: string
 
     @ApiProperty({
       description:"Debe contener la url de la img almacenada en cloudinary",
-      example:"http://example.com", 
-    }) //FALTA AGREGAR EL VALOR DEFAULT
+      example:"http://example.com",
+      default: "http://example.com" 
+    }) 
     @IsString()
-    @IsNotEmpty()
+    //@IsNotEmpty()
     @IsOptional()
     @IsUrl()
     image_url:string;
