@@ -38,12 +38,10 @@ auth0Id: string
       example:"Ejemplo91"
     })
     @IsString()
-    //@IsNotEmpty()
-    //@IsStrongPassword()
+    @IsStrongPassword()
+    @IsOptional()
     @MinLength(8)
     password?:string;
-
-
 
 
     @ApiProperty({
@@ -52,15 +50,12 @@ auth0Id: string
     })
     @IsString()
     @IsNotEmpty()
-    //@IsStrongPassword()
+    @IsStrongPassword()
     @IsOptional()
     @MinLength(8)
     ConfirmPassword?:string;
 
-
-
-
-   
+  
     @ApiProperty({
       description:"Debe contener entre 3 y 80 caracteres",
       example:"CalleFalsa"
