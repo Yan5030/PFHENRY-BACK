@@ -57,9 +57,13 @@ async registerWithAuth0(createUserDto: CreateUserDto) {
   }
 
   const newUser = await this.usersService.create({
-    ...createUserDto,
-    password: '', // No se almacena contraseña para Auth0
-    isComplete: false, // Perfil incompleto por defecto
+    auth0Id: createUserDto.auth0Id,
+    name: createUserDto.name,
+    email: createUserDto.email,
+    password: '', 
+    isComplete: createUserDto.isComplete ?? false, 
+    address: createUserDto.address ?? '', 
+    image_url: createUserDto.image_url ?? 'http://example.com', 
   });
 
   return newUser;
