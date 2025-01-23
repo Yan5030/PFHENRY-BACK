@@ -11,6 +11,7 @@ import { RolesDecorator } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
 import { UpdateRoleUserDto } from './dto/update-role-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { ImagesUploadPipe } from 'src/pipes/images-upload.pipe';
 
 @ApiTags("Users")
 @Controller('users')
@@ -81,7 +82,7 @@ export class UsersController {
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
     @Param('id') id: string,
-    @UploadedFile(/*new ImagesUploadPipe()*/) file: Express.Multer.File,
+    @UploadedFile(new ImagesUploadPipe()) file: Express.Multer.File,
   ) {
     const uploadedImageUrl = await this.fileUploadService.uploadFile({
       buffer: file.buffer,

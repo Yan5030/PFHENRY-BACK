@@ -33,7 +33,7 @@ export class Order {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   totalPrice: number;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({type:"date", default: () => 'CURRENT_DATE' })
   createdAt: Date;
 
   @Column({

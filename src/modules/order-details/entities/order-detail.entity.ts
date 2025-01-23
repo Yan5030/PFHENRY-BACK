@@ -23,7 +23,7 @@ import { MenuItem } from 'src/modules/menuItems/entities/menuItems.entities';
     quantity: number; // Cantidad del ítem
   
     @Column({ type: 'varchar', length: 255, nullable: true })
-    customization?: string; // Personalización opcional
+    comment?: string; // Personalización opcional
   
     @Column({ type: 'decimal', precision: 10, scale: 2 })
     subtotal: number; // Subtotal del ítem
