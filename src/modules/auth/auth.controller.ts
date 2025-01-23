@@ -16,6 +16,7 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { Role } from 'src/enum/roles.enum';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { JwtService } from '@nestjs/jwt';
+import { Auth0Guard } from 'src/guards/auth0.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -57,16 +58,17 @@ export class AuthController {
   }
 
   @Post('signup')
-  async signup(@Body() createUserDto: CreateUserDto) {
-    // Verifica si el registro es manual o proviene de Auth0
-    if (createUserDto.auth0Id) {
-      const user = await this.authService.registerWithAuth0(createUserDto);
-      return { message: 'Usuario registrado con Auth0', data: user };
-    } else {
+  async signup(@Body() createUserDto: CreateUserDto) { 
       const user = await this.authService.signup(createUserDto);
       return { message: 'Registro exitoso', data: user };
-    }
   }
+
+  @Post('signupWithAuth0')
+  @UseGuards(Auth0Guard)
+  async signupWithAuth0(@Body() createUserDto: CreateUserDto) {
+    const user = await this.authService.registerWithAuth0(createUserDto);
+    return { message: 'Usuario registrado con Auth0', data: user };
+  } 
 
   @Post('signin')
   async signin(@Body() signinDto: SigninAuthDto) {

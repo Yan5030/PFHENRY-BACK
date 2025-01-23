@@ -77,7 +77,6 @@ async registerWithAuth0(createUserDto: CreateUserDto) {
 // };
 
 
-
 async signin(signinAuthDto: SigninAuthDto) {
   try {
     const { email, password } = signinAuthDto;
