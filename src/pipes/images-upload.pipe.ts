@@ -15,3 +15,4 @@ export class ImagesUploadPipe implements PipeTransform {
     return file;
   }
 }
+

@@ -74,7 +74,8 @@ return this.orderRepository.save(order);
     }
 
     return order;
-  }async remove(id: string): Promise<void> {
+  }
+  async remove(id: string): Promise<void> {
     const order = await this.orderRepository.findOrderById(id);
     await this.orderRepository.remove(order);
   }

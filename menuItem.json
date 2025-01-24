@@ -1,183 +1,184 @@
+
 [
-  {
+    {
+    
+      "name": "Hamburguesa Clásica",
+      "description": "Hamburguesa con carne de res, queso cheddar, lechuga, tomate y mayonesa.",
+      "price": 5.99,
+      "category": "hamburguesa",
+      "image": "url-de-imagen-hamburguesa-clasica",
+      "stock": 50
+    },
+    {
+    
+      "name": "Hamburguesa BBQ",
+      "description": "Hamburguesa con carne de res, cebolla caramelizada, salsa barbacoa, bacon y queso cheddar.",
+      "price": 7.49,
+      "category": "hamburguesa",
+      "image": "url-de-imagen-hamburguesa-bbq",
+      "stock": 30
+    },
+    {
+    
+      "name": "Hamburguesa Vegana",
+      "description": "Hamburguesa vegetariana con proteína de soja, aguacate, tomate, cebolla morada y lechuga.",
+      "price": 6.49,
+      "category": "hamburguesa",
+      "image": "url-de-imagen-hamburguesa-vegana",
+      "stock": 25
+    },
+    {
+   
+      "name": "Hamburguesa Doble Carne",
+      "description": "Hamburguesa con dos carnes de res, bacon, queso suizo, cebolla y salsa especial.",
+      "price": 9.99,
+      "category": "hamburguesa",
+      "image": "url-de-imagen-hamburguesa-doble-carne",
+      "stock": 15
+    },
+    {
+    
+      "name": "Hamburguesa con Huevo",
+      "description": "Hamburguesa con carne de res, queso cheddar, huevo frito y salsa tártara.",
+      "price": 7.19,
+      "category": "hamburguesa",
+      "image": "url-de-imagen-hamburguesa-huevo",
+      "stock": 40
+    },
+    {
   
-    "name": "Hamburguesa Clásica",
-    "description": "Hamburguesa con carne de res, queso cheddar, lechuga, tomate y mayonesa.",
-    "price": 5.99,
-    "category": "hamburguesa",
-    "image": "url-de-imagen-hamburguesa-clasica",
-    "stock": 50
-  },
-  {
+      "name": "Papas Fritas",
+      "description": "Papas fritas crujientes servidas con ketchup.",
+      "price": 2.49,
+      "category": "acompañamiento",
+      "image": "url-de-imagen-papas-fritas",
+      "stock": 60
+    },
+    {
+    
+      "name": "Aros de Cebolla",
+      "description": "Aros de cebolla empanados y fritos servidos con salsa barbacoa.",
+      "price": 3.29,
+      "category": "acompañamiento",
+      "image": "url-de-imagen-aros-de-cebolla",
+      "stock": 40
+    },
+    {
+    
+      "name": "Ensalada César",
+      "description": "Ensalada con lechuga romana, pollo a la parrilla, crutones y aderezo César.",
+      "price": 4.99,
+      "category": "acompañamiento",
+      "image": "url-de-imagen-ensalada-cesar",
+      "stock": 20
+    },
+    {
+    
+      "name": "Papas Gajo",
+      "description": "Papas gajo horneadas con un toque de especias.",
+      "price": 2.99,
+      "category": "acompañamiento",
+      "image": "url-de-imagen-papas-gajo",
+      "stock": 45
+    },
+    {
+    
+      "name": "Acompañamiento Mixto",
+      "description": "Combinación de papas fritas, aros de cebolla y ensalada.",
+      "price": 5.49,
+      "category": "acompañamiento",
+      "image": "url-de-imagen-acompanamiento-mixto",
+      "stock": 35
+    },
+    {
+   
+      "name": "Coca-Cola",
+      "description": "Bebida gaseosa clásica, refrescante y deliciosa.",
+      "price": 1.49,
+      "category": "bebida",
+      "image": "url-de-imagen-coca-cola",
+      "stock": 100
+    },
+    {
+    
+      "name": "Sprite",
+      "description": "Bebida gaseosa de limón, refrescante y ligera.",
+      "price": 1.39,
+      "category": "bebida",
+      "image": "url-de-imagen-sprite",
+      "stock": 120
+    },
+    {
+    
+      "name": "Agua Mineral",
+      "description": "Botella de agua mineral natural.",
+      "price": 0.99,
+      "category": "bebida",
+      "image": "url-de-imagen-agua-mineral",
+      "stock": 150
+    },
+    {
+   
+      "name": "Fanta Naranja",
+      "description": "Bebida gaseosa de sabor naranja.",
+      "price": 1.29,
+      "category": "bebida",
+      "image": "url-de-imagen-fanta-naranja",
+      "stock": 110
+    },
+    {
+   
+      "name": "Jugo de Naranja",
+      "description": "Jugo natural de naranja fresco.",
+      "price": 2.49,
+      "category": "bebida",
+      "image": "url-de-imagen-jugo-naranja",
+      "stock": 90
+    },
+    {
+   
+      "name": "Tarta de Manzana",
+      "description": "Tarta de manzana casera con un toque de canela.",
+      "price": 3.99,
+      "category": "postre",
+      "image": "url-de-imagen-tarta-manzana",
+      "stock": 25
+    },
+    {
   
-    "name": "Hamburguesa BBQ",
-    "description": "Hamburguesa con carne de res, cebolla caramelizada, salsa barbacoa, bacon y queso cheddar.",
-    "price": 7.49,
-    "category": "hamburguesa",
-    "image": "url-de-imagen-hamburguesa-bbq",
-    "stock": 30
-  },
-  {
+      "name": "Brownie de Chocolate",
+      "description": "Brownie de chocolate con nueces y crema de vainilla.",
+      "price": 4.49,
+      "category": "postre",
+      "image": "url-de-imagen-brownie-chocolate",
+      "stock": 30
+    },
+    {
+   
+      "name": "Helado de Vainilla",
+      "description": "Helado cremoso de vainilla con topping de chocolate.",
+      "price": 2.99,
+      "category": "postre",
+      "image": "url-de-imagen-helado-vainilla",
+      "stock": 40
+    },
+    {
   
-    "name": "Hamburguesa Vegana",
-    "description": "Hamburguesa vegetariana con proteína de soja, aguacate, tomate, cebolla morada y lechuga.",
-    "price": 6.49,
-    "category": "hamburguesa",
-    "image": "url-de-imagen-hamburguesa-vegana",
-    "stock": 25
-  },
-  {
- 
-    "name": "Hamburguesa Doble Carne",
-    "description": "Hamburguesa con dos carnes de res, bacon, queso suizo, cebolla y salsa especial.",
-    "price": 9.99,
-    "category": "hamburguesa",
-    "image": "url-de-imagen-hamburguesa-doble-carne",
-    "stock": 15
-  },
-  {
-  
-    "name": "Hamburguesa con Huevo",
-    "description": "Hamburguesa con carne de res, queso cheddar, huevo frito y salsa tártara.",
-    "price": 7.19,
-    "category": "hamburguesa",
-    "image": "url-de-imagen-hamburguesa-huevo",
-    "stock": 40
-  },
-  {
-
-    "name": "Papas Fritas",
-    "description": "Papas fritas crujientes servidas con ketchup.",
-    "price": 2.49,
-    "category": "acompañamiento",
-    "image": "url-de-imagen-papas-fritas",
-    "stock": 60
-  },
-  {
-  
-    "name": "Aros de Cebolla",
-    "description": "Aros de cebolla empanados y fritos servidos con salsa barbacoa.",
-    "price": 3.29,
-    "category": "acompañamiento",
-    "image": "url-de-imagen-aros-de-cebolla",
-    "stock": 40
-  },
-  {
-  
-    "name": "Ensalada César",
-    "description": "Ensalada con lechuga romana, pollo a la parrilla, crutones y aderezo César.",
-    "price": 4.99,
-    "category": "acompañamiento",
-    "image": "url-de-imagen-ensalada-cesar",
-    "stock": 20
-  },
-  {
-  
-    "name": "Papas Gajo",
-    "description": "Papas gajo horneadas con un toque de especias.",
-    "price": 2.99,
-    "category": "acompañamiento",
-    "image": "url-de-imagen-papas-gajo",
-    "stock": 45
-  },
-  {
-  
-    "name": "Acompañamiento Mixto",
-    "description": "Combinación de papas fritas, aros de cebolla y ensalada.",
-    "price": 5.49,
-    "category": "acompañamiento",
-    "image": "url-de-imagen-acompanamiento-mixto",
-    "stock": 35
-  },
-  {
- 
-    "name": "Coca-Cola",
-    "description": "Bebida gaseosa clásica, refrescante y deliciosa.",
-    "price": 1.49,
-    "category": "bebida",
-    "image": "url-de-imagen-coca-cola",
-    "stock": 100
-  },
-  {
-  
-    "name": "Sprite",
-    "description": "Bebida gaseosa de limón, refrescante y ligera.",
-    "price": 1.39,
-    "category": "bebida",
-    "image": "url-de-imagen-sprite",
-    "stock": 120
-  },
-  {
-  
-    "name": "Agua Mineral",
-    "description": "Botella de agua mineral natural.",
-    "price": 0.99,
-    "category": "bebida",
-    "image": "url-de-imagen-agua-mineral",
-    "stock": 150
-  },
-  {
- 
-    "name": "Fanta Naranja",
-    "description": "Bebida gaseosa de sabor naranja.",
-    "price": 1.29,
-    "category": "bebida",
-    "image": "url-de-imagen-fanta-naranja",
-    "stock": 110
-  },
-  {
- 
-    "name": "Jugo de Naranja",
-    "description": "Jugo natural de naranja fresco.",
-    "price": 2.49,
-    "category": "bebida",
-    "image": "url-de-imagen-jugo-naranja",
-    "stock": 90
-  },
-  {
- 
-    "name": "Tarta de Manzana",
-    "description": "Tarta de manzana casera con un toque de canela.",
-    "price": 3.99,
-    "category": "postre",
-    "image": "url-de-imagen-tarta-manzana",
-    "stock": 25
-  },
-  {
-
-    "name": "Brownie de Chocolate",
-    "description": "Brownie de chocolate con nueces y crema de vainilla.",
-    "price": 4.49,
-    "category": "postre",
-    "image": "url-de-imagen-brownie-chocolate",
-    "stock": 30
-  },
-  {
- 
-    "name": "Helado de Vainilla",
-    "description": "Helado cremoso de vainilla con topping de chocolate.",
-    "price": 2.99,
-    "category": "postre",
-    "image": "url-de-imagen-helado-vainilla",
-    "stock": 40
-  },
-  {
-
-    "name": "Churros con Chocolate",
-    "description": "Churros recién hechos acompañados de una taza de chocolate caliente.",
-    "price": 3.29,
-    "category": "postre",
-    "image": "url-de-imagen-churros-chocolate",
-    "stock": 35
-  },
-  {
-  
-    "name": "Flan de Caramelo",
-    "description": "Flan cremoso con un delicioso toque de caramelo.",
-    "price": 3.49,
-    "category": "postre",
-    "image": "url-de-imagen-flan-caramelo",
-    "stock": 50
-  }
-  
-]
+      "name": "Churros con Chocolate",
+      "description": "Churros recién hechos acompañados de una taza de chocolate caliente.",
+      "price": 3.29,
+      "category": "postre",
+      "image": "url-de-imagen-churros-chocolate",
+      "stock": 35
+    },
+    {
+    
+      "name": "Flan de Caramelo",
+      "description": "Flan cremoso con un delicioso toque de caramelo.",
+      "price": 3.49,
+      "category": "postre",
+      "image": "url-de-imagen-flan-caramelo",
+      "stock": 50
+    }
+    
+  ]
