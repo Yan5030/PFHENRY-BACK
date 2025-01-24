@@ -14,7 +14,7 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
-    private readonly nodemailerService: NodemailerService // Inyección del repositorio de usuarios
+    private readonly nodemailerService: NodemailerService 
   ) {}
 
 

@@ -1,0 +1,29 @@
+[
+    {
+        "name": "Henry Admin",
+        "email": "soyhenry@email.com",
+        "password": "Admin123!",
+        "role": "admin",
+        "address": "123 Admin Street",
+        "image_url": "http://example.com/admin-image.jpg",
+        "isComplete": true
+      },
+      {
+        "name": "John Doe",
+        "email": "johndoe@email.com",
+        "password": "Password123!",
+        "role": "user",
+        "address": "456 User Lane",
+        "image_url": "http://example.com/john-image.jpg",
+        "isComplete": true
+      },
+      {
+        "name": "Jane Smith",
+        "email": "janesmith@gmail.com",
+        "password": "Password123!",
+        "role": "worker",
+        "address": "789 User Avenue",
+        "image_url": "http://example.com/jane-image.jpg",
+        "isComplete": true
+      }
+]
