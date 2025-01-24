@@ -22,14 +22,15 @@ export class CombosService {
     return await this.dataSource.transaction(async (manager) => {
       
       const items = await this.getMenuItemsByIds(createComboDto.items);
-      const combo = this.combosRepository.create({ ...createComboDto, items });
+      const combo = this.combosRepository.create({ ...createComboDto, menuItems:items });
       return manager.save(combo);
     });
   }
 
   async findAll(): Promise<Combo[]> {
-    return this.combosRepository.find({ relations: ['menu-items'] });
+    return this.combosRepository.find({ relations: ['menuItems'] }); 
   }
+  
 
   async findOne(id: string): Promise<Combo> {
     const combo = await this.combosRepository.findOne({
@@ -46,7 +47,7 @@ export class CombosService {
     const combo = await this.findOne(id);
     const items = updateComboDto.items
       ? await this.getMenuItemsByIds(updateComboDto.items)
-      : combo.items;
+      : combo.menuItems;
 
     Object.assign(combo, updateComboDto, { items });
     return this.combosRepository.save(combo);
