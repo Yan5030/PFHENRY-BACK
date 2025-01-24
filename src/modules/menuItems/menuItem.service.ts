@@ -21,24 +21,23 @@ export class MenuItemService implements OnModuleInit {
       @InjectRepository(Category)
       private readonly categoryRepository: Repository<Category>,
     ) {}
-  
     async onModuleInit() {
       await this.seedCategories(); 
       await this.seedMenuItems();   
-      await this.preloadCombos();   
+      await this.preloadCombos();
+      await this.associateMenuItemsToCombos();  
     }
- 
+    
     private async seedCategories(): Promise<void> {
       const categoriesData: CreateCategoryDto[] = JSON.parse(fs.readFileSync('categories.json', 'utf8'));
-  
+    
       for (const categoryData of categoriesData) {
         const category = this.categoryRepository.create(categoryData);
         await this.categoryRepository.save(category);
       }
-  
+    
       console.log('Categories se precargaron correctamente.');
     }
-  
     
     private async seedMenuItems(): Promise<void> {
       const menuItemsData: CreateMenuItemDto[] = JSON.parse(fs.readFileSync('menuItem.json', 'utf8'));
@@ -50,16 +49,15 @@ export class MenuItemService implements OnModuleInit {
         if (categoryId) {
           category = await this.categoryRepository.findOne({ where: { id: categoryId } });
     
-          
           if (!category) {
-            console.log(`Categoria con ID ${categoryId} no existe .`);
-            continue;  
+            console.log(`Categoria con ID ${categoryId} no existe.`);
+            continue;
           }
         }
     
         const menuItem = this.menuItemRepository.create({
           ...menuItemDto,
-          category,  
+          category,
         });
     
         await this.menuItemRepository.save(menuItem);
@@ -69,19 +67,54 @@ export class MenuItemService implements OnModuleInit {
     }
     
     private async preloadCombos(): Promise<void> {
-      const filePath = path.join(__dirname, 'data', 'combos.json');
-      const combosData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  
-      for (const comboData of combosData) {
-        const items = await this.getMenuItemsByIds(comboData.items);
-        const combo = this.combosRepository.create({ ...comboData, items });
+      const hogwartsHouseCombos = [
+        { name: 'Gryffindor Combo', price: 15.99, description: 'Un combo lleno de valor y coraje.' },
+        { name: 'Hufflepuff Combo', price: 14.99, description: 'Un combo lleno de lealtad y trabajo duro.' },
+        { name: 'Ravenclaw Combo', price: 16.49, description: 'Un combo lleno de sabiduría e ingenio.' },
+        { name: 'Slytherin Combo', price: 17.99, description: 'Un combo lleno de ambición y astucia.' }
+      ];
+    
+      for (const comboData of hogwartsHouseCombos) {
+        const combo = this.combosRepository.create(comboData);
         await this.combosRepository.save(combo);
+        console.log(`Combo "${comboData.name}" creado exitosamente, pero sin items asociados.`);
       }
-  
+    
       console.log('Combos precargados correctamente.');
     }
-  
-   
+    
+    private async associateMenuItemsToCombos(): Promise<void> {
+      const combos = await this.combosRepository.find();
+      const menuItems = await this.menuItemRepository.find();
+    
+      for (const combo of combos) {
+        let items: MenuItem[] = [];
+    
+        switch (combo.name) {
+          case 'Gryffindor Combo':
+            items = menuItems.filter(item => item.name.includes('Gryffindor'));
+            break;
+          case 'Hufflepuff Combo':
+            items = menuItems.filter(item => item.name.includes('Hufflepuff'));
+            break;
+          case 'Ravenclaw Combo':
+            items = menuItems.filter(item => item.name.includes('Ravenclaw'));
+            break;
+          case 'Slytherin Combo':
+            items = menuItems.filter(item => item.name.includes('Slytherin'));
+            break;
+          default:
+            break;
+        }
+    
+        if (items.length > 0) {
+          combo.menuItems = items;
+          await this.combosRepository.save(combo);
+          console.log(`Items asociados al combo "${combo.name}" correctamente.`);
+        }
+      }
+    }
+    
     private async getMenuItemsByIds(itemIds: string[]): Promise<MenuItem[]> {
       const items = await Promise.all(
         itemIds.map(async (itemId: string) => {
@@ -94,7 +127,6 @@ export class MenuItemService implements OnModuleInit {
       );
       return items;
     }
-
   async create(createMenuItemDto: CreateMenuItemDto): Promise<MenuItem> {
     const menuItem = this.menuItemRepository.create(createMenuItemDto);
     return await this.menuItemRepository.save(menuItem);

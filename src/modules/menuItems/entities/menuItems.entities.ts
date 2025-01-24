@@ -35,7 +35,7 @@ export class MenuItem {
   @JoinColumn()
   category: Category | null;
 
-  @ManyToMany(() => Combo, (combo) => combo.items)
+  @ManyToMany(() => Combo, (combo) => combo.menuItems)
   combos: Combo[];
 
    @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.menuItem)
