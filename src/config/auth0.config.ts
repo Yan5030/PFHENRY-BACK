@@ -1,4 +1,5 @@
-import { config as dotenvConfig } from 'dotenv';
+ import { config as dotenvConfig } from 'dotenv';
+
 
 dotenvConfig({ path: '.env' });
 
@@ -14,3 +15,4 @@ export const auth0Config = {
     clientID: process.env.AUTH0_CLIENT_ID,
     issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
 };
+ 

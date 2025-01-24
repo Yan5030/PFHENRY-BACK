@@ -9,27 +9,29 @@ import { UpdateProfileDto } from './dto/update-profile.dto';
 import { NodemailerService } from '../nodemailer/nodemailer.service';
 
 
+import { NodemailerService } from '../nodemailer/nodemailer.service';
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
+
     private readonly usersService: UsersService,
     private readonly nodemailerService: NodemailerService 
   ) {}
 
 
   async signup(createUserDto: CreateUserDto) {
-    const useremail = await this.usersService.getOneByEmail(createUserDto.email)
+    const useremail = await this.usersService.getOneByEmail(createUserDto.email);
     console.log('Correo de usuario:', useremail);
-    if(useremail){
+
+    if (useremail) {
       throw new BadRequestException('El correo ya se encuentra registrado');
     }
-
-    if(createUserDto.password !== createUserDto.ConfirmPassword ){
+    if (createUserDto.password !== createUserDto.ConfirmPassword) {
       throw new BadRequestException("password y confirm password deben ser iguales");
     }
    
-   // const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+
    const hashedPassword = bcrypt.hashSync(createUserDto.password, 10);
 
    if(!hashedPassword){
@@ -43,6 +45,8 @@ const userSave = await this.usersService.create({
   password: hashedPassword,
   isComplete,
 });
+
+await this.nodemailerService.sendEmail(createUserDto.email);
   
 await this.nodemailerService.sendEmail(createUserDto.email);
 
@@ -65,6 +69,9 @@ async registerWithAuth0(createUserDto: CreateUserDto) {
     address: createUserDto.address ?? '', 
     image_url: createUserDto.image_url ?? 'http://example.com', 
   });
+
+  await this.nodemailerService.sendEmail(createUserDto.email);
+  
 
   return newUser;
 }

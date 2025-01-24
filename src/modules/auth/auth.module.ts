@@ -1,5 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
+
 import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
@@ -10,6 +10,8 @@ import { User } from '../users/entities/user.entity';
 import { AuthMiddleware } from 'src/middlewares/Auth.middleware';
 import { NodemailerService } from '../nodemailer/nodemailer.service';
 
+import { NodemailerService } from '../nodemailer/nodemailer.service';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -25,6 +27,7 @@ import { NodemailerService } from '../nodemailer/nodemailer.service';
   ],
   controllers: [AuthController],
   providers: [AuthService, NodemailerService],
+
   exports: [PassportModule, JwtModule],
 })
 
