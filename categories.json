@@ -1,0 +1,28 @@
+[
+    {
+      "name": "All",
+      "icon": "LoaderPinwheel"
+      
+    },
+    {
+      "name": "Burgers",
+      "icon": "Sandwich"
+     
+    },
+    {
+      "name": "Drinks",
+      "icon": "CupSoda"
+      
+    },
+    {
+      "name": "Desserts",
+      "icon": "IceCreamCone"
+      
+    },
+    {
+      "name": "Sides",
+      "icon": "Salad"
+     
+    }
+  ]
+  
