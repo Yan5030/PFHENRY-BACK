@@ -22,7 +22,7 @@ constructor(private readonly menuItemService : MenuItemService,
     if(menu.stock > 0 && menu.stock > quantity ){
      menu.stock = menu.stock - quantity
 
-     subtotal = menu.price * quantity;//este no se reemplaza es para el precio
+     subtotal = menu.price * quantity;
     const updateData: UpdateMenuItemDto = { stock: menu.stock };
     await this.menuItemService.update(menu.id,updateData)
     }else{

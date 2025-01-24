@@ -6,13 +6,15 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
 import { ResponseUserDto } from '../users/dto/response-user.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { NodemailerService } from '../nodemailer/nodemailer.service';
 
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly usersService: UsersService, // Inyección del repositorio de usuarios
+    private readonly usersService: UsersService,
+    private readonly nodemailerService: NodemailerService // Inyección del repositorio de usuarios
   ) {}
 
 
@@ -42,6 +44,8 @@ const userSave = await this.usersService.create({
   isComplete,
 });
   
+await this.nodemailerService.sendEmail(createUserDto.email);
+
   return userSave;
 }
 
@@ -64,18 +68,6 @@ async registerWithAuth0(createUserDto: CreateUserDto) {
 
   return newUser;
 }
-
-//Aqui se envia al front esta informacion con iscomplete:false, sugiero que cuando reciba esta informacion asi redirija automaticamente a una pagina de completar registro
-//  Después de hacer la llamada al endpoint de registro
-// const handleRegister = async () => {
-//   const response = await api.post('/auth/register', formData);
-
-//   if (response.data.isComplete === false) {
-//     // Redirige al usuario a la página de completar perfil
-//     history.push('/complete-profile');  // Suponiendo que usas React Router
-//   }
-// };
-
 
 async signin(signinAuthDto: SigninAuthDto) {
   try {

@@ -3,15 +3,12 @@ import { AppModule } from './app.module';
 import {BadRequestException, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import{config as dotenvConfig} from "dotenv"
-import { auth0Config } from './config/auth0.config';
-import { auth } from 'express-openid-connect';
+
 dotenvConfig({path:'.env'})
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
  
-  
-  // app.use(auth(auth0Config));
   
   app.useGlobalPipes(new ValidationPipe({
     whitelist:true,

@@ -4,6 +4,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 //import { ImagesUploadPipe } from 'src/pipes/images-upload/images-upload.pipe';
 //import { AuthGuard } from 'src/guards/auth.guard';
 import { ApiTags } from '@nestjs/swagger';
+import { ImagesUploadPipe } from 'src/pipes/images-upload.pipe';
 
 @ApiTags("Files")
 @Controller('files')
@@ -15,7 +16,7 @@ export class FileUploadController {
   @Post("uploadImage/:id")
   @UseInterceptors(FileInterceptor("file"))
   @HttpCode(200)
- async uploadImage(@Param("id")id:string, @UploadedFile(/*new ImagesUploadPipe()*/) file : Express.Multer.File) {
+ async uploadImage(@Param("id")id:string, @UploadedFile(new ImagesUploadPipe()) file : Express.Multer.File) {
  const img= await this.fileUploadService.uploadFile({
     buffer:file.buffer,
     fieldName:file.fieldname,

@@ -8,6 +8,7 @@ import { UsersModule } from '../users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
 import { AuthMiddleware } from 'src/middlewares/Auth.middleware';
+import { NodemailerService } from '../nodemailer/nodemailer.service';
 
 
 @Module({
@@ -23,7 +24,7 @@ import { AuthMiddleware } from 'src/middlewares/Auth.middleware';
     UsersModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, NodemailerService],
   exports: [PassportModule, JwtModule],
 })
 

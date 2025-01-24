@@ -20,7 +20,7 @@ export class OrdersService {
   private readonly orderDetailsService: OrderDetailsService
 ){}
 async create(createOrderDto: CreateOrderDto) {
-  const{idUser,MenuItems,paymentMethod} = createOrderDto;
+  const{idUser,MenuItems,paymentMethod,comment} = createOrderDto;
 console.log(createOrderDto, "create order ");
 
   const user = await this.userService.findOneById(idUser);
@@ -37,6 +37,7 @@ console.log(createOrderDto, "create order ");
     status: OrderStatus.EN_PREPARACION,
     payment_status:PaymentStatus.PENDIENTE,
     createdAt: dayjs().format("YYYY-MM-DD"),
+    comment,
     totalPrice:0
   })
 const order = await this.orderRepository.save(createOrder);
@@ -46,19 +47,13 @@ const detalleOrden = await Promise.all(MenuItems.map( async menu=>{
   console.log("menu, map", menu);
   
   const result = await this.orderDetailsService.create(menu,order)
-  console.log("result map",result);
   
   return result;
 }))
-console.log(detalleOrden,"det or");
 
 const total = detalleOrden.reduce((sum, det) => sum + det.subtotal, 0);
-  console.log(total, "total calculado");
-
 order.totalPrice = total;
 order.orderDetails = detalleOrden;
-
-console.log("order final", order);
 
 return this.orderRepository.save(order);
 
@@ -79,7 +74,8 @@ return this.orderRepository.save(order);
     }
 
     return order;
-  }async remove(id: string): Promise<void> {
+  }
+  async remove(id: string): Promise<void> {
     const order = await this.orderRepository.findOrderById(id);
     await this.orderRepository.remove(order);
   }
