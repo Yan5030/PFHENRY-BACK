@@ -17,5 +17,5 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   migrations: ['dist/migrations/*{.js,.ts}'],
   synchronize: true,
   //dropSchema: true,
-  logging: true,
+  //logging: true,
 };
