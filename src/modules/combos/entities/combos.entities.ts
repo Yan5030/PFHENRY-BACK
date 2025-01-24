@@ -19,7 +19,7 @@ export class Combo {
   @Column({ default: true })
   isActive: boolean;
 
-  @ManyToMany(() => MenuItem, (menuItem) => menuItem.combos, { cascade: true })
+  @ManyToMany(() => MenuItem, menuItem => menuItem.combos, { cascade: true })
   @JoinTable()
-  items: MenuItem[];
+  menuItems: MenuItem[];
 }
