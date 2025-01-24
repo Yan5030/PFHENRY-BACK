@@ -1,17 +1,49 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { MenuItem } from './entities/menuItems.entities';
-import { MenuItemService } from './menuItem.service';
-import { MenuItemController } from './menuItem.controller';
-import { CategoriesModule } from '../categories/categories.module';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+  ManyToMany,
+  JoinColumn,
+} from 'typeorm';
+import { OrderDetail } from 'src/modules/order-details/entities/order-detail.entity'; 
+
+import { Combo } from 'src/modules/combos/entities/combos.entities';
 import { Category } from '../categories/entities/category.entity';
-import { OrderDetail } from '../order-details/entities/order-detail.entity'; 
+
+@Entity('menu_items')
+export class MenuItem {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column({ type: 'varchar', length: 100 })
+  name: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  description?: string; 
+
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  price: number; 
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  image_url?: string; 
+
+  @Column({nullable:true})
+  stock: number;
+
+  @ManyToOne(() => Category, { nullable: true })
+  @JoinColumn()
+  category: Category | null;
+
+  @ManyToMany(() => Combo, (combo) => combo.items)
+  combos: Combo[];
+
+   @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.menuItem)
+  orderDetails: OrderDetail[]
+
+@Column({ type: 'boolean', default: true })
+isActive: boolean;
 
 
-@Module({
-  imports: [TypeOrmModule.forFeature([MenuItem, Category, OrderDetail])],
-  controllers: [MenuItemController],
-  providers: [MenuItemService],
-  exports: [MenuItemService],
-})
-export class MenuItemModule {}
+}
