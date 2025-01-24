@@ -4,9 +4,11 @@ import {
     Column,
     ManyToOne,
     OneToMany,
+    ManyToMany,
   } from 'typeorm';
   import { OrderDetail } from 'src/modules/order-details/entities/order-detail.entity'; 
   import { Category } from '../../categories/entities/category.entity';
+import { Combo } from 'src/modules/combos/entities/combos.entities';
   
   @Entity('menu_items')
   export class MenuItem {
@@ -24,9 +26,14 @@ import {
   
     @Column({ type: 'varchar', length: 255, nullable: true })
     image_url?: string; 
+
+    @Column({nullable:true})
+    stock: number;
   
     @ManyToOne(() => Category, (category) => category.menuItems, { onDelete: 'SET NULL' })
     category: Category; 
+
+
   
      @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.menuItem)
     orderDetails: OrderDetail[]
@@ -34,8 +41,6 @@ import {
   @Column({ type: 'boolean', default: true })
   isActive: boolean;
 
-    @Column()
-    stock: number
 
   }
   
