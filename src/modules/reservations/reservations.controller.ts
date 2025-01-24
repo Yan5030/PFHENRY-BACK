@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, ParseUUIDPipe } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { CreateReservationDto } from './dto/create-reservation.dto';
@@ -9,7 +9,7 @@ export class ReservationsController {
   constructor(private readonly reservationsService: ReservationsService) {}
 
   @Post("/create/:id")
-  async create(@Param("id") id:string,@Body() createReservationDto:CreateReservationDto) {
+  async create(@Param("id", ParseUUIDPipe) id:string,@Body() createReservationDto:CreateReservationDto) {
     const reservation = await this.reservationsService.create(id,createReservationDto);
     return {message:"Reserva creada",data:reservation}
   }
@@ -21,19 +21,19 @@ export class ReservationsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
    const reservation = await this.reservationsService.findOneById(id);
    return {data:reservation}
   }
 
   @Put(':id')
- async update(@Param('id') id: string, @Body() updateReservationDto: UpdateReservationDto) {
+ async update(@Param('id', ParseUUIDPipe) id: string, @Body() updateReservationDto: UpdateReservationDto) {
     const updateReservation = await this.reservationsService.update(id, updateReservationDto);
     return {message: "Reserva modificada",data:updateReservation}
   }
 
   @Put('cancelled/:id')
- async cancelledReservation(@Param("id") id: string) {
+ async cancelledReservation(@Param("id", ParseUUIDPipe) id: string) {
    const updateReservation = await this.reservationsService.cancelled(id);
     return {message: "Reserva cancelada",data:updateReservation}
   }

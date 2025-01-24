@@ -108,10 +108,24 @@ return await this.usersRepository.save(updateRoleUser);;
   }
 
 
-  async findReservationsByUserService(id : string){
-    const user = await this.usersRepository.findOne({where:{id},relations:{reservations:true}});
+  async findReservationsByUserService( email?:string){
+    //let user:User ;
+    //if(id){
+     //  user = await this.usersRepository.findOne({where:{id},relations:{reservations:true}});
+    //} else if(email){
+      const user = await this.usersRepository.findOne({where:{email},relations:{reservations:true}});   
+    //} 
+   // if(!id && !email){
+     // throw new BadRequestException("Debe ingresar el email o id del usuario");
+   // }
+if(!user){
+throw new BadRequestException("Debe ingresar el email de un usuario activo");
+}
+
     const reservations = user?.reservations;
     if(!reservations){
+      throw new BadRequestException("El usuario no tiene reservas");
+    } else if(reservations.length === 0){
       throw new BadRequestException("El usuario no tiene reservas");
     }
   return reservations;

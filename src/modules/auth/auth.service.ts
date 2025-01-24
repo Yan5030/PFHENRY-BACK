@@ -8,8 +8,6 @@ import { ResponseUserDto } from '../users/dto/response-user.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { NodemailerService } from '../nodemailer/nodemailer.service';
 
-
-import { NodemailerService } from '../nodemailer/nodemailer.service';
 @Injectable()
 export class AuthService {
   constructor(
