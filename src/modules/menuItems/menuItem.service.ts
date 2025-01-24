@@ -2,57 +2,98 @@ import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as fs from 'fs';
+import * as path from 'path';
 import { MenuItem } from './entities/menuItems.entities';
 import { CreateMenuItemDto } from './dto/create-menu-itemdto';
 import { UpdateMenuItemDto } from './dto/update-product-dto';
 import { Category } from '../categories/entities/category.entity';
+import { CreateCategoryDto } from '../categories/dto/create-category.dto';
+import { Combo } from '../combos/entities/combos.entities';
 
 
 @Injectable()
 export class MenuItemService implements OnModuleInit {
     constructor(
+      @InjectRepository(Combo)
+      private readonly combosRepository: Repository<Combo>,
       @InjectRepository(MenuItem)
       private readonly menuItemRepository: Repository<MenuItem>,
       @InjectRepository(Category)
       private readonly categoryRepository: Repository<Category>,
     ) {}
   
-
     async onModuleInit() {
-        await this.seedMenuItems();
+      await this.seedCategories(); 
+      await this.seedMenuItems();   
+      await this.preloadCombos();   
+    }
+ 
+    private async seedCategories(): Promise<void> {
+      const categoriesData: CreateCategoryDto[] = JSON.parse(fs.readFileSync('categories.json', 'utf8'));
+  
+      for (const categoryData of categoriesData) {
+        const category = this.categoryRepository.create(categoryData);
+        await this.categoryRepository.save(category);
       }
+  
+      console.log('Categories se precargaron correctamente.');
+    }
+  
     
-      private async seedMenuItems(): Promise<void> {
-        try {
-          const menuItemsData: CreateMenuItemDto[] = JSON.parse(fs.readFileSync('menuItem.json', 'utf8'));
+    private async seedMenuItems(): Promise<void> {
+      const menuItemsData: CreateMenuItemDto[] = JSON.parse(fs.readFileSync('menuItem.json', 'utf8'));
     
-          for (const menuItemData of menuItemsData) {
-            const { categoryId, ...menuItemDto } = menuItemData;
+      for (const menuItemData of menuItemsData) {
+        const { categoryId, ...menuItemDto } = menuItemData;
     
-            
-            let category: Category;
-            if (categoryId) {
-              category = await this.categoryRepository.findOne({ where: { id: categoryId } });
-              if (!category) {
-                console.log(`Category with ID ${categoryId} not found. Skipping menu item.`);
-                continue;
-              }
-            }
+        let category: Category | null = null;
+        if (categoryId) {
+          category = await this.categoryRepository.findOne({ where: { id: categoryId } });
     
-        
-            const menuItem = this.menuItemRepository.create({
-              ...menuItemDto,
-              category,
-            });
-    
-            await this.menuItemRepository.save(menuItem);
+          
+          if (!category) {
+            console.log(`Categoria con ID ${categoryId} no existe .`);
+            continue;  
           }
-    
-          console.log('Menu items seeded successfully.');
-        } catch (error) {
-          console.error('Error seeding menu items:', error);
         }
+    
+        const menuItem = this.menuItemRepository.create({
+          ...menuItemDto,
+          category,  
+        });
+    
+        await this.menuItemRepository.save(menuItem);
       }
+    
+      console.log('Menu items precargado correctamente.');
+    }
+    
+    private async preloadCombos(): Promise<void> {
+      const filePath = path.join(__dirname, 'data', 'combos.json');
+      const combosData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  
+      for (const comboData of combosData) {
+        const items = await this.getMenuItemsByIds(comboData.items);
+        const combo = this.combosRepository.create({ ...comboData, items });
+        await this.combosRepository.save(combo);
+      }
+  
+      console.log('Combos precargados correctamente.');
+    }
+  
+   
+    private async getMenuItemsByIds(itemIds: string[]): Promise<MenuItem[]> {
+      const items = await Promise.all(
+        itemIds.map(async (itemId: string) => {
+          const item = await this.menuItemRepository.findOne({ where: { id: itemId } });
+          if (!item) {
+            throw new NotFoundException(`MenuItem with ID ${itemId} not found`);
+          }
+          return item;
+        })
+      );
+      return items;
+    }
 
   async create(createMenuItemDto: CreateMenuItemDto): Promise<MenuItem> {
     const menuItem = this.menuItemRepository.create(createMenuItemDto);
