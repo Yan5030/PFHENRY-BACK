@@ -7,10 +7,52 @@ import { Repository } from 'typeorm';
 import { ResponseUserDto } from './dto/response-user.dto';
 import { Role } from 'src/enum/roles.enum';
 import dayjs from 'dayjs';
+import * as fs from 'fs';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
   constructor(@InjectRepository(User) private readonly usersRepository: Repository<User>){}
+
+  async seedUsers(): Promise<void> {
+    try {
+      // Leer el archivo JSON
+      const usersData: CreateUserDto[] = JSON.parse(
+        fs.readFileSync('users.json', 'utf8'),
+      );
+
+      for (const userData of usersData) {
+        const existingUser = await this.usersRepository.findOne({
+          where: { email: userData.email },
+        });
+
+        if (existingUser) {
+          console.log(
+            `El usuario con el email ${userData.email} ya existe. Se omite.`,
+          );
+          continue;
+        }
+
+        // Hash de la contraseña si está presente
+        if (userData.password) {
+          userData.password = await bcrypt.hash(userData.password, 10);
+        }
+
+        const newUser = this.usersRepository.create({
+          ...userData,
+          create_at: new Date().toISOString(),
+        });
+
+        await this.usersRepository.save(newUser);
+        console.log(`Usuario ${userData.name} agregado exitosamente.`);
+      }
+    } catch (error) {
+      console.error('Error al cargar los usuarios:', error.message);
+      throw new BadRequestException(
+        'Error al cargar los usuarios desde el archivo JSON.',
+      );
+    }
+  }
 
   async create(createUserDto: CreateUserDto) : Promise<User>{ 
     const userDb = await this.usersRepository.findOne({where:{email:createUserDto.email}})
