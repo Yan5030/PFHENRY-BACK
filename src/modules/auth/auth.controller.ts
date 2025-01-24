@@ -74,6 +74,7 @@ export class AuthController {
       throw new BadRequestException('Error al registrar el usuario', error);
     }
   }
+  
   @Post('signin')
   async signin(@Body() signinDto: SigninAuthDto) {
     const responseLogin = await this.authService.signin(signinDto);

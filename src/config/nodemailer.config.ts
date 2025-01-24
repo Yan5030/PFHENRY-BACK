@@ -1,3 +1,4 @@
+
 import nodemailer from 'nodemailer';
 
 
@@ -16,3 +17,4 @@ transporter.verify((error, success) => {
     console.log('Conexión exitosa al servicio de correo.');
   }
 });
+

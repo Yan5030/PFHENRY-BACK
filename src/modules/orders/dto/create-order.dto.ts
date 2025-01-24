@@ -11,13 +11,17 @@ export class CreateOrderDto {
   @IsString()
   idUser: string; // order
 
+
+
   @ApiProperty({
     description: "Método de pago utilizado para la orden",
     enum: PaymentMethod,
-    example: PaymentMethod.EFECTIVO, 
+    example: [PaymentMethod.EFECTIVO, PaymentMethod.TARJETA_CREDITO,PaymentMethod.TARJETA_DEBITO,PaymentMethod.TRANSFERENCIA ]
   })
   @IsEnum(PaymentMethod)
   paymentMethod: PaymentMethod; // order
+
+
 
   @ApiProperty({
     description: "Lista de elementos del menú incluidos en la orden",
@@ -25,4 +29,12 @@ export class CreateOrderDto {
   })
   @IsArray()
   MenuItems: CreateOrderDetailDto[]; // orderDet
+
+  @ApiProperty({
+    description:"Añade algun comentario para el pedido",
+    example:"Quiero la hamburguesa sin lechuga"
+  })
+  @IsString()
+  comment: string
+
 }

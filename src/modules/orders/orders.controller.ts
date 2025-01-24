@@ -37,6 +37,7 @@ export class OrdersController {
         createdAt: order.createdAt,
         payment_status: order.payment_status,
         paymentMethod: order.paymentMethod,
+        comment:order.comment,
         user: {
           id: order.user.id, // Solo el ID del usuario
         },
