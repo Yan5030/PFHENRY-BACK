@@ -5,10 +5,13 @@ export class CreateUserDto{
  
 @ApiProperty ({
 description: "id generado por auth0",
-example: "uuid"})
+example: null,
+nullable: true,})
 @IsOptional()
 @IsString()
-auth0Id: string
+auth0Id: string | null = null;
+
+
   @ApiProperty({
     description:"El nombre debe tener entre 3 y 80 caracteres",
     example:"Maximiliano"

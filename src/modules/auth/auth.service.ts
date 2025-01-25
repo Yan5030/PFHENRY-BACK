@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { SigninAuthDto } from './dto/sigin-auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
@@ -7,6 +7,7 @@ import { UsersService } from '../users/users.service';
 import { ResponseUserDto } from '../users/dto/response-user.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { NodemailerService } from '../nodemailer/nodemailer.service';
+
 
 @Injectable()
 export class AuthService {
@@ -36,18 +37,22 @@ export class AuthService {
     throw new BadRequestException('Error al encriptar la contraseña');
   }
    
-  const isComplete = !createUserDto.auth0Id;
+  const isComplete = 
+  createUserDto.email.trim() !== '' &&
+    createUserDto.password.trim() !== '' &&
+    createUserDto.name.trim() !== '' &&
+    (createUserDto.address?.trim() || '') !== '' &&  // Si el campo address es obligatorio, verifica que no esté vacío
+    createUserDto.ConfirmPassword.trim() !== '';
 
 const userSave = await this.usersService.create({
   ...createUserDto,
   password: hashedPassword,
-  isComplete,
+  address: createUserDto.address?.trim() || '',
+  isComplete: isComplete
 });
 
 await this.nodemailerService.sendEmail(createUserDto.email);
   
-await this.nodemailerService.sendEmail(createUserDto.email);
-
   return userSave;
 }
 
@@ -73,7 +78,6 @@ async registerWithAuth0(createUserDto: CreateUserDto) {
 
   return newUser;
 }
-
 async signin(signinAuthDto: SigninAuthDto) {
   try {
     const { email, password } = signinAuthDto;
@@ -106,15 +110,56 @@ async signin(signinAuthDto: SigninAuthDto) {
     }
     }
 
-async completeUserProfile(updateProfileDto: UpdateProfileDto) { 
-  const user = await this.usersService.getOneByAuth0Id(updateProfileDto.auth0Id); 
-  if (!user) { 
-    throw new BadRequestException('Usuario no encontrado'); 
-  } 
-  const updatedUser = await this.usersService.update(user.id, 
-    { 
-      ...updateProfileDto, 
-      isComplete: true,
-     }); 
-  return updatedUser; }
+    async validateUserAndBuildResponse(user: any): Promise<any> {
+      try {
+        // Aquí el 'user' contiene los datos del usuario que hemos extraído del token JWT
+        // Por ejemplo, 'user.sub' es el ID del usuario en Auth0 o cualquier otro campo que usas para identificarlo
+        const userId = user.sub;  // 'sub' es el campo estándar para el ID del usuario en Auth0
+        console.log('User ID from token:', userId);
+        // Busca al usuario en tu base de datos usando el ID proporcionado
+        const foundUser = await this.usersService.getOneByAuth0Id(userId);
+  
+        if (!foundUser) {
+          throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
+        }
+  
+        // Devuelve la respuesta personalizada del usuario, por ejemplo, puedes devolver la información relevante
+        return {
+          id: foundUser.id,
+          name: foundUser.name,
+          email: foundUser.email,
+          message: 'Usuario autenticado exitosamente',
+        };
+      } catch (error) {
+        throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
+      }
+    }
+
+    async completeUserProfile(id: string, updateProfileDto: UpdateProfileDto) {
+      const user = await this.usersService.findOneById(id);
+    
+      if (!user) {
+        throw new BadRequestException('Usuario no encontrado');
+      }
+    
+      if (user.isComplete) {
+        throw new BadRequestException('El perfil ya está completo');
+      }
+
+      const { address, password } = updateProfileDto;
+      if (!address?.trim() || !password?.trim()) {
+        throw new BadRequestException(
+          'Es necesario completar los campos address y password'
+        );
+      }
+    
+      const updateData = {
+        address: address.trim(),
+        password: bcrypt.hashSync(password, 10), 
+        isComplete: true,
+      };
+    
+      return await this.usersService.updateById(id, updateData);
+    }
+    
 }

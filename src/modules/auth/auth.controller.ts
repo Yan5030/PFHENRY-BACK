@@ -3,10 +3,14 @@ import {
   Get, 
   Body, 
   Headers,
-  Request,
   UseGuards,
+  Request,
   Post,
-  BadRequestException
+  BadRequestException,
+  Param,
+  HttpException,
+  HttpStatus,
+  Req
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto'; // Mantener el DTO de Jhon
@@ -17,7 +21,10 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { Role } from 'src/enum/roles.enum';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { JwtService } from '@nestjs/jwt';
-//import { Auth0Guard } from 'src/guards/auth0.guard';
+import { RequestWithUser } from 'src/types/RequestWithUser';
+import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+
+
 
 @Controller('auth')
 export class AuthController {
@@ -65,15 +72,15 @@ export class AuthController {
   }
 
   @Post('signupWithAuth0')
- //@UseGuards(Auth0Guard)
-  async signupWithAuth0(@Body() createUserDto: CreateUserDto) {
-    try {
-      const user = await this.authService.registerWithAuth0(createUserDto);
-      return { message: 'Usuario registrado con Auth0', data: user };
-    } catch (error) {
-      throw new BadRequestException('Error al registrar el usuario', error);
-    }
-  }
+  //@UseGuards(Auth0Guard)
+   async signupWithAuth0(@Body() createUserDto: CreateUserDto) {
+     try {
+       const user = await this.authService.registerWithAuth0(createUserDto);
+       return { message: 'Usuario registrado con Auth0', data: user };
+     } catch (error) {
+       throw new BadRequestException('Error al registrar el usuario', error);
+     }
+   }
   
   @Post('signin')
   async signin(@Body() signinDto: SigninAuthDto) {
@@ -82,11 +89,41 @@ export class AuthController {
 
     return {data:responseLogin}
   }
+ 
+  @Post('signinwithauth0')
+  async signinWithAuth0(
+    @Headers('authorization') authHeader: string,  // Recibe el token de los headers
+    @Req() req: RequestWithUser,  // Mantén el acceso al req.user si ya lo tienes en algún middleware
+  )
+  
+  {  
+    console.log (authHeader, req)
+    
+    try {
+      const user = req.user;  // Ahora 'req.user' está correctamente tipado
+      if (!user) {
+        throw new HttpException('Usuario no encontrado', HttpStatus.UNAUTHORIZED);
+      }
 
+      const userData = await this.authService.validateUserAndBuildResponse(user);
+      return {
+        data: userData,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
+    }
+  }
 
-@Post('complete-profile') 
-async completeProfile(@Body() updateProfileDto: UpdateProfileDto) { 
-  const user = await this.authService.completeUserProfile(updateProfileDto); 
-  return { message: 'Perfil completado', data: user }; }
+  @Post('complete-profile/:id')
+async completeProfile(
+  @Param('id') id: string,
+  @Body() updateProfileDto: UpdateProfileDto,
+) {
+  const user = await this.authService.completeUserProfile(id, updateProfileDto);
+  return { message: 'Perfil completado', data: user };
+}
+
+  
+  
 
 }
