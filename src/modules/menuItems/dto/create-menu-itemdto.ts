@@ -24,6 +24,6 @@ export class CreateMenuItemDto {
   image_url?: string; 
 
   @IsOptional()
-  @IsUUID()
-  categoryId?: string; 
+
+  category?: string; 
 }

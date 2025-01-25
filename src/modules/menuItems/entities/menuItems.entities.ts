@@ -31,9 +31,8 @@ export class MenuItem {
   @Column({nullable:true})
   stock: number;
 
-  @ManyToOne(() => Category, { nullable: true })
-  @JoinColumn()
-  category: Category | null;
+  @ManyToOne(() => Category, (category) => category.menuItems, { eager: true })
+  category: Category;
 
   @ManyToMany(() => Combo, (combo) => combo.menuItems)
   combos: Combo[];
