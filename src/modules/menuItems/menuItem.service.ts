@@ -26,45 +26,58 @@ export class MenuItemService implements OnModuleInit {
     await this.preloadCombos();
     await this.associateMenuItemsToCombos();
   }
-
+  
   private async seedCategories(): Promise<void> {
     const categoriesData: CreateCategoryDto[] = JSON.parse(fs.readFileSync('categories.json', 'utf8'));
-
+  
     for (const categoryData of categoriesData) {
+      
+      const existingCategory = await this.categoryRepository.findOne({ where: { name: categoryData.name } });
+      if (existingCategory) {
+        console.log(`La categoría "${categoryData.name}" ya existe. No se creará.`);
+        continue;
+      }
+  
       const category = this.categoryRepository.create(categoryData);
       await this.categoryRepository.save(category);
     }
-
+  
     console.log('Categories se precargaron correctamente.');
   }
-
+  
   private async seedMenuItems(): Promise<void> {
     const menuItemsData: CreateMenuItemDto[] = JSON.parse(fs.readFileSync('menuItem.json', 'utf8'));
-
+  
     for (const menuItemData of menuItemsData) {
       const { category, ...menuItemDto } = menuItemData;
-
+  
+     
+      const existingMenuItem = await this.menuItemRepository.findOne({ where: { name: menuItemDto.name } });
+      if (existingMenuItem) {
+        console.log(`El menú item "${menuItemDto.name}" ya existe. No se creará.`);
+        continue;
+      }
+  
       const categoryEntity = category
         ? await this.categoryRepository.findOne({ where: { name: category } })
         : null;
-
+  
       if (!categoryEntity) {
         console.log(`La categoría "${category}" no existe. El item no se creará.`);
         continue;
       }
-
-      
+  
       const menuItem = this.menuItemRepository.create({
         ...menuItemDto,
         category: categoryEntity,
       });
-
+  
       await this.menuItemRepository.save(menuItem);
     }
-
+  
     console.log('Menu items precargados correctamente.');
   }
-
+  
   private async preloadCombos(): Promise<void> {
     const hogwartsHouseCombos = [
       { name: 'Gryffindor Combo', price: 25.36, description: 'Un combo lleno de valor y coraje.' },
@@ -72,44 +85,47 @@ export class MenuItemService implements OnModuleInit {
       { name: 'Ravenclaw Combo', price: 16.49, description: 'Un combo lleno de sabiduría e ingenio.' },
       { name: 'Slytherin Combo', price: 17.99, description: 'Un combo lleno de ambición y astucia.' },
     ];
-
+  
     for (const comboData of hogwartsHouseCombos) {
+    
+      const existingCombo = await this.combosRepository.findOne({ where: { name: comboData.name } });
+      if (existingCombo) {
+        console.log(`El combo "${comboData.name}" ya existe. No se creará.`);
+        continue;
+      }
+  
       const combo = this.combosRepository.create(comboData);
       await this.combosRepository.save(combo);
       console.log(`Combo "${comboData.name}" creado exitosamente, pero sin items asociados.`);
     }
-
+  
     console.log('Combos precargados correctamente.');
   }
-
+  
   private async associateMenuItemsToCombos(): Promise<void> {
     const combos = await this.combosRepository.find();
-    const menuItems = await this.menuItemRepository.find(); // No necesitamos relaciones específicas aquí.
+    const menuItems = await this.menuItemRepository.find(); 
   
     for (const combo of combos) {
       let items: MenuItem[] = [];
   
       switch (combo.name) {
         case 'Gryffindor Combo':
-          
           items = menuItems.filter(
             (item) => item.price >= 5 && item.price <= 10 && item.stock > 4
           );
           break;
         case 'Hufflepuff Combo':
-       
           items = menuItems.filter(
             (item) => item.price < 6 && item.stock > 5
           );
           break;
         case 'Ravenclaw Combo':
-         
           items = menuItems.filter(
             (item) => item.price >= 1 && item.price <= 10
           );
           break;
         case 'Slytherin Combo':
-         
           items = menuItems.filter(
             (item) => item.price > 11 && item.stock > 5
           );
@@ -128,20 +144,19 @@ export class MenuItemService implements OnModuleInit {
     }
   }
   
-
   private async getMenuItemsByIds(itemIds: string[]): Promise<MenuItem[]> {
     const items = await Promise.all(
       itemIds.map(async (itemId: string) => {
         const item = await this.menuItemRepository.findOne({ where: { id: itemId } });
         if (!item) {
-          throw new NotFoundException(`MenuItem  con id ${itemId} no encontrado`);
+          throw new NotFoundException(`MenuItem con id ${itemId} no encontrado`);
         }
         return item;
       }),
     );
     return items;
   }
-
+  
   async create(createMenuItemDto: CreateMenuItemDto): Promise<MenuItem> {
     const { category, ...menuItemDto } = createMenuItemDto;
 
