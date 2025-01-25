@@ -1,184 +1,114 @@
-
 [
-    {
-    
-      "name": "Hamburguesa Clásica",
-      "description": "Hamburguesa con carne de res, queso cheddar, lechuga, tomate y mayonesa.",
-      "price": 5.99,
-      "category": "hamburguesa",
-      "image": "url-de-imagen-hamburguesa-clasica",
-      "stock": 50
-    },
-    {
-    
-      "name": "Hamburguesa BBQ",
-      "description": "Hamburguesa con carne de res, cebolla caramelizada, salsa barbacoa, bacon y queso cheddar.",
-      "price": 7.49,
-      "category": "hamburguesa",
-      "image": "url-de-imagen-hamburguesa-bbq",
-      "stock": 30
-    },
-    {
-    
-      "name": "Hamburguesa Vegana",
-      "description": "Hamburguesa vegetariana con proteína de soja, aguacate, tomate, cebolla morada y lechuga.",
-      "price": 6.49,
-      "category": "hamburguesa",
-      "image": "url-de-imagen-hamburguesa-vegana",
-      "stock": 25
-    },
-    {
-   
-      "name": "Hamburguesa Doble Carne",
-      "description": "Hamburguesa con dos carnes de res, bacon, queso suizo, cebolla y salsa especial.",
-      "price": 9.99,
-      "category": "hamburguesa",
-      "image": "url-de-imagen-hamburguesa-doble-carne",
-      "stock": 15
-    },
-    {
-    
-      "name": "Hamburguesa con Huevo",
-      "description": "Hamburguesa con carne de res, queso cheddar, huevo frito y salsa tártara.",
-      "price": 7.19,
-      "category": "hamburguesa",
-      "image": "url-de-imagen-hamburguesa-huevo",
-      "stock": 40
-    },
-    {
-  
-      "name": "Papas Fritas",
-      "description": "Papas fritas crujientes servidas con ketchup.",
-      "price": 2.49,
-      "category": "acompañamiento",
-      "image": "url-de-imagen-papas-fritas",
-      "stock": 60
-    },
-    {
-    
-      "name": "Aros de Cebolla",
-      "description": "Aros de cebolla empanados y fritos servidos con salsa barbacoa.",
-      "price": 3.29,
-      "category": "acompañamiento",
-      "image": "url-de-imagen-aros-de-cebolla",
-      "stock": 40
-    },
-    {
-    
-      "name": "Ensalada César",
-      "description": "Ensalada con lechuga romana, pollo a la parrilla, crutones y aderezo César.",
-      "price": 4.99,
-      "category": "acompañamiento",
-      "image": "url-de-imagen-ensalada-cesar",
-      "stock": 20
-    },
-    {
-    
-      "name": "Papas Gajo",
-      "description": "Papas gajo horneadas con un toque de especias.",
-      "price": 2.99,
-      "category": "acompañamiento",
-      "image": "url-de-imagen-papas-gajo",
-      "stock": 45
-    },
-    {
-    
-      "name": "Acompañamiento Mixto",
-      "description": "Combinación de papas fritas, aros de cebolla y ensalada.",
-      "price": 5.49,
-      "category": "acompañamiento",
-      "image": "url-de-imagen-acompanamiento-mixto",
-      "stock": 35
-    },
-    {
-   
-      "name": "Coca-Cola",
-      "description": "Bebida gaseosa clásica, refrescante y deliciosa.",
-      "price": 1.49,
-      "category": "bebida",
-      "image": "url-de-imagen-coca-cola",
-      "stock": 100
-    },
-    {
-    
-      "name": "Sprite",
-      "description": "Bebida gaseosa de limón, refrescante y ligera.",
-      "price": 1.39,
-      "category": "bebida",
-      "image": "url-de-imagen-sprite",
-      "stock": 120
-    },
-    {
-    
-      "name": "Agua Mineral",
-      "description": "Botella de agua mineral natural.",
-      "price": 0.99,
-      "category": "bebida",
-      "image": "url-de-imagen-agua-mineral",
-      "stock": 150
-    },
-    {
-   
-      "name": "Fanta Naranja",
-      "description": "Bebida gaseosa de sabor naranja.",
-      "price": 1.29,
-      "category": "bebida",
-      "image": "url-de-imagen-fanta-naranja",
-      "stock": 110
-    },
-    {
-   
-      "name": "Jugo de Naranja",
-      "description": "Jugo natural de naranja fresco.",
-      "price": 2.49,
-      "category": "bebida",
-      "image": "url-de-imagen-jugo-naranja",
-      "stock": 90
-    },
-    {
-   
-      "name": "Tarta de Manzana",
-      "description": "Tarta de manzana casera con un toque de canela.",
-      "price": 3.99,
-      "category": "postre",
-      "image": "url-de-imagen-tarta-manzana",
-      "stock": 25
-    },
-    {
-  
-      "name": "Brownie de Chocolate",
-      "description": "Brownie de chocolate con nueces y crema de vainilla.",
-      "price": 4.49,
-      "category": "postre",
-      "image": "url-de-imagen-brownie-chocolate",
-      "stock": 30
-    },
-    {
-   
-      "name": "Helado de Vainilla",
-      "description": "Helado cremoso de vainilla con topping de chocolate.",
-      "price": 2.99,
-      "category": "postre",
-      "image": "url-de-imagen-helado-vainilla",
-      "stock": 40
-    },
-    {
-  
-      "name": "Churros con Chocolate",
-      "description": "Churros recién hechos acompañados de una taza de chocolate caliente.",
-      "price": 3.29,
-      "category": "postre",
-      "image": "url-de-imagen-churros-chocolate",
-      "stock": 35
-    },
-    {
-    
-      "name": "Flan de Caramelo",
-      "description": "Flan cremoso con un delicioso toque de caramelo.",
-      "price": 3.49,
-      "category": "postre",
-      "image": "url-de-imagen-flan-caramelo",
-      "stock": 50
-    }
-    
-  ]
+  {
+    "name": "The Butterbeer Beast",
+    "description": "Butterbeer-infused bun, Double Smoked Patty, Cheddar, Bacon, Special Sauce.",
+    "price": 12.4,
+    "image_url": "https://i.postimg.cc/F7Szskf6/hamburguesa.jpg",
+    "category": "Burgers",
+    "stock": 10
+  },
+  {
+    "name": "Hagrid’s Classic Burger",
+    "description": "Classic bun, Smoked Patty, Lettuce, Tomato, Cheddar, Mayonnaise.",
+    "price": 8.9,
+    "image_url": "https://i.postimg.cc/F7Szskf6/hamburguesa.jpg",
+    "category": "Burgers",
+    "stock": 20
+  },
+  {
+    "name": "The Sirius Black BBQ",
+    "description": "Brioche bun, Double Patty, Crispy Bacon, Caramelized Onions, BBQ Sauce.",
+    "price": 13.2,
+    "image_url": "https://i.postimg.cc/F7Szskf6/hamburguesa.jpg",
+    "category": "Burgers",
+    "stock": 15
+  },
+  {
+    "name": "The Golden Snitch Cheese",
+    "description": "Potato bun, Smoked Patty, Triple Cheddar, Golden Sauce.",
+    "price": 11.0,
+    "image_url": "https://i.postimg.cc/F7Szskf6/hamburguesa.jpg",
+    "category": "Burgers",
+    "stock": 8
+  },
+  {
+    "name": "The Fiery Dragon Burger",
+    "description": "Handcrafted bun, Patty, Jalapeños, Fiery Spicy Sauce.",
+    "price": 11.8,
+    "image_url": "https://i.postimg.cc/F7Szskf6/hamburguesa.jpg",
+    "category": "Burgers",
+    "stock": 12
+  },
+  {
+    "name": "Pumpkin Juice",
+    "description": "354ml Bottle of Sweet Pumpkin Juice.",
+    "price": 1.4,
+    "image_url": "https://i.postimg.cc/HWPYP38v/coca.jpg",
+    "category": "Drinks",
+    "stock": 50
+  },
+  {
+    "name": "Polyjuice Potion",
+    "description": "500ml Bottle, magically refreshing.",
+    "price": 1.6,
+    "image_url": "https://i.postimg.cc/HWPYP38v/coca.jpg",
+    "category": "Drinks",
+    "stock": 40
+  },
+  {
+    "name": "Felix Felicis Elixir",
+    "description": "600ml Bottle, a lucky drink.",
+    "price": 1.2,
+    "image_url": "https://i.postimg.cc/HWPYP38v/coca.jpg",
+    "category": "Drinks",
+    "stock": 30
+  },
+  {
+    "name": "Treacle Tart with Ice Cream",
+    "description": "Classic British dessert served warm with vanilla ice cream.",
+    "price": 6.0,
+    "image_url": "https://i.postimg.cc/6yQsYkKf/chesscake.jpg",
+    "category": "Desserts",
+    "stock": 10
+  },
+  {
+    "name": "Cauldron Cake",
+    "description": "A delicious chocolate cake served with a caramel drizzle.",
+    "price": 6.5,
+    "image_url": "https://i.postimg.cc/6yQsYkKf/chesscake.jpg",
+    "category": "Desserts",
+    "stock": 5
+  },
+  {
+    "name": "Hogwarts Fries",
+    "description": "Generous portion of crispy fries.",
+    "price": 4.5,
+    "image_url": "https://i.postimg.cc/YqzHB3vw/papas.jpg",
+    "category": "Sides",
+    "stock": 25
+  },
+  {
+    "name": "Dragon Wings",
+    "description": "Crispy fried onion rings with a special dipping sauce.",
+    "price": 4.8,
+    "image_url": "https://i.postimg.cc/YqzHB3vw/papas.jpg",
+    "category": "Sides",
+    "stock": 15
+  },
+  {
+    "name": "Magical Caesar Salad",
+    "description": "Fresh salad with chicken, croutons, and Caesar dressing.",
+    "price": 5.0,
+    "image_url": "https://i.postimg.cc/YqzHB3vw/papas.jpg",
+    "category": "Sides",
+    "stock": 10
+  },
+  {
+    "name": "Gryffindor Mozzarella Sticks",
+    "description": "Breaded and fried mozzarella sticks, served with marinara sauce.",
+    "price": 5.2,
+    "image_url": "https://i.postimg.cc/YqzHB3vw/papas.jpg",
+    "category": "Sides",
+    "stock": 18
+  }
+]
