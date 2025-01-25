@@ -80,10 +80,10 @@ export class MenuItemService implements OnModuleInit {
   
   private async preloadCombos(): Promise<void> {
     const hogwartsHouseCombos = [
-      { name: 'Gryffindor Combo', price: 25.36, description: 'Un combo lleno de valor y coraje.' },
-      { name: 'Hufflepuff Combo', price: 14.99, description: 'Un combo lleno de lealtad y trabajo duro.' },
-      { name: 'Ravenclaw Combo', price: 16.49, description: 'Un combo lleno de sabiduría e ingenio.' },
-      { name: 'Slytherin Combo', price: 17.99, description: 'Un combo lleno de ambición y astucia.' },
+      { name: 'Gryffindor Combo', price: 27.36, description: 'Un combo lleno de valor y coraje.' },
+      { name: 'Hufflepuff Combo', price: 24.99, description: 'Un combo lleno de lealtad y trabajo duro.' },
+      { name: 'Ravenclaw Combo', price: 16.50, description: 'Un combo lleno de sabiduría e ingenio.' },
+      { name: 'Slytherin Combo', price: 10.07, description: 'Un combo lleno de ambición y astucia.' },
     ];
   
     for (const comboData of hogwartsHouseCombos) {
@@ -112,22 +112,22 @@ export class MenuItemService implements OnModuleInit {
       switch (combo.name) {
         case 'Gryffindor Combo':
           items = menuItems.filter(
-            (item) => item.price >= 5 && item.price <= 10 && item.stock > 4
+            (item) => item.name === 'The Butterbeer Beast' || item.name === 'The Sirius Black BBQ' || item.name === 'Felix Felicis Elixir' || item.name === 'Polyjuice Potion'
           );
           break;
         case 'Hufflepuff Combo':
           items = menuItems.filter(
-            (item) => item.price < 6 && item.stock > 5
+            (item) => item.name === 'The Fiery Dragon Burger' || item.name === 'The Fiery Dragon Burger' || item.name === 'Felix Felicis Elixir' ||  item.name === 'Felix Felicis Elixir'
           );
           break;
         case 'Ravenclaw Combo':
           items = menuItems.filter(
-            (item) => item.price >= 1 && item.price <= 10
+            (item) => item.name === 'The Golden Snitch Cheese' || item.name === 'Pumpkin Juice' || item.name === 'Treacle Tart with Ice Cream'
           );
           break;
         case 'Slytherin Combo':
           items = menuItems.filter(
-            (item) => item.price > 11 && item.stock > 5
+            (item) => item.name === 'Hogwarts Fries' || item.name === 'Dragon Wings' || item.name === 'Felix Felicis Elixir' || item.name === 'Felix Felicis Elixir'
           );
           break;
         default:
@@ -143,6 +143,7 @@ export class MenuItemService implements OnModuleInit {
       }
     }
   }
+  
   
   private async getMenuItemsByIds(itemIds: string[]): Promise<MenuItem[]> {
     const items = await Promise.all(
