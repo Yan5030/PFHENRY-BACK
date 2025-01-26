@@ -1,8 +1,9 @@
 import { Role } from "src/enum/roles.enum";
 import { Order } from "src/modules/orders/entities/order.entity";
 import { Reservation } from "src/modules/reservations/entities/reservation.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { v4 as uuid} from "uuid";
+import { Review } from "src/modules/review/entities/review.entity";
  
 @Entity()
 export class User {
@@ -30,7 +31,8 @@ create_at : string
 reservations:Reservation[]
 @OneToMany(() => Order, (order) => order.user) // Relación con Order
 orders: Order[]; // Un usuario puede tener varias órdenes
-
+@OneToOne(() => Review, (review) => review.user, { cascade: true }) // Relación con Review
+review: Review | null; // Un usuario puede tener una sola reseña
 @Column({ type: 'boolean', default: true })
     isActive: boolean; //borrado logico
 }
