@@ -4,7 +4,7 @@
     "description": "Butterbeer-infused bun, Double Smoked Patty, Cheddar, Bacon, Special Sauce.",
     "price": 12.4,
     "image_url": "https://i.postimg.cc/F7Szskf6/hamburguesa.jpg",
-    "category": ["Burgers", "All"],
+    "category": "Burgers",
     "stock": 10
   },
   {
@@ -12,7 +12,7 @@
     "description": "Classic bun, Smoked Patty, Lettuce, Tomato, Cheddar, Mayonnaise.",
     "price": 8.9,
     "image_url": "https://i.postimg.cc/F7Szskf6/hamburguesa.jpg",
-    "category": ["Burgers", "All"],
+    "category": "Burgers",
 
     "stock": 20
   },
@@ -21,7 +21,7 @@
     "description": "Brioche bun, Double Patty, Crispy Bacon, Caramelized Onions, BBQ Sauce.",
     "price": 13.2,
     "image_url": "https://i.postimg.cc/F7Szskf6/hamburguesa.jpg",
-    "category":["Burgers", "All"],
+    "category":"Burgers",
 
     "stock": 15
   },
@@ -30,7 +30,7 @@
     "description": "Potato bun, Smoked Patty, Triple Cheddar, Golden Sauce.",
     "price": 11.0,
     "image_url": "https://i.postimg.cc/F7Szskf6/hamburguesa.jpg",
-    "category": ["Burgers", "All"],
+    "category": "Burgers",
 
     "stock": 8
   },
@@ -39,7 +39,7 @@
     "description": "Handcrafted bun, Patty, Jalapeños, Fiery Spicy Sauce.",
     "price": 11.8,
     "image_url": "https://i.postimg.cc/F7Szskf6/hamburguesa.jpg",
-    "category": ["Burgers", "All"],
+    "category": "Burgers",
 
     "stock": 12
   },
@@ -48,7 +48,7 @@
     "description": "354ml Bottle of Sweet Pumpkin Juice.",
     "price": 1.4,
     "image_url": "https://i.postimg.cc/HWPYP38v/coca.jpg",
-    "category":[ "Drinks", "All"],
+    "category": "Drinks",
     "stock": 50
   },
   {
@@ -56,7 +56,7 @@
     "description": "500ml Bottle, magically refreshing.",
     "price": 1.6,
     "image_url": "https://i.postimg.cc/HWPYP38v/coca.jpg",
-    "category": ["Drinks", "All"],
+    "category": "Drinks",
     "stock": 40
   },
   {
@@ -64,7 +64,7 @@
     "description": "600ml Bottle, a lucky drink.",
     "price": 1.2,
     "image_url": "https://i.postimg.cc/HWPYP38v/coca.jpg",
-    "category": ["Drinks", "All"],
+    "category": "Drinks",
     "stock": 30
   },
   {
@@ -72,7 +72,7 @@
     "description": "Classic British dessert served warm with vanilla ice cream.",
     "price": 6.0,
     "image_url": "https://i.postimg.cc/6yQsYkKf/chesscake.jpg",
-    "category": ["Desserts", "All"],
+    "category": "Desserts",
     "stock": 10
   },
   {
@@ -80,7 +80,7 @@
     "description": "A delicious chocolate cake served with a caramel drizzle.",
     "price": 6.5,
     "image_url": "https://i.postimg.cc/6yQsYkKf/chesscake.jpg",
-    "category": ["Desserts", "All"],
+    "category": "Desserts",
     "stock": 5
   },
   {
@@ -88,7 +88,7 @@
     "description": "Generous portion of crispy fries.",
     "price": 4.5,
     "image_url": "https://i.postimg.cc/YqzHB3vw/papas.jpg",
-    "category": ["Sides", "All"],
+    "category": "Sides",
     "stock": 25
   },
   {
@@ -96,7 +96,7 @@
     "description": "Crispy fried onion rings with a special dipping sauce.",
     "price": 4.8,
     "image_url": "https://i.postimg.cc/YqzHB3vw/papas.jpg",
-    "category": ["Sides", "All"],
+    "category": "Sides",
     "stock": 15
   },
   {
@@ -104,7 +104,7 @@
     "description": "Fresh salad with chicken, croutons, and Caesar dressing.",
     "price": 5.0,
     "image_url": "https://i.postimg.cc/YqzHB3vw/papas.jpg",
-    "category": [ "Sides", "All"],
+    "category":  "Sides",
     "stock": 10
   },
   {
@@ -112,7 +112,7 @@
     "description": "Breaded and fried mozzarella sticks, served with marinara sauce.",
     "price": 5.2,
     "image_url": "https://i.postimg.cc/YqzHB3vw/papas.jpg",
-    "category": ["Sides", "All"],
+    "category": "Sides",
     "stock": 18
   }
 ]
