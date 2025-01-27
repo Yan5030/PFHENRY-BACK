@@ -1,40 +1,35 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { expressjwt as jwt } from 'express-jwt';
-import jwksRsa from 'jwks-rsa';
+import { compactDecrypt } from 'jose';
 
 @Injectable()
-export class JwtMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: NextFunction) {
-    const jwksUri = `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`;
-    const audience = process.env.AUTH0_AUDIENCE;
-    const issuer = `https://${process.env.AUTH0_DOMAIN}`;
+export class JweMiddleware implements NestMiddleware {
+  // Clave secreta compartida para desencriptar tokens JWE (debes configurarla adecuadamente)
+  private readonly sharedKey: Uint8Array = new TextEncoder().encode('your-shared-secret-key'); // Reemplaza con tu clave
 
-    if (!jwksUri || !audience || !issuer) {
-      console.error('JWT configuration variables are missing.');
-      return res.status(500).send({ error: 'Server configuration error' });
+  async use(req: Request, res: Response, next: NextFunction) {
+    const jweToken = req.headers['authorization']?.split(' ')[1];
+
+    if (!jweToken || jweToken.split('.').length < 5) {
+      return res.status(400).send({ error: 'Token JWE no encontrado o formato no válido' });
     }
 
     try {
-      jwt({
-        secret: jwksRsa.expressJwtSecret({
-          cache: true,
-          rateLimit: true,
-          jwksUri,
-        }) as jwksRsa.GetVerificationKey,
-        audience,
-        issuer,
-        algorithms: ['RS256'],
-      })(req, res, (err) => {
-        if (err) {
-          console.error('JWT Middleware error:', err.message);
-          return res.status(401).send({ error: 'Unauthorized' });
-        }
-        next(); // Continúa al siguiente middleware/controlador si no hay errores
-      });
+      // Desencriptar el token JWE usando la clave compartida
+      const { plaintext } = await compactDecrypt(jweToken, this.sharedKey);
+
+      let userData;
+      try {
+        userData = JSON.parse(new TextDecoder().decode(plaintext));
+      } catch (error) {
+        return res.status(400).send({ error: 'El payload desencriptado no es válido' });
+      }
+
+      req['user'] = userData;
+      next();
     } catch (error) {
-      console.error('Unexpected error in JWT Middleware:', error.message);
-      return res.status(500).send({ error: 'Internal Server Error' });
+      console.error('Error al procesar el token JWE:', error.message);
+      return res.status(401).send({ error: 'Token JWE inválido o clave incorrecta' });
     }
   }
 }

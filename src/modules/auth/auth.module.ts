@@ -8,7 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
 import { NodemailerService } from '../nodemailer/nodemailer.service';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtMiddleware } from 'src/middlewares/jwt.middleware';
+//import { JwtMiddleware } from 'src/middlewares/jwt.middleware';
 import { UsersService } from '../users/users.service';
 
 @Module({
@@ -18,7 +18,7 @@ import { UsersService } from '../users/users.service';
     JwtModule.register({
       global: true,
       signOptions: { expiresIn: '1h' },
-      secret: process.env.JWT_SECRET || 'clavesecret', // Llave secreta por defecto
+      secret: 'lFbSLO8L0CcSFx8p7wizSxHlQa0fUQDN'  //process.env.JWT_SECRET || '', // Llave secreta por defecto
     }),
     TypeOrmModule.forFeature([User]),
     UsersModule,
@@ -27,10 +27,11 @@ import { UsersService } from '../users/users.service';
   providers: [AuthService, NodemailerService, UsersService],
   exports: [PassportModule, JwtModule],
 })
-export class AuthModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(JwtMiddleware) // Aplica el middleware para validar tokens
-      .forRoutes('auth/signinwithauth0'); // Rutas protegidas
-  }
-}
+export class AuthModule {} 
+// implements NestModule {
+//   configure(consumer: MiddlewareConsumer) {
+//     consumer
+//       .apply(JwtMiddleware) // Aplica el middleware para validar tokens
+//       .forRoutes('auth/signinWithAuth0'); // Rutas protegidas
+//   }
+

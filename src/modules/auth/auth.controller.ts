@@ -90,7 +90,7 @@ export class AuthController {
     return {data:responseLogin}
   }
  
-  @Post('signinwithauth0')
+  @Post('signinWithAuth0')
   async signinWithAuth0(
     @Headers('authorization') authHeader: string,  // Recibe el token de los headers
     @Req() req: RequestWithUser,  // Mantén el acceso al req.user si ya lo tienes en algún middleware
