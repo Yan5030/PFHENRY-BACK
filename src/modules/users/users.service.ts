@@ -98,8 +98,19 @@ return userNoPassword;
 const updateUser = Object.assign(userDb, updateUserDto); // esto me modifica el usuario que traje de bd, y pone las propiedades modificadas
 //hago esto para poder guardar los cambios de este usuario y poder retornar el usuario, sin hacer otra peticion 
 return await this.usersRepository.save(updateUser);;
+  }
+
+  async updateByEmail(email: string, updateUserDto: UpdateUserDto) : Promise<User> {
+    const userDb = await this.usersRepository.findOne({where:{email}});
+  if(!userDb){
+    throw new BadRequestException("No se encontraron usuarios con la id ingresada");
+  }
+const updateUser = Object.assign(userDb, updateUserDto); // esto me modifica el usuario que traje de bd, y pone las propiedades modificadas
+//hago esto para poder guardar los cambios de este usuario y poder retornar el usuario, sin hacer otra peticion 
+return await this.usersRepository.save(updateUser);;
 
   }
+
 
   async remove(id: string) {
     const userDb = await this.usersRepository.findOne({where:{id}})
