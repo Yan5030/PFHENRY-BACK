@@ -1,23 +1,25 @@
+import { MenuItem } from 'src/modules/menuItems/entities/menuItems.entities';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
-import { MenuItem } from '../../menuitems/entities/menuitems.entities';
+
 
 @Entity()
 export class Combo {
-    @PrimaryGeneratedColumn()
-    id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column()
-    name: string;
+  @Column()
+  name: string;
 
-    @Column()
-    description: string;
+  @Column()
+  description: string;
 
-    @Column('decimal')
-    price: number;
+  @Column('decimal', { precision: 10, scale: 2 })
+  price: number;
 
-    @Column()
-    isActive: boolean;
+  @Column({ default: true })
+  isActive: boolean;
 
-
-
+  @ManyToMany(() => MenuItem, menuItem => menuItem.combos, { cascade: true })
+  @JoinTable()
+  menuItems: MenuItem[];
 }

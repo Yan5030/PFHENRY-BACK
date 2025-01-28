@@ -1,4 +1,4 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { SigninAuthDto } from './dto/sigin-auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
@@ -7,6 +7,8 @@ import { UsersService } from '../users/users.service';
 import { ResponseUserDto } from '../users/dto/response-user.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { NodemailerService } from '../nodemailer/nodemailer.service';
+import { User } from '../users/entities/user.entity';
+import { SigninWithAuth0Dto } from './dto/signin-withAuth0.dto';
 
 
 @Injectable()
@@ -107,33 +109,50 @@ async signin(signinAuthDto: SigninAuthDto) {
     } catch (error) {
       console.error('Error en signin:', error.message);
       throw new BadRequestException('Error al iniciar sesión');
-    }
-    }
-
-    async validateUserAndBuildResponse(user: any): Promise<any> {
-      try {
-        // Aquí el 'user' contiene los datos del usuario que hemos extraído del token JWT
-        // Por ejemplo, 'user.sub' es el ID del usuario en Auth0 o cualquier otro campo que usas para identificarlo
-        const userId = user.sub;  // 'sub' es el campo estándar para el ID del usuario en Auth0
-        console.log('User ID from token:', userId);
-        // Busca al usuario en tu base de datos usando el ID proporcionado
-        const foundUser = await this.usersService.getOneByAuth0Id(userId);
-  
-        if (!foundUser) {
-          throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
-        }
-  
-        // Devuelve la respuesta personalizada del usuario, por ejemplo, puedes devolver la información relevante
-        return {
-          id: foundUser.id,
-          name: foundUser.name,
-          email: foundUser.email,
-          message: 'Usuario autenticado exitosamente',
-        };
-      } catch (error) {
-        throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
       }
     }
+
+
+    async signinWithAuth0(signinWithAuth0Dto: SigninWithAuth0Dto) {
+      try {
+        const { auth0Id } = signinWithAuth0Dto;
+    
+        if (!auth0Id) {
+          throw new BadRequestException('El campo auth0Id es requerido');
+        }
+    
+        // Buscar usuario por auth0Id
+        const user = await this.usersService.getOneByAuth0Id(auth0Id);
+        if (!user) {
+          throw new UnauthorizedException('Credenciales incorrectas');
+        }
+    
+        // Crear el payload del token
+        const payload = {
+          sub: user.id,
+          id: user.id,
+          email: user.email,
+          roles: [user.role], // Asegúrate de que `role` esté definido en la entidad User
+        };
+    
+        // Generar el token JWT
+        const token = this.jwtService.sign(payload);
+    
+        // Construir el ResponseUserDto con los datos del usuario
+        const responseUser = new ResponseUserDto(user);
+    
+        // Respuesta final
+        return {
+          token,
+          user: responseUser,
+          loggin: true,
+        };
+      } catch (error) {
+        console.error('Error en signinWithAuth0:', error.message);
+        throw new BadRequestException('Error al iniciar sesión');
+      }
+    }
+    
 
     async completeUserProfile(id: string, updateProfileDto: UpdateProfileDto) {
       const user = await this.usersService.findOneById(id);

@@ -10,7 +10,8 @@ import {
   Param,
   HttpException,
   HttpStatus,
-  Req
+  Req,
+  UnauthorizedException
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto'; // Mantener el DTO de Jhon
@@ -23,6 +24,7 @@ import { UpdateProfileDto } from './dto/update-profile.dto';
 import { JwtService } from '@nestjs/jwt';
 import { RequestWithUser } from 'src/types/RequestWithUser';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { SigninWithAuth0Dto } from './dto/signin-withAuth0.dto';
 
 
 
@@ -91,39 +93,16 @@ export class AuthController {
   }
  
   @Post('signinWithAuth0')
-  async signinWithAuth0(
-    @Headers('authorization') authHeader: string,  // Recibe el token de los headers
-    @Req() req: RequestWithUser,  // Mantén el acceso al req.user si ya lo tienes en algún middleware
-  )
-  
-  {  
-    console.log (authHeader, req)
-    
-    try {
-      const user = req.user;  // Ahora 'req.user' está correctamente tipado
-      if (!user) {
-        throw new HttpException('Usuario no encontrado', HttpStatus.UNAUTHORIZED);
-      }
-
-      const userData = await this.authService.validateUserAndBuildResponse(user);
-      return {
-        data: userData,
-      };
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
-    }
+  async signinWithAuth0(@Body() signinWithAuth0Dto: SigninWithAuth0Dto) {
+    return this.authService.signinWithAuth0(signinWithAuth0Dto);
   }
 
-  @Post('complete-profile/:id')
+@Post('complete-profile/:id')
 async completeProfile(
   @Param('id') id: string,
   @Body() updateProfileDto: UpdateProfileDto,
 ) {
   const user = await this.authService.completeUserProfile(id, updateProfileDto);
   return { message: 'Perfil completado', data: user };
-}
-
-  
-  
-
+    }
 }
