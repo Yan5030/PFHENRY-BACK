@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { ReservationsController } from './reservations.controller';
 import { UsersService } from '../users/users.service';
@@ -17,6 +17,6 @@ export class ReservationsModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(DateValidationMiddleware)
-      .forRoutes('reservations'); // Aplica solo para las rutas de reservas
+      .forRoutes({ path: 'reservations/create/:id', method: RequestMethod.POST });
   }
 }

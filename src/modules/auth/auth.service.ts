@@ -7,21 +7,19 @@ import { UsersService } from '../users/users.service';
 import { ResponseUserDto } from '../users/dto/response-user.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { NodemailerService } from '../nodemailer/nodemailer.service';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-
     private readonly usersService: UsersService,
     private readonly nodemailerService: NodemailerService 
   ) {}
 
 
-  async signup(createUserDto: CreateUserDto) {
+  async signup(createUserDto: CreateUserDto): Promise<User> {
     const useremail = await this.usersService.getOneByEmail(createUserDto.email);
-    console.log('Correo de usuario:', useremail);
-
     if (useremail) {
       throw new BadRequestException('El correo ya se encuentra registrado');
     }
@@ -45,14 +43,12 @@ const userSave = await this.usersService.create({
 });
 
 await this.nodemailerService.sendEmail(createUserDto.email);
-  
-await this.nodemailerService.sendEmail(createUserDto.email);
 
   return userSave;
 }
 
 
-async registerWithAuth0(createUserDto: CreateUserDto) {
+async registerWithAuth0(createUserDto: CreateUserDto): Promise<User> {
   const userExists = await this.usersService.getOneByAuth0Id(createUserDto.auth0Id);
   if (userExists) {
     throw new BadRequestException('El usuario ya está registrado');
@@ -69,15 +65,11 @@ async registerWithAuth0(createUserDto: CreateUserDto) {
   });
 
   await this.nodemailerService.sendEmail(createUserDto.email);
-  
-
   return newUser;
 }
 
-async signin(signinAuthDto: SigninAuthDto) {
-  
+async signin(signinAuthDto: SigninAuthDto) {  
     const { email, password } = signinAuthDto;
-
     const user = await this.usersService.getOneByEmail(email);
     if (!user) {
       throw new BadRequestException('Credenciales incorrectas');
@@ -103,11 +95,9 @@ async signin(signinAuthDto: SigninAuthDto) {
     const token = this.jwtService.sign(payload);
     const responseUser = new ResponseUserDto(user)
     return { token:token, user:responseUser,loggin};
-    
-    
     }
 
-async completeUserProfile(updateProfileDto: UpdateProfileDto) { 
+async completeUserProfile(updateProfileDto: UpdateProfileDto): Promise<User> { 
   const user = await this.usersService.getOneByAuth0Id(updateProfileDto.auth0Id); 
   if (!user) { 
     throw new BadRequestException('Usuario no encontrado'); 

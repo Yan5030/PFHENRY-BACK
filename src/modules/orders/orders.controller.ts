@@ -3,29 +3,24 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   HttpCode,
   HttpStatus,
-  UseGuards,
   Request,
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { RolesGuard } from 'src/guards/roles.guard';
-import { RolesDecorator } from 'src/decorators/roles.decorator';
 
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
+  //@RolesDecorator(Role.User,Role.Admin,Role.Worker)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
   @Post()
-  //@UseGuards(AuthGuard, RolesGuard)
-  //@RolesDecorator('user')
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createOrderDto: CreateOrderDto) {
     const order = await this.ordersService.create(createOrderDto);
@@ -52,10 +47,10 @@ export class OrdersController {
   }
 
   
-
+  //@RolesDecorator(Role.Admin,Role.Worker)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
   @Get()
-  //@UseGuards(AuthGuard, RolesGuard)
-  //@RolesDecorator('Worker', 'Admin')
   async findAll() {
     const orders = await this.ordersService.findAll();
     return {
@@ -64,8 +59,10 @@ export class OrdersController {
     };
   }
 
+  //@RolesDecorator(Role.Admin,Role.Worker)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
   @Get(':id')
-  //@UseGuards(AuthGuard, RolesGuard)
   async findOne(@Param('id', ParseUUIDPipe) id: string, @Request() req:any) {
     const order = await this.ordersService.findOne(id, req.user);
     return {
@@ -83,6 +80,7 @@ export class OrdersController {
   //   };
   // }
 
+  
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseUUIDPipe) id: string) {
