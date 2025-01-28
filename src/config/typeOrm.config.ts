@@ -16,6 +16,10 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   entities: [__dirname + '/../**/*.entity.{js,ts}'], // entities : [ 'dist/**/*.entity{.ts,.js}' ]
   migrations: ['dist/migrations/*{.js,.ts}'],
   synchronize: true,
-  dropSchema: true,
-  logging: true,
+ /*  dropSchema: true, */
+  //logging: true,
+  // ssl: { Quitar el comentario para conexiones seguras
+  //   rejectUnauthorized: false, // Render requiere esto para conexiones seguras
+  // },}
+  ssl: false,
 };

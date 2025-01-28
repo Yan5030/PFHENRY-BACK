@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, BadRequestException, Put, UseInterceptors, UploadedFile, UseGuards, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, BadRequestException, Put, UseInterceptors, UploadedFile, UseGuards, Patch, ParseUUIDPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -31,9 +31,9 @@ export class UsersController {
   // @UseGuards(RolesGuard)
  // }
 
-  @RolesDecorator(Role.User)
-  @UseGuards(AuthGuard,RolesGuard)
-  @ApiBearerAuth()
+  //@RolesDecorator(Role.User)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
   @Get()
   async findAllActivate() {
     const users= await this.usersService.findAll();
@@ -41,9 +41,9 @@ export class UsersController {
   }
 
 
-  @RolesDecorator(Role.Admin)
-  @UseGuards(AuthGuard,RolesGuard)
-  @ApiBearerAuth()
+  //@RolesDecorator(Role.Admin)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
   @Get("/findAllUsers")
   async findAllAdmin() {
     const users= await this.usersService.findAllAdmin();
@@ -53,14 +53,14 @@ export class UsersController {
 
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
     const updateUser = await this.usersService.findOneById(id)
       return {data: updateUser}
   
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(@Param('id', ParseUUIDPipe) id: string, @Body() updateUserDto: UpdateUserDto) {
     
       const updateUser = await this.usersService.update(id, updateUserDto);
       return {message:"Usuario modificado", data:updateUser};
@@ -81,7 +81,7 @@ export class UsersController {
   @Post(':id/upload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @UploadedFile(new ImagesUploadPipe()) file: Express.Multer.File,
   ) {
     const uploadedImageUrl = await this.fileUploadService.uploadFile({
@@ -105,7 +105,7 @@ export class UsersController {
   @UseGuards(AuthGuard,RolesGuard)
   @ApiBearerAuth()
   @Put("updateRole/:id")
-  async updateRoleUser(@Param("id") id: string, @Body() updateRole :UpdateRoleUserDto ){
+  async updateRoleUser(@Param("id", ParseUUIDPipe) id: string, @Body() updateRole :UpdateRoleUserDto ){
     const updateUser = await this.usersService.updateRol(id,updateRole.role);
     return {message:"El rol del usuario fue cambiado con exito", data:updateUser}
       }
@@ -113,13 +113,20 @@ export class UsersController {
 
 
     @Patch("desactivate/:id")
-async desactivateUser(@Param("id") id:string){
+async desactivateUser(@Param("id", ParseUUIDPipe) id:string){
  return await this.usersService.desactivate(id);
 }
 
-@Get(":id/reservations")
-async findReservationsByUser(@Param("id") id:string){
+/*@Get(":id/reservations")
+async findReservationsByUserId(@Param("id") id:string){
 const reservations = await this.usersService.findReservationsByUserService(id);
+return {data:reservations}
+
+}
+*/
+@Get("reservations/:email")
+async findReservationsByUserEmail(@Param("email") email:string){
+const reservations = await this.usersService.findReservationsByUserService(email);
 return {data:reservations}
 
 }

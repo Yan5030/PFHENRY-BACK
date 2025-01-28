@@ -5,8 +5,7 @@ export class CreateUserDto{
  
 @ApiProperty ({
 description: "id generado por auth0",
-example: null,
-nullable: true,})
+default:null})
 @IsOptional()
 @IsString()
 auth0Id: string | null = null;

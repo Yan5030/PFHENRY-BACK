@@ -81,7 +81,7 @@ async registerWithAuth0(createUserDto: CreateUserDto) {
   return newUser;
 }
 async signin(signinAuthDto: SigninAuthDto) {
-  try {
+  
     const { email, password } = signinAuthDto;
 
     const user = await this.usersService.getOneByEmail(email);
@@ -93,6 +93,11 @@ async signin(signinAuthDto: SigninAuthDto) {
     if (!validPassword) {
       throw new BadRequestException('Credenciales incorrectas');
     }
+
+    if(user.isActive === false){
+      throw new BadRequestException('Su cuenta fue dada de baja.');
+    }
+
     const payload = {
       sub: user.id,
       id: user.id,
@@ -100,7 +105,6 @@ async signin(signinAuthDto: SigninAuthDto) {
       roles: [user.role], 
     };
 
-    console.log(payload)
     const loggin = true;
     const token = this.jwtService.sign(payload);
     const responseUser = new ResponseUserDto(user)

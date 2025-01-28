@@ -10,7 +10,7 @@ import {
   HttpStatus,
   UseGuards,
   Request,
-  Req,
+  ParseUUIDPipe,
   HttpException,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
@@ -70,7 +70,7 @@ export class OrdersController {
 
   @Get(':id')
   //@UseGuards(AuthGuard, RolesGuard)
-  async findOne(@Param('id') id: string, @Request() req:any) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string, @Request() req:any) {
     const order = await this.ordersService.findOne(id, req.user);
     return {
       message: "Orden con ID ${id} obtenida exitosamente",
@@ -103,7 +103,7 @@ async updateOrderStatus(
   @Delete(':id')
   @RolesDecorator (Role.Admin)
   @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
     await this.ordersService.remove(id);
     return {
       message: "Orden con ID ${id} eliminada exitosamente",
