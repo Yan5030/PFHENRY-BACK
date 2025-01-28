@@ -37,4 +37,3 @@ review: Review | null; // Un usuario puede tener una sola reseña
     isActive: boolean; //borrado logico
 }
 
-

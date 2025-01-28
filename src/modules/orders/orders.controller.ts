@@ -11,6 +11,7 @@ import {
   UseGuards,
   Request,
   ParseUUIDPipe,
+  HttpException,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -18,6 +19,9 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { RolesDecorator } from 'src/decorators/roles.decorator';
+import { Role } from 'src/enum/roles.enum';
+import { OrderStatus } from 'src/enum/order-status.enum';
+import { UpdateOrderStatusDto } from './dto/update-orderStatus.dto';
 
 @Controller('orders')
 export class OrdersController {
@@ -25,7 +29,7 @@ export class OrdersController {
 
   @Post()
   //@UseGuards(AuthGuard, RolesGuard)
-  //@RolesDecorator('user')
+  //@RolesDecorator(Role.User)
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createOrderDto: CreateOrderDto) {
     const order = await this.ordersService.create(createOrderDto);
@@ -55,7 +59,7 @@ export class OrdersController {
 
   @Get()
   //@UseGuards(AuthGuard, RolesGuard)
-  //@RolesDecorator('Worker', 'Admin')
+  //@RolesDecorator(Role.Admin, Role.Worker)
   async findAll() {
     const orders = await this.ordersService.findAll();
     return {
@@ -74,16 +78,30 @@ export class OrdersController {
     };
   }
 
-  // @Patch(':id')
-  // async update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
-  //   const order = await this.ordersService.update(+id, updateOrderDto);
-  //   return {
-  //     message: Orden con ID ${id} actualizada exitosamente,
-  //     order,
-  //   };
-  // }
+  
+  @Patch(':id/status')
+@RolesDecorator(Role.Admin, Role.Worker) // Solo admin y worker pueden usar este endpoint
+async updateOrderStatus(
+  @Param('id') id: string,
+  @Body() updateStatusDto: UpdateOrderStatusDto, // Usamos el DTO aquí
+) {
+  try {
+    const updatedOrder = await this.ordersService.updateOrderStatus(id, updateStatusDto.status);
+    return {
+      message: 'Order status updated successfully',
+      updatedOrder,
+    };
+  } catch (error) {
+    throw new HttpException(
+      { message: 'Error updating order status', error: error.message },
+      HttpStatus.BAD_REQUEST,
+    );
+  }
+}
+
 
   @Delete(':id')
+  @RolesDecorator (Role.Admin)
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseUUIDPipe) id: string) {
     await this.ordersService.remove(id);
