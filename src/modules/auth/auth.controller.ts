@@ -74,7 +74,6 @@ export class AuthController {
   }
 
   @Post('signupWithAuth0')
-  //@UseGuards(Auth0Guard)
    async signupWithAuth0(@Body() createUserDto: CreateUserDto) {
      try {
        const user = await this.authService.registerWithAuth0(createUserDto);
