@@ -31,9 +31,9 @@ export class UsersController {
   // @UseGuards(RolesGuard)
  // }
 
-  @RolesDecorator(Role.User)
-  @UseGuards(AuthGuard,RolesGuard)
-  @ApiBearerAuth()
+  //@RolesDecorator(Role.User)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
   @Get()
   async findAllActivate() {
     const users= await this.usersService.findAll();
@@ -41,9 +41,9 @@ export class UsersController {
   }
 
 
-  @RolesDecorator(Role.Admin)
-  @UseGuards(AuthGuard,RolesGuard)
-  @ApiBearerAuth()
+  //@RolesDecorator(Role.Admin)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
   @Get("/findAllUsers")
   async findAllAdmin() {
     const users= await this.usersService.findAllAdmin();
