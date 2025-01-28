@@ -14,7 +14,7 @@ constructor(private readonly menuItemService : MenuItemService,
   @InjectRepository(OrderDetail) private readonly orderDetailRepository : Repository<OrderDetail>
 ){}
 
-  async create(createOrderDetailDto: CreateOrderDetailDto, order : Order) {
+  async create(createOrderDetailDto: CreateOrderDetailDto, order : Order) : Promise<OrderDetail> {
     const{quantity,idMenuItem} = createOrderDetailDto;
     const menu = await this.menuItemService.findOne(idMenuItem)
 
@@ -34,21 +34,19 @@ constructor(private readonly menuItemService : MenuItemService,
       quantity,
       subtotal
     })
-    console.log("create det ord",orderDetail);
-    
     return this.orderDetailRepository.save(orderDetail);
   }
 
-  async findAll() {
+  async findAll() : Promise<OrderDetail[]> {
     return await this.orderDetailRepository.find();
   }
 
-  async findOneById(id: string) {
+  async findOneById(id: string): Promise<OrderDetail> {
     const orderDet= await this.orderDetailRepository.findOne({where:{id}})
     return orderDet;
   }
 
-  async update(id: string, updateOrderDetailDto: UpdateOrderDetailDto) {
+  async update(id: string, updateOrderDetailDto: UpdateOrderDetailDto): Promise<OrderDetail> {
     const orderDet = await this.orderDetailRepository.findOne({where:{id}});
     if(!orderDet){
       throw new BadRequestException("No se encuentra detalle con ese id");

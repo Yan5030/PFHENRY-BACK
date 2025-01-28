@@ -1,15 +1,11 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
-import { Repository } from 'typeorm';
 import { UsersService } from '../users/users.service';
 import { OrderStatus } from 'src/enum/order-status.enum';
 import { PaymentStatus } from 'src/enum/payment-status.enum';
 import dayjs from 'dayjs';
 import { OrderDetailsService } from '../order-details/order-details.service';
-import { CreateOrderDetailDto } from '../order-details/dto/create-order-detail.dto';
 import { OrderRepository } from './orders.repository';
 import { OrderDetail } from '../order-details/entities/order-detail.entity';
 
@@ -20,9 +16,9 @@ export class OrdersService {
   private readonly userService : UsersService,
   private readonly orderDetailsService: OrderDetailsService
 ){}
-async create(createOrderDto: CreateOrderDto) {
+
+async create(createOrderDto: CreateOrderDto): Promise<Order> {
   const{idUser,MenuItems,paymentMethod,comment} = createOrderDto;
-console.log(createOrderDto, "create order ");
 
   const user = await this.userService.findOneById(idUser);
   if(!user){
@@ -42,10 +38,8 @@ console.log(createOrderDto, "create order ");
     totalPrice:0
   })
 const order = await this.orderRepository.save(createOrder);
-console.log(order, "order");
 
 const detalleOrden = await Promise.all(MenuItems.map( async menu=>{ 
-  console.log("menu, map", menu);
   
   const result = await this.orderDetailsService.create(menu,order)
   
