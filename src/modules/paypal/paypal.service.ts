@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import * as paypal from '@paypal/checkout-server-sdk';
+import * as paypal from '@paypal/checkout-server-sdk' ;
 import { OrderDetailsService } from '../order-details/order-details.service'; 
 
 

@@ -165,4 +165,17 @@ throw new BadRequestException("Debe ingresar el email de un usuario activo");
     return this.usersRepository.findOne({ where: { auth0Id } });
   }
 
+  async updateById(id: string, updateData: Partial<User>) {
+    const user = await this.usersRepository.findOne({ where: { id } });
+  
+    if (!user) {
+      throw new BadRequestException('Usuario no encontrado');
+    }
+  
+    // Actualizar los datos
+    Object.assign(user, updateData);
+    return await this.usersRepository.save(user);
+  }
+  
+
 }

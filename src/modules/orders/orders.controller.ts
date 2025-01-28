@@ -9,6 +9,7 @@ import {
   HttpStatus,
   Request,
   ParseUUIDPipe,
+  HttpException,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -82,6 +83,7 @@ export class OrdersController {
 
   
   @Delete(':id')
+  @RolesDecorator (Role.Admin)
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseUUIDPipe) id: string) {
     await this.ordersService.remove(id);
