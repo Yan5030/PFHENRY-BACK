@@ -5,6 +5,7 @@ import { UpdateReviewDto } from './dto/update-review.dto';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('review')
 @ApiTags('Review')
@@ -12,6 +13,7 @@ export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @Post()
   async create(@Req() req, @Body() createReviewDto: CreateReviewDto) {
     const userId = req.user.id; // Obtenemos el ID del usuario autenticado
@@ -29,6 +31,7 @@ export class ReviewController {
   }
 
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @Put()
   async update(@Req() req, @Body() updateReviewDto: UpdateReviewDto) {
     const userId = req.user.id; // Obtenemos el ID del usuario autenticado
