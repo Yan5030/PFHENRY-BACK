@@ -114,9 +114,7 @@ async signin(signinAuthDto: SigninAuthDto) {
       console.error('Error en signin:', error.message);
       throw new BadRequestException('Error al iniciar sesión');
       }
-    }
-
-
+    
     async signinWithAuth0(signinWithAuth0Dto: SigninWithAuth0Dto) {
       try {
         const { auth0Id } = signinWithAuth0Dto;
@@ -185,4 +183,4 @@ async signin(signinAuthDto: SigninAuthDto) {
       return await this.usersService.updateById(id, updateData);
     }
     
-}
+  }
