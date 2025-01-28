@@ -65,10 +65,10 @@ export class UsersController {
  //@RolesDecorator(Role.User)
   //@UseGuards(AuthGuard,RolesGuard)
   //@ApiBearerAuth()
-  @Post(':id/upload')
+  @Post(':email/upload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('email') email: string,
     @UploadedFile(new ImagesUploadPipe()) file: Express.Multer.File,
   ) {
     const uploadedImageUrl = await this.fileUploadService.uploadFile({
@@ -79,12 +79,11 @@ export class UsersController {
       size: file.size,
     });
 
-    const user = await this.usersService.update(id, { image_url: uploadedImageUrl });
+    const user = await this.usersService.updateByEmail(email, { image_url: uploadedImageUrl });
 
-    return {
-      message: 'Imagen cargada con éxito',
-      data: user,
-    };
+   
+      return {img:uploadedImageUrl};
+    
 
   }
 
