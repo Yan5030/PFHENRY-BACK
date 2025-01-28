@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne } from 'typeorm';
 import { User } from 'src/modules/users/entities/user.entity';
 import { v4 as uuid} from "uuid";
 
@@ -13,7 +13,6 @@ export class Review {
     @Column({ type: "float", default: 0 })
     rate: number;
 
-    @OneToOne(() => User, (user) => user.review, {onDelete: 'CASCADE'})
-    @JoinColumn()
+    @ManyToOne(() => User, (user) => user.reviews, {onDelete: 'CASCADE'})
     user: User;
 }
