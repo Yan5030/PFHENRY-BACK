@@ -24,7 +24,7 @@ import { ReviewModule } from './modules/review/review.module';
   imports: [
     TypeOrmModule.forRoot(typeOrmConfig), 
     ConfigModule.forRoot({
-      envFilePath: '.env.development',  
+      envFilePath: '.env',  
       isGlobal: true, 
     }),
     AuthModule, 
@@ -48,5 +48,4 @@ import { ReviewModule } from './modules/review/review.module';
   providers: [AppService, /*CloudinaryConfig*/ CloudinaryService],
 })
 export class AppModule {}
-
 

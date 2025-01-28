@@ -37,4 +37,3 @@ reviews: Review[]; // Un usuario puede tener varias reviews
     isActive: boolean; //borrado logico
 }
 
-

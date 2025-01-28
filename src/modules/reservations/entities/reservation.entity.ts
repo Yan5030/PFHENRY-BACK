@@ -19,7 +19,4 @@ create_at:string;
 @ManyToOne(()=>User,(user)=>user.reservations)
 userId:User
 
-
-
-
 }

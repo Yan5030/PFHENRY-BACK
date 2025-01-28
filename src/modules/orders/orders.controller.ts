@@ -3,29 +3,29 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   HttpCode,
   HttpStatus,
-  UseGuards,
   Request,
   ParseUUIDPipe,
+  HttpException,
+  Patch,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { RolesGuard } from 'src/guards/roles.guard';
 import { RolesDecorator } from 'src/decorators/roles.decorator';
+import { Role } from 'src/enum/roles.enum';
+import { UpdateOrderStatusDto } from './dto/update-orderStatus.dto';
 
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
+  //@RolesDecorator(Role.User,Role.Admin,Role.Worker)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
   @Post()
-  //@UseGuards(AuthGuard, RolesGuard)
-  //@RolesDecorator('user')
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createOrderDto: CreateOrderDto) {
     const order = await this.ordersService.create(createOrderDto);
@@ -52,10 +52,10 @@ export class OrdersController {
   }
 
   
-
+  //@RolesDecorator(Role.Admin,Role.Worker)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
   @Get()
-  //@UseGuards(AuthGuard, RolesGuard)
-  //@RolesDecorator('Worker', 'Admin')
   async findAll() {
     const orders = await this.ordersService.findAll();
     return {
@@ -64,8 +64,10 @@ export class OrdersController {
     };
   }
 
+  //@RolesDecorator(Role.Admin,Role.Worker)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
   @Get(':id')
-  //@UseGuards(AuthGuard, RolesGuard)
   async findOne(@Param('id', ParseUUIDPipe) id: string, @Request() req:any) {
     const order = await this.ordersService.findOne(id, req.user);
     return {
@@ -74,16 +76,28 @@ export class OrdersController {
     };
   }
 
-  // @Patch(':id')
-  // async update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
-  //   const order = await this.ordersService.update(+id, updateOrderDto);
-  //   return {
-  //     message: Orden con ID ${id} actualizada exitosamente,
-  //     order,
-  //   };
-  // }
-
+  @Patch(':id/status')
+  @RolesDecorator(Role.Admin, Role.Worker) // Solo admin y worker pueden usar este endpoint
+  async updateOrderStatus(
+    @Param('id') id: string,
+    @Body() updateStatusDto: UpdateOrderStatusDto, // Usamos el DTO aquí
+  ) {
+    try {
+      const updatedOrder = await this.ordersService.updateOrderStatus(id, updateStatusDto.status);
+      return {
+        message: 'Order status updated successfully',
+        updatedOrder,
+      };
+    } catch (error) {
+      throw new HttpException(
+        { message: 'Error updating order status', error: error.message },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+  
   @Delete(':id')
+  @RolesDecorator(Role.Admin)
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseUUIDPipe) id: string) {
     await this.ordersService.remove(id);
