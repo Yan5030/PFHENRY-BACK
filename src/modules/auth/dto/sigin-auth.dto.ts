@@ -30,10 +30,4 @@ export class SigninAuthDto{
         @MinLength(8)
     password: string;
 
-  @ApiProperty({
-    description: "sub generado por auth0 guardado como auth0Id",
-    example: "auth0sub"
-  })
-  @IsOptional()
-    auth0Id?: string;
 }

@@ -24,7 +24,7 @@ import { ReviewModule } from './modules/review/review.module';
   imports: [
     TypeOrmModule.forRoot(typeOrmConfig), 
     ConfigModule.forRoot({
-      envFilePath: '.env.development',  
+      envFilePath: '.env',  
       isGlobal: true, 
     }),
     AuthModule, 

@@ -1,22 +1,18 @@
 import { config as dotenvConfig } from 'dotenv';
 
-// Carga las variables de entorno desde el archivo `.env`
+
 dotenvConfig({ path: '.env' });
 
-// Validación de variables de entorno
-if (
-  !process.env.AUTH0_SECRET ||
-  !process.env.AUTH0_BASE_URL ||
-  !process.env.AUTH0_ISSUER_BASE_URL ||
-  !process.env.AUTH0_AUDIENCE
-) {
-  throw new Error('Faltan variables de entorno requeridas para Auth0');
+if (!process.env.AUTH0_SECRET || !process.env.AUTH0_BASE_URL || !process.env.AUTH0_CLIENT_ID || !process.env.AUTH0_ISSUER_BASE_URL) {
+    throw new Error('Missing required Auth0 environment variables');
 }
 
-// Configuración exportada para Auth0
 export const auth0Config = {
-  secret: process.env.AUTH0_SECRET,             // Secreto para verificar tokens
-  baseURL: process.env.AUTH0_BASE_URL,         // URL base de tu aplicación
-  issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL, // URL del issuer (Auth0 tenant)
-  audience: process.env.AUTH0_AUDIENCE,        // Identificador del API
+    authRequired: false,
+    auth0Logout: true,
+    secret: process.env.AUTH0_SECRET,
+    baseURL: process.env.AUTH0_BASE_URL,
+    clientID: process.env.AUTH0_CLIENT_ID,
+    issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
 };
+ 
