@@ -31,8 +31,8 @@ create_at : string
 reservations:Reservation[]
 @OneToMany(() => Order, (order) => order.user) // Relación con Order
 orders: Order[]; // Un usuario puede tener varias órdenes
-@OneToOne(() => Review, (review) => review.user, { cascade: true }) // Relación con Review
-review: Review | null; // Un usuario puede tener una sola reseña
+@OneToMany(() => Review, (review) => review.user, { cascade: true }) // Relación con Review
+reviews: Review[]; // Un usuario puede tener varias reviews
 @Column({ type: 'boolean', default: true })
     isActive: boolean; //borrado logico
 }

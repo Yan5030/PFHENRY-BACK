@@ -15,13 +15,11 @@ export class ReviewService {
   ) {}
 
   async create(userId: string, createReviewDto: CreateReviewDto) {
-    const user = await this.userRepository.findOne({where: {id: userId}, relations: ['review']});
+    const user = await this.userRepository.findOne({where: {id: userId}});
     if (!user) {
       throw new BadRequestException('Usuario no encontrado');
     }
-    if (user.review) {
-      throw new BadRequestException('Ya tienes una reseña activa, modifica la reseña existente');
-    }
+  
     const review = this.reviewRepository.create({
       ...createReviewDto,
       user,
@@ -30,7 +28,7 @@ export class ReviewService {
 
     return {
       ...savedReview,
-      user: { id: user.id }
+      user: { id: user.id, name: user.name }
     }
   }
 
@@ -54,12 +52,30 @@ export class ReviewService {
     }
   }
 
-  async update(userId: string, updateReviewDto: UpdateReviewDto) {
-    const user = await this.userRepository.findOne({where: {id: userId}, relations: ['review']});
-    if (!user || !user.review) {
-      throw new Error('Usuario o reseña no encontrada');
+  async findByUserId(userId: string) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['reviews'], // Incluimos las reseñas relacionadas
+    });
+  
+    if (!user) {
+      throw new BadRequestException('Usuario no encontrado');
     }
-    const updateRevie = this.reviewRepository.merge(user.review, updateReviewDto);
-    return await this.reviewRepository.save(updateRevie);
+    console.log(user.reviews);
+    return user.reviews;
   }
+
+   async update(userId: string, reviewId: string ,updateReviewDto: UpdateReviewDto) {
+     const review = await this.reviewRepository.findOne({where: {id: reviewId, user: {id: userId}}, relations: ['user']});
+
+     if (!review) {
+       throw new BadRequestException('Usuario no encontrado o no pertenece al usuario');
+     }
+    
+     const updateReview = this.reviewRepository.merge(review, updateReviewDto);
+
+     const saved = await this.reviewRepository.save(updateReview);
+
+     return {...saved, user: { id: review.user.id, name: review.user.name }};
+   }
 }
