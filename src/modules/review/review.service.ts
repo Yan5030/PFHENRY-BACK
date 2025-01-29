@@ -65,15 +65,17 @@ export class ReviewService {
     return user.reviews;
   }
 
-  // async update(userId: string, reviewId: string ,updateReviewDto: UpdateReviewDto) {
-  //   const review = await this.userRepository.findOne({where: {id: reviewId, user: {id: userId}}, relations: ['user']});
+   async update(userId: string, reviewId: string ,updateReviewDto: UpdateReviewDto) {
+     const review = await this.reviewRepository.findOne({where: {id: reviewId, user: {id: userId}}, relations: ['user']});
 
-  //   if (!review) {
-  //     throw new BadRequestException('Usuario no encontrado');
-  //   }
+     if (!review) {
+       throw new BadRequestException('Usuario no encontrado o no pertenece al usuario');
+     }
     
-  //   const updateReview = this.reviewRepository.merge(review, updateReviewDto);
+     const updateReview = this.reviewRepository.merge(review, updateReviewDto);
 
-  //   return await this.reviewRepository.save(updateRevie);
-  // }
+     const saved = await this.reviewRepository.save(updateReview);
+
+     return {...saved, user: { id: review.user.id, name: review.user.name }};
+   }
 }

@@ -49,18 +49,18 @@ export class ReviewController {
   }
 }
 
-  // @UseGuards(AuthGuard)
-  // @ApiBearerAuth()
-  // @Put()
-  // async update(@Req() req, @Param('reviewId') reviewId: string, @Body() updateReviewDto: UpdateReviewDto) {
-  //   const userId = req.user.id; // Obtenemos el ID del usuario autenticado
-  //   try {
-  //     return await this.reviewService.update(userId, reviewId, updateReviewDto);
-  //   } catch (error) {
-  //     throw new HttpException(
-  //       error.message || 'Error al actualizar la reseña',
-  //       HttpStatus.BAD_REQUEST
-  //     )
-  //   }
-  // }
+   @UseGuards(AuthGuard)
+   @ApiBearerAuth()
+   @Put(":reviewId")
+   async update(@Req() req, @Param('reviewId') reviewId: string, @Body() updateReviewDto: UpdateReviewDto) {
+     const userId = req.user.id; // Obtenemos el ID del usuario autenticado
+     try {
+       return await this.reviewService.update(userId, reviewId, updateReviewDto);
+     } catch (error) {
+       throw new HttpException(
+         error.message || 'Error al actualizar la reseña',
+         HttpStatus.BAD_REQUEST
+       )
+     }
+   }
 }
