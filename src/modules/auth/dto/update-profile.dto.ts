@@ -1,18 +1,19 @@
-import { IsString } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsOptional } from 'class-validator';
 
 export class UpdateProfileDto {
-  @ApiProperty({
-    description: 'Dirección del usuario',
-    example: 'Calle Falsa 123',
-  })
   @IsString()
-  address: string;
+@IsOptional()
+  auth0Id: string;
 
-  @ApiProperty({
-    description: 'Contraseña del usuario',
-    example: 'ContraseñaSegura91*',
-  })
+  @IsOptional()
   @IsString()
-  password: string;
+  address?: string;
+
+  @IsOptional()
+  @IsString()
+  image_url?: string;
+
+  @IsOptional()
+  @IsString()
+  name?: string;
 }
