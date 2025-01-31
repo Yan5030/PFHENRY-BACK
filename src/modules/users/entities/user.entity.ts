@@ -1,9 +1,8 @@
 import { Role } from "src/enum/roles.enum";
 import { Order } from "src/modules/orders/entities/order.entity";
 import { Reservation } from "src/modules/reservations/entities/reservation.entity";
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { v4 as uuid} from "uuid";
-import { Review } from "src/modules/review/entities/review.entity";
  
 @Entity()
 export class User {
@@ -19,7 +18,7 @@ email: string;
 password: string;
 @Column({ default: '', nullable: true })
 address: string;
-@Column({default:"https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black-thumbnail.png"})
+@Column({default:"http://example.com"})
 image_url: string;
 @Column({ default: false }) 
 isComplete: boolean; 
@@ -31,9 +30,9 @@ create_at : string
 reservations:Reservation[]
 @OneToMany(() => Order, (order) => order.user) // Relación con Order
 orders: Order[]; // Un usuario puede tener varias órdenes
-@OneToMany(() => Review, (review) => review.user, { cascade: true }) // Relación con Review
-reviews: Review[]; // Un usuario puede tener varias reviews
+
 @Column({ type: 'boolean', default: true })
     isActive: boolean; //borrado logico
 }
+
 

@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Body, Param, Put, UseInterceptors, UploadedFile, UseGuards, Patch, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, BadRequestException, Put, UseInterceptors, UploadedFile, UseGuards, Patch, ParseUUIDPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -9,6 +10,7 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { RolesDecorator } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
 import { UpdateRoleUserDto } from './dto/update-role-user.dto';
+import { JwtService } from '@nestjs/jwt';
 import { ImagesUploadPipe } from 'src/pipes/images-upload.pipe';
 
 @ApiTags("Users")
@@ -17,11 +19,21 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly fileUploadService : FileUploadService,
+    private readonly jwtService: JwtService
   ) {}
 
-  //@RolesDecorator(Role.Worker,Role.Admin)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+ // @Post()
+ // async create(@Body() createUserDto: CreateUserDto) {
+ //     const newUser= await this.usersService.create(createUserDto);
+  //    return {message:"Usuario creado con exito",data:newUser}
+
+  // @RolesDecorator(Role.Admin)
+  // @UseGuards(RolesGuard)
+ // }
+
+  @RolesDecorator(Role.User)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
   @Get()
   async findAllActivate() {
     const users= await this.usersService.findAll();
@@ -29,9 +41,9 @@ export class UsersController {
   }
 
 
-  //@RolesDecorator(Role.Admin)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+  @RolesDecorator(Role.Admin)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
   @Get("/findAllUsers")
   async findAllAdmin() {
     const users= await this.usersService.findAllAdmin();
@@ -39,9 +51,7 @@ export class UsersController {
   }
 
 
- //@RolesDecorator(Role.User)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     const updateUser = await this.usersService.findOneById(id)
@@ -49,10 +59,6 @@ export class UsersController {
   
   }
 
-
-   //@RolesDecorator(Role.User)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
   @Put(':id')
   async update(@Param('id', ParseUUIDPipe) id: string, @Body() updateUserDto: UpdateUserDto) {
     
@@ -62,13 +68,20 @@ export class UsersController {
   }
 
 
- //@RolesDecorator(Role.User)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
-  @Post(':email/upload')
+
+ // @Delete(':id')
+  //async remove(@Param('id') id: string) {
+   //   const user= await this.usersService.remove(id);
+    //  return {message: `Usuario eliminado`}
+ // }
+      
+
+
+
+  @Post(':id/upload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
-    @Param('email') email: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @UploadedFile(new ImagesUploadPipe()) file: Express.Multer.File,
   ) {
     const uploadedImageUrl = await this.fileUploadService.uploadFile({
@@ -79,11 +92,12 @@ export class UsersController {
       size: file.size,
     });
 
-    const user = await this.usersService.updateByEmail(email, { image_url: uploadedImageUrl });
+    const user = await this.usersService.update(id, { image_url: uploadedImageUrl });
 
-   
-      return {img:uploadedImageUrl};
-    
+    return {
+      message: 'Imagen cargada con éxito',
+      data: user,
+    };
 
   }
 
@@ -97,9 +111,7 @@ export class UsersController {
       }
 
 
- //@RolesDecorator(Role.Admin)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+
     @Patch("desactivate/:id")
 async desactivateUser(@Param("id", ParseUUIDPipe) id:string){
  return await this.usersService.desactivate(id);
@@ -112,24 +124,10 @@ return {data:reservations}
 
 }
 */
-
- //@RolesDecorator(Role.User,Role.Admin,Role.Worker)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
 @Get("reservations/:email")
 async findReservationsByUserEmail(@Param("email") email:string){
 const reservations = await this.usersService.findReservationsByUserService(email);
 return {data:reservations}
-
-}
-
-//@RolesDecorator(Role.User,Role.Admin,Role.Worker)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
-@Get("orders/:email")
-async findOrdersByUserEmail(@Param("email") email:string){
-const orders = await this.usersService.findOrdersByUserService(email);
-return {data:orders}
 
 }
 

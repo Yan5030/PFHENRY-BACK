@@ -18,13 +18,12 @@ import { MenuItemModule } from './modules/menuItems/menuItem.module';
 import { FileUploadModule } from './modules/file-upload/file-upload.module';
 import { CloudinaryService } from './service/cloudinary/cloudinary,service';
 import { CombosModule } from './modules/combos/combos.module';
-import { ReviewModule } from './modules/review/review.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeOrmConfig), 
     ConfigModule.forRoot({
-      envFilePath: '.env',  
+      envFilePath: '.env.development',  
       isGlobal: true, 
     }),
     AuthModule, 
@@ -40,12 +39,12 @@ import { ReviewModule } from './modules/review/review.module';
     OrdersModule,
     MenuItemModule,
     CombosModule,
-    FileUploadModule,
-    ReviewModule,
+    FileUploadModule
   ],
 
   controllers: [AppController],
   providers: [AppService, /*CloudinaryConfig*/ CloudinaryService],
 })
 export class AppModule {}
+
 
