@@ -123,6 +123,16 @@ return {data:reservations}
 
 }
 
+//@RolesDecorator(Role.User,Role.Admin,Role.Worker)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
+@Get("orders/:email")
+async findOrdersByUserEmail(@Param("email") email:string){
+const orders = await this.usersService.findOrdersByUserService(email);
+return {data:orders}
+
+}
+
 
 }
 

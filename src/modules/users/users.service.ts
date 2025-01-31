@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 import * as fs from 'fs';
 import * as bcrypt from 'bcryptjs';
 import { Reservation } from '../reservations/entities/reservation.entity';
+import { Order } from '../orders/entities/order.entity';
 
 @Injectable()
 export class UsersService {
@@ -187,6 +188,43 @@ throw new BadRequestException("Debe ingresar el email de un usuario activo");
     Object.assign(user, updateData);
     return await this.usersRepository.save(user);
   }
+  
+
+  async findOrdersByUserService( email:string){
+    const user = await this.usersRepository.findOne({where:{email},relations:{orders:{orderDetails:true}}});   
+if(!user){
+throw new BadRequestException("Debe ingresar el email de un usuario activo");
+}
+
+  const orders = user?.orders;
+
+  if(!orders){
+    throw new BadRequestException("El usuario no tiene ordenes");
+  } else if(orders.length === 0){
+    throw new BadRequestException("El usuario no tiene reservas");
+  }
+
+
+  const responseOrders = orders.map(order => ({
+    id: order.id,
+    status: order.status,
+    totalPrice: order.totalPrice,
+    createdAt: order.createdAt,
+    payment_status: order.payment_status,
+    paymentMethod: order.paymentMethod,
+    comment: order.comment,
+    isActive: order.isActive,
+    orderDetails: order.orderDetails.map(detail => ({
+      id: detail.id,
+      quantity: detail.quantity,
+      subtotal: detail.subtotal,
+    }))
+  }));
+  
+
+  
+return responseOrders;
+}
   
 
 }
