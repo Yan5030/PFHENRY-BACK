@@ -28,7 +28,7 @@ export class CombosService {
   }
 
   async findAll(): Promise<Combo[]> {
-    return this.combosRepository.find({ relations: ['menuItems', 'menuItems.category'] });
+    return this.combosRepository.find({ relations: ['menuItems'] }); 
   }
   
 
@@ -43,17 +43,15 @@ export class CombosService {
     return combo;
   }
 
+  async update(id: string, updateComboDto: UpdateComboDto): Promise<Combo> {
+    const combo = await this.findOne(id);
+    const items = updateComboDto.items
+      ? await this.getMenuItemsByIds(updateComboDto.items)
+      : combo.menuItems;
 
- async update(id: string, updateComboDto: UpdateComboDto): Promise<Combo> {
-  const combo = await this.findOne(id);
-  const items = updateComboDto.items
-    ? await this.getMenuItemsByIds(updateComboDto.items)
-    : combo.menuItems;
-  const price = updateComboDto.price || combo.price;
-  Object.assign(combo, updateComboDto, { menuItems: items, price });
-  return this.combosRepository.save(combo);
-}
-
+    Object.assign(combo, updateComboDto, { items });
+    return this.combosRepository.save(combo);
+  }
 
   async deactivate(id: string): Promise<void> {
     const combo = await this.findOne(id);
