@@ -7,11 +7,16 @@ import { Reservation } from './entities/reservation.entity';
 import { Repository } from 'typeorm';
 import { UsersService } from '../users/users.service';
 import { ReservationStatus } from 'src/enum/reservationStatus.enum';
+import { NodemailerService } from '../nodemailer/nodemailer.service';
 
 @Injectable()
 export class ReservationsService {
-constructor(@InjectRepository(Reservation)private readonly reservationRepository : Repository<Reservation>,
-private usersService:UsersService){}
+constructor(@InjectRepository(Reservation)
+private readonly reservationRepository : Repository<Reservation>,
+private usersService:UsersService,
+private readonly nodemailerService:NodemailerService,
+
+){}
 
  async create(id:string,createReservationDto:CreateReservationDto) {
  //todo el manejo de fecha y tiempo lo guarde en un middleware, y lo puse solo para este controlador
@@ -22,6 +27,9 @@ const user = await this.usersService.findOneById(id); //supongo que el usuario s
 // sacando el del token el id de usuario logueado
 const newReservation = this.reservationRepository.create({...createReservationDto,create_at:create_at,userId:user});
 //return newReservation; para pruebas
+
+await this.nodemailerService.sendEmail(user.email);
+
 return this.reservationRepository.save(newReservation); 
   }
 
