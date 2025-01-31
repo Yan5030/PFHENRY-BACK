@@ -179,6 +179,9 @@ export class MenuItemService implements OnModuleInit {
 
   async update(id: string, updateMenuItemDto: UpdateMenuItemDto): Promise<MenuItem> {
     const { category, ...menuItemDto } = updateMenuItemDto;
+console.log(updateMenuItemDto);
+console.log(id);
+
 
     const categoryEntity = category
       ? await this.categoryRepository.findOne({ where: { name: category } })
@@ -187,12 +190,13 @@ export class MenuItemService implements OnModuleInit {
     const menuItem = await this.menuItemRepository.preload({
       id,
       ...menuItemDto,
-      category: categoryEntity,
+    //  category: categoryEntity,
     });
 
     if (!menuItem) {
       throw new NotFoundException(`MenuItem con id ${id} no econtrado`);
     }
+console.log(menuItem);
 
     return await this.menuItemRepository.save(menuItem);
   }

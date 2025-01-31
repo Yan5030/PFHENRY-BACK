@@ -61,7 +61,8 @@ async registerWithAuth0(createUserDto: CreateUserDto): Promise<User> {
   if (userExists) {
     throw new BadRequestException('El usuario ya está registrado');
   }
-
+  console.log("service",createUserDto);
+  
   const newUser = await this.usersService.create({
     auth0Id: createUserDto.auth0Id,
     name: createUserDto.name,
