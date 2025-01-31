@@ -16,11 +16,12 @@ import { MenuItem } from "../menuItems/entities/menuItems.entities";
 import { User } from "../users/entities/user.entity";
 import { Category } from "../categories/entities/category.entity";
 import { PayPalService } from "./paypal.service";
+import { OrderRepository } from "../orders/orders.repository";
 
 
 @Module({
   imports: [ConfigModule, OrdersModule,TypeOrmModule.forFeature([Order,Combo,OrderDetail,MenuItem,User,Category])],
-  providers: [OrdersService, OrderDetailsService,UsersService,MenuItemService,OrderDetailsService,PayPalService],
+  providers: [OrdersService, OrderDetailsService,UsersService,MenuItemService,OrderDetailsService,PayPalService,OrderRepository],
   controllers: [PayPalController],
 })
 export class PayPalModule {}
