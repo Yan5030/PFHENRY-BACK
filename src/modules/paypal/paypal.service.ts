@@ -22,7 +22,7 @@ export class PayPalService {
     try {
       console.log(`Buscando detalles de la orden con ID: ${orderId}`);
   
-      // Obtener todos los detalles de la orden por orderId
+      
       const orderDetails = await this.orderDetailsService.findDetailsByOrderId(orderId);
   
       if (!orderDetails || orderDetails.length === 0) {
@@ -32,14 +32,14 @@ export class PayPalService {
   
       console.log("Detalles de la orden encontrados:", orderDetails);
   
-      // Calcular el precio total de la orden, asegurándose de que se manejen como números
+     
       const totalPrice = orderDetails.reduce((total, item) => {
-        // Asegurarnos de que el subtotal sea tratado como un número
+      
         const validSubtotal = typeof item.subtotal === 'number' ? item.subtotal : parseFloat(String(item.subtotal));
         return total + validSubtotal;
       }, 0);
   
-      // Redondear el precio total a 2 decimales
+ 
       const totalPriceRounded = parseFloat(totalPrice.toFixed(2));
   
       console.log(`Total calculado para la orden ${orderId}: $${totalPriceRounded}`);
