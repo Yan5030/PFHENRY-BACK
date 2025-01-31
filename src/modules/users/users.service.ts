@@ -9,6 +9,8 @@ import { Role } from 'src/enum/roles.enum';
 import dayjs from 'dayjs';
 import * as fs from 'fs';
 import * as bcrypt from 'bcryptjs';
+import { Reservation } from '../reservations/entities/reservation.entity';
+import { Order } from '../orders/entities/order.entity';
 
 @Injectable()
 export class UsersService {
@@ -89,18 +91,27 @@ return userNoPassword;
      return users;
    };
 
-  async update(id: string, updateUserDto: UpdateUserDto)  {
+  async update(id: string, updateUserDto: UpdateUserDto) : Promise<User> {
     const userDb = await this.usersRepository.findOne({where:{id}});
   if(!userDb){
     throw new BadRequestException("No se encontraron usuarios con la id ingresada");
   }
-
 const updateUser = Object.assign(userDb, updateUserDto); // esto me modifica el usuario que traje de bd, y pone las propiedades modificadas
 //hago esto para poder guardar los cambios de este usuario y poder retornar el usuario, sin hacer otra peticion 
+return await this.usersRepository.save(updateUser);;
+  }
 
+  async updateByEmail(email: string, updateUserDto: UpdateUserDto) : Promise<User> {
+    const userDb = await this.usersRepository.findOne({where:{email}});
+  if(!userDb){
+    throw new BadRequestException("No se encontraron usuarios con la id ingresada");
+  }
+const updateUser = Object.assign(userDb, updateUserDto); // esto me modifica el usuario que traje de bd, y pone las propiedades modificadas
+//hago esto para poder guardar los cambios de este usuario y poder retornar el usuario, sin hacer otra peticion 
 return await this.usersRepository.save(updateUser);;
 
   }
+
 
   async remove(id: string) {
     const userDb = await this.usersRepository.findOne({where:{id}})
@@ -113,12 +124,11 @@ const userDb = await this.usersRepository.findOne({where:{email}})
 return userDb;
 }
 
-async updateRol(id: string, newRole: string)  {
+async updateRol(id: string, newRole: string): Promise<User>  {
   const userDb = await this.usersRepository.findOne({where:{id}});
 if(!userDb){
   throw new BadRequestException("No se encontraron usuarios con la id ingresada");
 }
-console.log(newRole);
 
 let rol:Role;
 if(newRole === "admin"){
@@ -136,8 +146,6 @@ const updateRoleUser = {
   ...userDb,
 role:rol
 }
-console.log(updateRoleUser);
-
 return await this.usersRepository.save(updateRoleUser);;
 
 }
@@ -150,16 +158,8 @@ return await this.usersRepository.save(updateRoleUser);;
   }
 
 
-  async findReservationsByUserService( email?:string){
-    //let user:User ;
-    //if(id){
-     //  user = await this.usersRepository.findOne({where:{id},relations:{reservations:true}});
-    //} else if(email){
+  async findReservationsByUserService( email:string): Promise<Reservation[]>{
       const user = await this.usersRepository.findOne({where:{email},relations:{reservations:true}});   
-    //} 
-   // if(!id && !email){
-     // throw new BadRequestException("Debe ingresar el email o id del usuario");
-   // }
 if(!user){
 throw new BadRequestException("Debe ingresar el email de un usuario activo");
 }
@@ -176,5 +176,55 @@ throw new BadRequestException("Debe ingresar el email de un usuario activo");
   async getOneByAuth0Id(auth0Id: string): Promise<User | undefined> {
     return this.usersRepository.findOne({ where: { auth0Id } });
   }
+
+  async updateById(id: string, updateData: Partial<User>) {
+    const user = await this.usersRepository.findOne({ where: { id } });
+  
+    if (!user) {
+      throw new BadRequestException('Usuario no encontrado');
+    }
+  
+    // Actualizar los datos
+    Object.assign(user, updateData);
+    return await this.usersRepository.save(user);
+  }
+  
+
+  async findOrdersByUserService( email:string){
+    const user = await this.usersRepository.findOne({where:{email},relations:{orders:{orderDetails:true}}});   
+if(!user){
+throw new BadRequestException("Debe ingresar el email de un usuario activo");
+}
+
+  const orders = user?.orders;
+
+  if(!orders){
+    throw new BadRequestException("El usuario no tiene ordenes");
+  } else if(orders.length === 0){
+    throw new BadRequestException("El usuario no tiene reservas");
+  }
+
+
+  const responseOrders = orders.map(order => ({
+    id: order.id,
+    status: order.status,
+    totalPrice: order.totalPrice,
+    createdAt: order.createdAt,
+    payment_status: order.payment_status,
+    paymentMethod: order.paymentMethod,
+    comment: order.comment,
+    isActive: order.isActive,
+    orderDetails: order.orderDetails.map(detail => ({
+      id: detail.id,
+      quantity: detail.quantity,
+      subtotal: detail.subtotal,
+    }))
+  }));
+  
+
+  
+return responseOrders;
+}
+  
 
 }

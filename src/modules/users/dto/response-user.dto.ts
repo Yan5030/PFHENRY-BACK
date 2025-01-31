@@ -6,6 +6,7 @@ export class ResponseUserDto{
   address: string
   image_url : string
   create_at:string
+  isComplete: boolean
 
   constructor(data: Partial<ResponseUserDto>) {
     const { password, ...rest } = data as any;
