@@ -77,6 +77,8 @@ export class AuthController {
    async signupWithAuth0(@Body() createUserDto: CreateUserDto) {
      try {
        const user = await this.authService.registerWithAuth0(createUserDto);
+       console.log(user);
+       
        return { message: 'Usuario registrado con Auth0', data: user };
      } catch (error) {
        throw new BadRequestException('Error al registrar el usuario', error);

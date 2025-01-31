@@ -24,6 +24,8 @@ constructor(private readonly menuItemService : MenuItemService,
 
      subtotal = menu.price * quantity;
     const updateData: UpdateMenuItemDto = { stock: menu.stock };
+    console.log(menu);
+    
     await this.menuItemService.update(menu.id,updateData)
     }else{
       throw new BadRequestException("No hay suficiente stock para realizar la orden")
