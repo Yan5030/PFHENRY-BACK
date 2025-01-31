@@ -19,7 +19,7 @@ email: string;
 password: string;
 @Column({ default: '', nullable: true })
 address: string;
-@Column({default:"http://example.com"})
+@Column({default:"https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black-thumbnail.png"})
 image_url: string;
 @Column({ default: false }) 
 isComplete: boolean; 
