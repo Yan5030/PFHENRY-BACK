@@ -31,7 +31,7 @@ export class MenuItem {
   @Column({nullable:true})
   stock: number;
 
-  @ManyToOne(() => Category, (category) => category.menuItems, { eager: true })
+  @ManyToOne(() => Category, (category) => category.menuItems, { onDelete: "SET NULL" })
   category: Category;
 
   @ManyToMany(() => Combo, (combo) => combo.menuItems)

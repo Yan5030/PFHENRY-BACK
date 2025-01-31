@@ -28,7 +28,7 @@ export class CombosService {
   }
 
   async findAll(): Promise<Combo[]> {
-    return this.combosRepository.find({ relations: ['menuItems'] }); 
+    return this.combosRepository.find({ relations: ['menuItems', 'menuItems.category'] });
   }
   
 
