@@ -16,7 +16,7 @@ export class CreateOrderDto {
   @ApiProperty({
     description: "Método de pago utilizado para la orden",
     enum: PaymentMethod,
-    example: [PaymentMethod.EFECTIVO, PaymentMethod.TARJETA_CREDITO,PaymentMethod.TARJETA_DEBITO,PaymentMethod.TRANSFERENCIA ]
+    example: [PaymentMethod.Cash, PaymentMethod.PayPal ]
   })
   @IsEnum(PaymentMethod)
   paymentMethod: PaymentMethod; // order

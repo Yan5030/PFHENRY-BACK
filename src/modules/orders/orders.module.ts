@@ -12,10 +12,11 @@ import { MenuItemService } from '../menuItems/menuItem.service';
 import { Category } from '../categories/entities/category.entity';
 import { OrderRepository } from './orders.repository';
 import { Combo } from '../combos/entities/combos.entities';
+import { CombosService } from '../combos/combos.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([OrderDetail, MenuItem,Order,User,Category,Combo])],
 controllers: [OrdersController],
-  providers: [OrdersService,UsersService,OrderDetailsService,MenuItemService,OrderRepository],
+  providers: [OrdersService,UsersService,OrderDetailsService,MenuItemService,OrderRepository,CombosService],
 })
 export class OrdersModule {}

@@ -35,7 +35,7 @@ export class CombosService {
   async findOne(id: string): Promise<Combo> {
     const combo = await this.combosRepository.findOne({
       where: { id },
-      relations: ['menu_items'],
+      relations: {menuItems:true},
     });
     if (!combo) {
       throw new NotFoundException(`Combo with ID ${id} not found`);

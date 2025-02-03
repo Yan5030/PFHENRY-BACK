@@ -11,7 +11,7 @@ export class OrderRepository extends Repository<Order> {
   }
 
   async findOrders(): Promise<Order[]> {
-    return this.find({ relations: ['orderDetails', 'user'] });
+    return this.find({ relations:{ orderDetails:{menuItem:true,combo:true}, user:true } });
   }
 
   async findOrderById(id: string): Promise<Order | null> {
