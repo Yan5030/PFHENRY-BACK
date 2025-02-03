@@ -58,6 +58,11 @@ return this.orderRepository.save(order);
     return this.orderRepository.findOrders();
   }
 
+  async findAllActives(): Promise<Order[]> {
+    return this.orderRepository.findAllActives();
+    
+  }
+
   async findOne(id: string, user: any): Promise<Order> {
     const order = await this.orderRepository.findOrderById(id);
 
