@@ -67,11 +67,11 @@ return this.orderRepository.save(order);
     const order = await this.orderRepository.findOrderById(id);
 
     if (!order) {
-      throw new NotFoundException("La orden con ID ${id} no existe.");
+      throw new NotFoundException(`La orden con ID ${id} no existe.`);
     }
-    if (user.role !== 'worker'||user.role !== 'admin' || order.user !== user.id) {
-      throw new NotFoundException('No tienes permisos para ver esta orden.');
-    }
+    //if (user.role !== 'worker'||user.role !== 'admin' || order.user !== user.id) {
+     // throw new NotFoundException('No tienes permisos para ver esta orden.');
+    //}
 
     return order;
   }

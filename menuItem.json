@@ -5,7 +5,7 @@
     "price": 12.4,
     "image_url": "https://i.postimg.cc/F7Szskf6/hamburguesa.jpg",
     "category": "Burgers",
-    "stock": 10
+    "stock": 160
   },
   {
     "name": "Hagrid’s Classic Burger",
@@ -14,7 +14,7 @@
     "image_url": "https://i.postimg.cc/F7Szskf6/hamburguesa.jpg",
     "category": "Burgers",
 
-    "stock": 20
+    "stock": 160
   },
   {
     "name": "The Sirius Black BBQ",
@@ -23,7 +23,7 @@
     "image_url": "https://i.postimg.cc/F7Szskf6/hamburguesa.jpg",
     "category":"Burgers",
 
-    "stock": 15
+    "stock": 160
   },
   {
     "name": "The Golden Snitch Cheese",
@@ -32,7 +32,7 @@
     "image_url": "https://i.postimg.cc/F7Szskf6/hamburguesa.jpg",
     "category": "Burgers",
 
-    "stock": 8
+    "stock": 160
   },
   {
     "name": "The Fiery Dragon Burger",
@@ -41,7 +41,7 @@
     "image_url": "https://i.postimg.cc/F7Szskf6/hamburguesa.jpg",
     "category": "Burgers",
 
-    "stock": 12
+    "stock": 160
   },
   {
     "name": "Pumpkin Juice",
@@ -49,7 +49,7 @@
     "price": 1.4,
     "image_url": "https://i.postimg.cc/HWPYP38v/coca.jpg",
     "category": "Drinks",
-    "stock": 50
+    "stock": 160
   },
   {
     "name": "Polyjuice Potion",
@@ -57,7 +57,7 @@
     "price": 1.6,
     "image_url": "https://i.postimg.cc/HWPYP38v/coca.jpg",
     "category": "Drinks",
-    "stock": 40
+    "stock": 160
   },
   {
     "name": "Felix Felicis Elixir",
@@ -65,7 +65,7 @@
     "price": 1.2,
     "image_url": "https://i.postimg.cc/HWPYP38v/coca.jpg",
     "category": "Drinks",
-    "stock": 30
+    "stock": 160
   },
   {
     "name": "Treacle Tart with Ice Cream",
@@ -73,7 +73,7 @@
     "price": 6.0,
     "image_url": "https://i.postimg.cc/6yQsYkKf/chesscake.jpg",
     "category": "Desserts",
-    "stock": 10
+    "stock": 160
   },
   {
     "name": "Cauldron Cake",
@@ -81,7 +81,7 @@
     "price": 6.5,
     "image_url": "https://i.postimg.cc/6yQsYkKf/chesscake.jpg",
     "category": "Desserts",
-    "stock": 5
+    "stock": 160
   },
   {
     "name": "Hogwarts Fries",
@@ -89,7 +89,7 @@
     "price": 4.5,
     "image_url": "https://i.postimg.cc/YqzHB3vw/papas.jpg",
     "category": "Sides",
-    "stock": 25
+    "stock": 160
   },
   {
     "name": "Dragon Wings",
@@ -97,7 +97,7 @@
     "price": 4.8,
     "image_url": "https://i.postimg.cc/YqzHB3vw/papas.jpg",
     "category": "Sides",
-    "stock": 15
+    "stock": 160
   },
   {
     "name": "Magical Caesar Salad",
@@ -105,7 +105,7 @@
     "price": 5.0,
     "image_url": "https://i.postimg.cc/YqzHB3vw/papas.jpg",
     "category":  "Sides",
-    "stock": 10
+    "stock": 160
   },
   {
     "name": "Gryffindor Mozzarella Sticks",
@@ -113,6 +113,6 @@
     "price": 5.2,
     "image_url": "https://i.postimg.cc/YqzHB3vw/papas.jpg",
     "category": "Sides",
-    "stock": 18
+    "stock": 160
   }
 ]
