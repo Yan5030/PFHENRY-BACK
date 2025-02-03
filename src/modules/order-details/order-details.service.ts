@@ -13,6 +13,7 @@ import { MenuItem } from '../menuItems/entities/menuItems.entities';
 @Injectable()
 export class OrderDetailsService {
 constructor(private readonly menuItemService : MenuItemService,
+
   @InjectRepository(OrderDetail) private readonly orderDetailRepository : Repository<OrderDetail>,
   @InjectRepository(MenuItem) private readonly menuItemRepository : Repository<MenuItem>,
   private readonly comboService : CombosService
@@ -52,9 +53,6 @@ const orderDetail = this.orderDetailRepository.create({
       quantity,
       subtotal: (combo.price * quantity)
     });
- 
-    return this.orderDetailRepository.save(orderDetail);
- 
  
  
     //const menu = await this.menuItemService.findOne(idMenuItem)
@@ -106,11 +104,13 @@ async buyMenuItem(idMenuItem : string, quantity: number){
     return await this.orderDetailRepository.find();
   }
  
+
+
   async findOneById(id: string) {
     const orderDet= await this.orderDetailRepository.findOne({where:{id}})
     return orderDet;
   }
- 
+
   async update(id: string, updateOrderDetailDto: UpdateOrderDetailDto) {
     const orderDet = await this.orderDetailRepository.findOne({where:{id}});
     if(!orderDet){
@@ -119,13 +119,14 @@ async buyMenuItem(idMenuItem : string, quantity: number){
   const updateOrderDet = Object.assign(orderDet, updateOrderDetailDto); 
     return await this.orderDetailRepository.save(updateOrderDet);
   }
- 
+
   async remove(id: string): Promise<void> {
     const orderDetail = await this.orderDetailRepository.findOne({ where: { id } });
     if (!orderDetail) {
       throw new BadRequestException("No se encontró el detalle de la orden.");
     }
     await this.orderDetailRepository.remove(orderDetail);
+
   }
   async findDetailsByOrderId(orderId: string): Promise<OrderDetail[]> {
     return await this.orderDetailRepository.find({

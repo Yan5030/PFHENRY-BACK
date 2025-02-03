@@ -54,7 +54,5 @@ export class Order {
     @Column({ type: 'varchar', length: 255, nullable: true })
     comment?: string; // Personalización opcional
 
-    @Column({ type: 'boolean', default: true })
-    isActive: boolean; // Para borrado lógico
 }
 

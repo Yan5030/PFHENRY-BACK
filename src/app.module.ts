@@ -25,7 +25,7 @@ import { PayPalModule } from './modules/paypal/paypal.module';
   imports: [
     TypeOrmModule.forRoot(typeOrmConfig), 
     ConfigModule.forRoot({
-      envFilePath: '.env',  
+      envFilePath: '.env.development',  
       isGlobal: true, 
     }),
     AuthModule, 
@@ -50,4 +50,5 @@ import { PayPalModule } from './modules/paypal/paypal.module';
   providers: [AppService, /*CloudinaryConfig*/ CloudinaryService],
 })
 export class AppModule {}
+
 

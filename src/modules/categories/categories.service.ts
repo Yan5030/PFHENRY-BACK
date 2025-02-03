@@ -4,7 +4,8 @@ import { Category } from './entities/category.entity';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import {  UpdateCategoryDto } from './dto/update-category.dto';
 import { Repository } from 'typeorm';
-
+// import * as data from '../utils/data.json';
+import data from '../utils/data.json';
 
 
 @Injectable()
@@ -16,6 +17,35 @@ export class CategoriesService {
 
   async findAllCategories(): Promise<Category[]> {
     return this.categoriesRepository.find({relations: ['menuItems']});
+  }
+
+  async seedCategories() {
+
+    const categories = data
+      .map(item => ({
+        name: item.category,
+        icon: item.categoryDescription || `DModifica esta descripcion ${item.category}`, //En caso de no contar con descripcion añade el texto
+      }))
+      .filter(
+        (value, index, self) =>
+          self.findIndex(v => v.name === value.name) === index, // Para identificar categorias unicas
+      );
+  
+    for (const category of categories) {
+      const categoryExists = await this.categoriesRepository.findOne({
+        where: { name: category.name },
+      });
+  
+      if (!categoryExists) {
+        const newCategory = this.categoriesRepository.create({
+          name: category.name,
+          icon: category.icon,
+        });
+        await this.categoriesRepository.save(newCategory);
+      }
+    }
+  
+    return `Categorías añadidas: ${categories.map(cat => cat.name)}`;
   }
 
 

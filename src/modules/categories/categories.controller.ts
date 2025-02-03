@@ -12,6 +12,21 @@ export class CategoriesController {
     return this.categoriesService.findAllCategories();
   }
 
+  @Get('seeder')
+  async seedCategories() {
+    try {
+      return await this.categoriesService.seedCategories();
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Las categorías han sido cargadas con anterioridad',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.categoriesService.findCategoryById(id);
