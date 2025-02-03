@@ -8,13 +8,15 @@ import dayjs from 'dayjs';
 import { OrderDetailsService } from '../order-details/order-details.service';
 import { OrderRepository } from './orders.repository';
 import { OrderDetail } from '../order-details/entities/order-detail.entity';
+import { NodemailerService } from '../nodemailer/nodemailer.service';
 
 @Injectable()
 export class OrdersService {
   constructor(
   private readonly orderRepository : OrderRepository,
   private readonly userService : UsersService,
-  private readonly orderDetailsService: OrderDetailsService
+  private readonly orderDetailsService: OrderDetailsService,
+  private readonly nodeMailerService: NodemailerService,
 ){}
 
 async create(createOrderDto: CreateOrderDto): Promise<Order> {
@@ -50,6 +52,7 @@ const total = detalleOrden.reduce((sum, det) => sum + det.subtotal, 0);
 order.totalPrice = total;
 order.orderDetails = detalleOrden;
 
+await this.nodeMailerService.sendEmailOrden(user.email);
 return this.orderRepository.save(order);
 
   }
