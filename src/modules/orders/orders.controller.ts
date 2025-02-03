@@ -90,7 +90,7 @@ export class OrdersController {
   }
 
   @Patch(':id/status')
-  @RolesDecorator(Role.Admin, Role.Worker) // Solo admin y worker pueden usar este endpoint
+  //@RolesDecorator(Role.Admin, Role.Worker) // Solo admin y worker pueden usar este endpoint
   async updateOrderStatus(
     @Param('id') id: string,
     @Body() updateStatusDto: UpdateOrderStatusDto, // Usamos el DTO aquí
@@ -110,7 +110,7 @@ export class OrdersController {
   }
   
   @Delete(':id')
-  @RolesDecorator(Role.Admin)
+  //@RolesDecorator(Role.Admin)
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseUUIDPipe) id: string) {
     await this.ordersService.remove(id);
