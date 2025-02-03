@@ -59,8 +59,8 @@ return this.orderRepository.save(order);
   }
 
   async findAllActives(): Promise<Order[]> {
-    const orders = await this.orderRepository.findOrders();
-    return orders.filter(order => order.isActive);
+    return this.orderRepository.findAllActives();
+    
   }
 
   async findOne(id: string, user: any): Promise<Order> {

@@ -68,8 +68,12 @@ export class OrdersController {
   //@UseGuards(AuthGuard,RolesGuard)
   //@ApiBearerAuth()
   @Get('findAllActives')
-  async findAllActives(): Promise<Order[]> {
-    return this.ordersService.findAllActives();
+  async findAllActives() {
+    const orders = await this.ordersService.findAllActives();
+  return {
+    message: 'Órdenes activas obtenidas exitosamente',
+    orders,
+  };
   }
 
 
