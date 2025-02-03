@@ -60,4 +60,10 @@ constructor(private readonly menuItemService : MenuItemService,
   remove(id: number) {
     return `This action removes a #${id} orderDetail`;
   }
+  async findDetailsByOrderId(orderId: string): Promise<OrderDetail[]> {
+    return await this.orderDetailRepository.find({
+      where: { order: { id: orderId } },
+      relations: ['menuItem', 'order'],
+    });
+  }
 }

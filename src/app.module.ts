@@ -18,6 +18,8 @@ import { MenuItemModule } from './modules/menuItems/menuItem.module';
 import { FileUploadModule } from './modules/file-upload/file-upload.module';
 import { CloudinaryService } from './service/cloudinary/cloudinary,service';
 import { CombosModule } from './modules/combos/combos.module';
+import { ReviewModule } from './modules/review/review.module';
+import { PayPalModule } from './modules/paypal/paypal.module';
 
 @Module({
   imports: [
@@ -39,7 +41,9 @@ import { CombosModule } from './modules/combos/combos.module';
     OrdersModule,
     MenuItemModule,
     CombosModule,
-    FileUploadModule
+    FileUploadModule,
+    ReviewModule,
+    PayPalModule
   ],
 
   controllers: [AppController],

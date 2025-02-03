@@ -6,11 +6,12 @@ import { Reservation } from './entities/reservation.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
 import { DateValidationMiddleware } from 'src/middlewares/date-validation/date-validation.middleware';
+import { NodemailerService } from '../nodemailer/nodemailer.service';
 
 @Module({
   imports:[TypeOrmModule.forFeature([Reservation,User])],
   controllers: [ReservationsController],
-  providers: [ReservationsService,UsersService],
+  providers: [ReservationsService,UsersService,NodemailerService],
   exports:[ReservationsService]
 })
 export class ReservationsModule implements NestModule {
