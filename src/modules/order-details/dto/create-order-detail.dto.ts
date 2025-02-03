@@ -5,10 +5,17 @@ import { Order } from "src/modules/orders/entities/order.entity"
 export class CreateOrderDetailDto {
 @ApiProperty({
     description: "Debe recibir el id del menuItem",
-    example: "123e4567-e89b-12d3-a456-426614174000"
+    default: null
 })
 //@IsUUID()
-idMenuItem: string
+idMenuItem?: string
+
+@ApiProperty({
+    description: "Debe recibir el id del combo",
+    default: null
+})
+//@IsUUID()
+idCombo?: string
 
 @ApiProperty({
     description:"Debe contener la cantidad de unidades de ese menuitem",

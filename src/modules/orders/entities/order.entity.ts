@@ -39,7 +39,7 @@ export class Order {
   @Column({
       type: "enum",
       enum: PaymentMethod,
-      default: PaymentMethod.EFECTIVO, 
+      default: PaymentMethod.Cash, 
     })
     paymentMethod: PaymentMethod; 
 
