@@ -17,6 +17,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { RolesDecorator } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
 import { UpdateOrderStatusDto } from './dto/update-orderStatus.dto';
+import { Order } from './entities/order.entity';
 
 @Controller('orders')
 export class OrdersController {
@@ -63,6 +64,14 @@ export class OrdersController {
       orders,
     };
   }
+//@RolesDecorator(Role.Admin,Role.Worker)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
+  @Get('findAllActives')
+  async findAllActives(): Promise<Order[]> {
+    return this.ordersService.findAllActives();
+  }
+
 
   //@RolesDecorator(Role.Admin,Role.Worker)
   //@UseGuards(AuthGuard,RolesGuard)
