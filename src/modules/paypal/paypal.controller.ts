@@ -6,7 +6,7 @@ import { SavePaypalDto } from "./dtos/savePaypal.dto";
 export class PayPalController {
   constructor(private readonly payPalService: PayPalService) {}
 
-  @Post("/savePayment")
+  @Post("savePayment")
   async savePayment(@Body() paypalData: SavePaypalDto) {
     return this.payPalService.savePayment(paypalData);
   }
