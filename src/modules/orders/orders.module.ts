@@ -13,11 +13,12 @@ import { Category } from '../categories/entities/category.entity';
 import { OrderRepository } from './orders.repository';
 import { Combo } from '../combos/entities/combos.entities';
 import { CombosService } from '../combos/combos.service';
-import { NodemailerModule } from '../nodemailer/nodemailer.module';
+import { NodemailerService } from '../nodemailer/nodemailer.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([OrderDetail, MenuItem,Order,User,Category,Combo]), NodemailerModule],
+  imports: [TypeOrmModule.forFeature([OrderDetail, MenuItem,Order,User,Category,Combo]),],
 controllers: [OrdersController],
-  providers: [OrdersService,UsersService,OrderDetailsService,MenuItemService,OrderRepository,CombosService],
+  providers: [OrdersService,UsersService,OrderDetailsService,MenuItemService,OrderRepository,CombosService,NodemailerService],
+exports:[OrdersService]
 })
 export class OrdersModule {}
