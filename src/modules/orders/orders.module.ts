@@ -16,7 +16,7 @@ import { CombosService } from '../combos/combos.service';
 import { NodemailerService } from '../nodemailer/nodemailer.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([OrderDetail, MenuItem,Order,User,Category,Combo])],
+  imports: [TypeOrmModule.forFeature([OrderDetail, MenuItem,Order,User,Category,Combo]),],
 controllers: [OrdersController],
   providers: [OrdersService,UsersService,OrderDetailsService,MenuItemService,OrderRepository,CombosService,NodemailerService],
 exports:[OrdersService]
