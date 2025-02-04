@@ -20,6 +20,7 @@ import { CloudinaryService } from './service/cloudinary/cloudinary,service';
 import { CombosModule } from './modules/combos/combos.module';
 import { ReviewModule } from './modules/review/review.module';
 import { PayPalModule } from './modules/paypal/paypal.module';
+import { NodemailerModule } from './modules/nodemailer/nodemailer.module';
 
 @Module({
   imports: [
@@ -43,7 +44,7 @@ import { PayPalModule } from './modules/paypal/paypal.module';
     CombosModule,
     FileUploadModule,
     ReviewModule,
-    PayPalModule
+    PayPalModule,
   ],
 
   controllers: [AppController],
