@@ -26,6 +26,9 @@ export class Combo {
   @Column({ default: true })
   isActive: boolean;
 
+  @Column({ default: 0 })
+  stockCombos: number;
+
   @ManyToMany(() => MenuItem, menuItem => menuItem.combos, { cascade: true })
   @JoinTable()
   menuItems: MenuItem[];

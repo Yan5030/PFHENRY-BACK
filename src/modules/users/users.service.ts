@@ -201,11 +201,11 @@ throw new BadRequestException("Debe ingresar el email de un usuario activo");
   
 
   async findOrdersByUserService( email:string){
-    const user = await this.usersRepository.findOne({where:{email},relations:{orders:{orderDetails:true}}});   
+    const user = await this.usersRepository.findOne({where:{email},relations:{orders:{orderDetails:{combo:true,menuItem:true}}}});   
 if(!user){
 throw new BadRequestException("Debe ingresar el email de un usuario activo");
 }
-
+  
   const orders = user?.orders;
 
   if(!orders){
@@ -228,6 +228,8 @@ throw new BadRequestException("Debe ingresar el email de un usuario activo");
       id: detail.id,
       quantity: detail.quantity,
       subtotal: detail.subtotal,
+      combo: detail.combo,
+      menuItem: detail.menuItem
     }))
   }));
   

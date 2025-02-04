@@ -47,6 +47,12 @@ const detalleOrden = await Promise.all(MenuItems.map( async menu=>{
   
   return result;
 }))
+console.log(detalleOrden);
+
+if(detalleOrden.length === 0){
+this.remove(order.id)
+throw new BadRequestException("No hay stock suficiente");
+}
 
 const total = detalleOrden.reduce((sum, det) => sum + det.subtotal, 0);
 order.totalPrice = total;
@@ -61,15 +67,20 @@ return this.orderRepository.save(order);
     return this.orderRepository.findOrders();
   }
 
+  async findAllActives(): Promise<Order[]> {
+    return this.orderRepository.findAllActives();
+    
+  }
+
   async findOne(id: string, user: any): Promise<Order> {
     const order = await this.orderRepository.findOrderById(id);
 
     if (!order) {
-      throw new NotFoundException("La orden con ID ${id} no existe.");
+      throw new NotFoundException(`La orden con ID ${id} no existe.`);
     }
-    if (user.role !== 'worker'||user.role !== 'admin' || order.user !== user.id) {
-      throw new NotFoundException('No tienes permisos para ver esta orden.');
-    }
+    //if (user.role !== 'worker'||user.role !== 'admin' || order.user !== user.id) {
+     // throw new NotFoundException('No tienes permisos para ver esta orden.');
+    //}
 
     return order;
   }
@@ -99,8 +110,7 @@ return this.orderRepository.save(order);
   }
 
   async remove(id: string): Promise<void> {
-    const order = await this.orderRepository.findOrderById(id);
-    await this.orderRepository.remove(order);
+    await this.orderRepository.delete(id);
   }
   
 }

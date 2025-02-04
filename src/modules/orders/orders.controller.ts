@@ -17,7 +17,11 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { RolesDecorator } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
 import { UpdateOrderStatusDto } from './dto/update-orderStatus.dto';
+
 import { PaymentStatus } from 'src/enum/payment-status.enum';
+
+import { Order } from './entities/order.entity';
+
 
 @Controller('orders')
 export class OrdersController {
@@ -64,6 +68,18 @@ export class OrdersController {
       orders,
     };
   }
+//@RolesDecorator(Role.Admin,Role.Worker)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
+  @Get('findAllActives')
+  async findAllActives() {
+    const orders = await this.ordersService.findAllActives();
+  return {
+    message: 'Órdenes activas obtenidas exitosamente',
+    orders,
+  };
+  }
+
 
   @Patch(':orderId/payment-status')
   async updatePaymentStatus(
@@ -87,7 +103,7 @@ export class OrdersController {
   }
 
   @Patch(':id/status')
-  @RolesDecorator(Role.Admin, Role.Worker) // Solo admin y worker pueden usar este endpoint
+  //@RolesDecorator(Role.Admin, Role.Worker) // Solo admin y worker pueden usar este endpoint
   async updateOrderStatus(
     @Param('id') id: string,
     @Body() updateStatusDto: UpdateOrderStatusDto, // Usamos el DTO aquí
@@ -107,7 +123,7 @@ export class OrdersController {
   }
   
   @Delete(':id')
-  @RolesDecorator(Role.Admin)
+  //@RolesDecorator(Role.Admin)
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseUUIDPipe) id: string) {
     await this.ordersService.remove(id);

@@ -14,10 +14,20 @@ export class OrderRepository extends Repository<Order> {
     return this.find({ relations:{ orderDetails:{menuItem:true,combo:true}, user:true } });
   }
 
+  async findAllActives(): Promise<Order[]> {
+    return this.find({
+      where: { isActive: true },  // Filtra solo las órdenes activas
+      relations: {
+        orderDetails: { menuItem: true, combo: true },
+        user: true,
+      },
+    });
+  }
+
   async findOrderById(id: string): Promise<Order | null> {
     return this.findOne({
       where: { id },
-      relations: ['orderDetails', 'user'],
+      relations: { orderDetails:{menuItem:true,combo:true}, user:true },
     });
   }
 }
