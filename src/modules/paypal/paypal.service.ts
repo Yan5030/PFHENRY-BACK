@@ -10,13 +10,22 @@ import {
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { OrderDetailsService } from "../order-details/order-details.service";
+import { SavePaypalDto } from "./dtos/savePaypal.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { PaypalPayment } from "./entities/paypalPayment.entities";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class PayPalService {
   private client: Client;
   private ordersController: OrdersController;
 
-  constructor(private configService: ConfigService, private orderDetailsService:OrderDetailsService) {
+  constructor(
+    @InjectRepository(PaypalPayment)
+    private paypalRepo: Repository<PaypalPayment>,
+    private configService: ConfigService,
+    private orderDetailsService:OrderDetailsService
+    ) {
     this.client = new Client({
       clientCredentialsAuthCredentials: {
         oAuthClientId: this.configService.get<string>("PAYPAL_CLIENT_ID"),
@@ -61,54 +70,14 @@ export class PayPalService {
       throw new Error("Hubo un problema al calcular el total de la orden.");
     }
   }
-
-  async createOrder(orderId: string): Promise<any> {
-    try {
-      const totalPrice = await this.getTotalPrice(orderId);
-      
-      const requestBody: OrderRequest = {
-        intent: CheckoutPaymentIntent.Capture,
-        purchaseUnits: [
-          {
-            amount: {
-              currencyCode: "USD",
-              value: totalPrice.toString(),
-            },
-          },
-        ],
-        applicationContext: {
-          returnUrl: "http://localhost:3000/success",
-          cancelUrl: "http://localhost:3000/cancel",
-        },
-      };
-      
-      const response = await this.ordersController.ordersCreate({
-        body: requestBody,
-        prefer: "return=minimal",
-      });
-
-      return response.body;
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Error(error.message);
-      }
-      throw error;
-    }
+  async savePayment(paypalData: SavePaypalDto) {
+    const payment = this.paypalRepo.create(paypalData);
+    return await this.paypalRepo.save(payment);
   }
 
-  async captureOrder(orderId: string): Promise<any> {
-    try {
-      const { body } = await this.ordersController.ordersCapture({
-        id: orderId,
-        prefer: "return=minimal",
-      });
-
-      return body;
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Error(error.message);
-      }
-      throw error;
-    }
+  async getPaymentByOrderId(orderId: string): Promise<PaypalPayment | null> {
+    return await this.paypalRepo.findOne({ where: { orderId } });
   }
+
+
 }

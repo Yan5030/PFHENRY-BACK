@@ -18,11 +18,13 @@ import { Category } from "../categories/entities/category.entity";
 import { PayPalService } from "./paypal.service";
 import { OrderRepository } from "../orders/orders.repository";
 import { CombosService } from "../combos/combos.service";
+import { NodemailerService } from "../nodemailer/nodemailer.service";
+import { PaypalPayment } from "./entities/paypalPayment.entities";
 
 
 @Module({
-  imports: [ConfigModule, OrdersModule,TypeOrmModule.forFeature([Order,Combo,OrderDetail,MenuItem,User,Category])],
-  providers: [OrdersService, OrderDetailsService,UsersService,MenuItemService,OrderDetailsService,PayPalService,OrderRepository,CombosService],
+  imports: [ConfigModule, OrdersModule,TypeOrmModule.forFeature([Order,Combo,OrderDetail,MenuItem,User,Category, PaypalPayment])],
+  providers: [NodemailerService,OrdersService, OrderDetailsService,UsersService,MenuItemService,OrderDetailsService,PayPalService,OrderRepository,CombosService],
   controllers: [PayPalController],
 })
 export class PayPalModule {}

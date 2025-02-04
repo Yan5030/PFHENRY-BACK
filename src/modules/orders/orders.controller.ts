@@ -17,6 +17,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { RolesDecorator } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
 import { UpdateOrderStatusDto } from './dto/update-orderStatus.dto';
+import { PaymentStatus } from 'src/enum/payment-status.enum';
 
 @Controller('orders')
 export class OrdersController {
@@ -63,6 +64,15 @@ export class OrdersController {
       orders,
     };
   }
+
+  @Patch(':orderId/payment-status')
+  async updatePaymentStatus(
+    @Param('orderId') orderId: string,
+    @Body('status') status: PaymentStatus,
+  ) {
+    return this.ordersService.updatePaymentStatus(orderId, status);
+  }
+
 
   //@RolesDecorator(Role.Admin,Role.Worker)
   //@UseGuards(AuthGuard,RolesGuard)
