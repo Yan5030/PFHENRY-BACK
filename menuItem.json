@@ -40,7 +40,6 @@
     "price": 11.8,
     "image_url": "https://i.postimg.cc/F7Szskf6/hamburguesa.jpg",
     "category": "Burgers",
-
     "stock": 160
   },
   {
@@ -97,7 +96,7 @@
     "price": 4.8,
     "image_url": "https://i.postimg.cc/YqzHB3vw/papas.jpg",
     "category": "Sides",
-    "stock": 160
+    "stock": 0
   },
   {
     "name": "Magical Caesar Salad",

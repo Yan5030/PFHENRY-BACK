@@ -47,6 +47,12 @@ const detalleOrden = await Promise.all(MenuItems.map( async menu=>{
   
   return result;
 }))
+console.log(detalleOrden);
+
+if(detalleOrden.length === 0){
+this.remove(order.id)
+throw new BadRequestException("No hay stock suficiente");
+}
 
 const total = detalleOrden.reduce((sum, det) => sum + det.subtotal, 0);
 order.totalPrice = total;
@@ -92,8 +98,7 @@ return this.orderRepository.save(order);
   }
 
   async remove(id: string): Promise<void> {
-    const order = await this.orderRepository.findOrderById(id);
-    await this.orderRepository.remove(order);
+    await this.orderRepository.delete(id);
   }
   
 }

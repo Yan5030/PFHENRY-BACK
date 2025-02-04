@@ -9,13 +9,16 @@ import { Order } from '../orders/entities/order.entity';
 import { UpdateMenuItemDto } from '../menuItems/dto/update-product-dto';
 import { CombosService } from '../combos/combos.service';
 import { MenuItem } from '../menuItems/entities/menuItems.entities';
+import { OrdersService } from '../orders/orders.service';
+import { OrderRepository } from '../orders/orders.repository';
  
 @Injectable()
 export class OrderDetailsService {
 constructor(private readonly menuItemService : MenuItemService,
   @InjectRepository(OrderDetail) private readonly orderDetailRepository : Repository<OrderDetail>,
   @InjectRepository(MenuItem) private readonly menuItemRepository : Repository<MenuItem>,
-  private readonly comboService : CombosService
+  private readonly comboService : CombosService,
+  private readonly orderRepository : OrderRepository,
 ){}
  
   async create(createOrderDetailDto: CreateOrderDetailDto, order : Order) : Promise<OrderDetail> {
@@ -25,7 +28,7 @@ constructor(private readonly menuItemService : MenuItemService,
  
  
 if(!idCombo){
-  const itemSubtotal = await this.buyMenuItem(idMenuItem,quantity);
+  const itemSubtotal = await this.buyMenuItem(idMenuItem,quantity,order.id);
   const {menu,subtotal}= itemSubtotal;
  
  
@@ -45,7 +48,7 @@ const orderDetail = this.orderDetailRepository.create({
  
       //const itemsSubtotal = await Promise.all(combo.menuItems.map( async item=> { return  await this.buyMenuItem(item.id,1)} ) ) 
       //const items= itemsSubtotal.map(item => {return item.menu}) // guardo solo array items
-      await Promise.all(combo.menuItems.map( async item=> { return  await this.buyMenuItem(item.id,quantity)} )) //x cada item descuenta en stock
+      await Promise.all(combo.menuItems.map( async item=> { return  await this.buyMenuItem(item.id,quantity,order.id)} )) //x cada item descuenta en stock
       const orderDetail = this.orderDetailRepository.create({
       order,
       combo: combo,
@@ -84,7 +87,7 @@ const orderDetail = this.orderDetailRepository.create({
  
   }
  
-async buyMenuItem(idMenuItem : string, quantity: number){
+async buyMenuItem(idMenuItem : string, quantity: number,orderId:string){
   const menu = await this.menuItemService.findOne(idMenuItem)
   if(!menu)
   {
@@ -92,6 +95,7 @@ async buyMenuItem(idMenuItem : string, quantity: number){
   }
  
   if (menu.stock < quantity) {
+    this.orderRepository.delete(orderId);
     throw new BadRequestException("No hay suficiente stock para realizar la orden.");
   }
   menu.stock -= quantity;
