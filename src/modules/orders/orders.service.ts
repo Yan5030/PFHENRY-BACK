@@ -97,6 +97,18 @@ return this.orderRepository.save(order);
     return this.orderRepository.save(order);
   }
 
+  async updatePaymentStatus(orderId: string, status: PaymentStatus) {
+    const order = await this.orderRepository.findOne({where: {id: orderId}});
+    if (!order) {
+      throw new NotFoundException(`Orden con ID ${orderId} no encontrada`);
+    }
+
+    order.payment_status = status;
+    await this.orderRepository.save(order);
+
+    return { message: `Orden ${orderId} actualizada a ${status}` };
+  }
+
   async remove(id: string): Promise<void> {
     await this.orderRepository.delete(id);
   }

@@ -20,5 +20,6 @@ import { NodemailerService } from '../nodemailer/nodemailer.service';
 controllers: [OrdersController],
   providers: [OrdersService,UsersService,OrderDetailsService,MenuItemService,OrderRepository,CombosService,NodemailerService],
 exports:[OrdersService]
+
 })
 export class OrdersModule {}
