@@ -160,8 +160,8 @@ return await this.usersRepository.save(updateRoleUser);;
 
 }
 
- async desactivate(id: string): Promise<User> {
-    const user = await this.usersRepository.findOne({where:{id}});
+ async desactivate(email: string): Promise<User> {
+    const user = await this.usersRepository.findOne({where:{email}});
 
     user.isActive = false; 
     return await this.usersRepository.save(user);
