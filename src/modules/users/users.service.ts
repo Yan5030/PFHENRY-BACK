@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -207,13 +207,13 @@ throw new BadRequestException("Debe ingresar el email de un usuario activo");
     });
   
     if (!user) {
-      throw new BadRequestException("Debe ingresar el email de un usuario activo");
+      throw new NotFoundException("El usuario no fue encontrado");
     }
   
     const orders = user?.orders;
   
     if (!orders || orders.length === 0) {
-      throw new BadRequestException("El usuario no tiene órdenes");
+      return [];
     }
   
     const responseOrders = orders.map(order => ({
