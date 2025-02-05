@@ -98,4 +98,12 @@ export class AuthController {
     return this.authService.signinWithAuth0(signinWithAuth0Dto);
   }
 
+
+  @Post('signup/worker')
+  async signupWorker(@Body() createUserDto: CreateUserDto) { 
+      const user = await this.authService.signupWorker(createUserDto);
+      return { message: 'Registro exitoso', data: user };
+  }
+
+
 }

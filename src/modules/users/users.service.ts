@@ -66,7 +66,7 @@ export class UsersService {
 
     const newUser = this.usersRepository.create({
       ...createUserDto,
-      create_at: dayjs().format("YYYY-MM-DD")});
+      create_at: dayjs().format("YYYY-MM-DD")})
     return this.usersRepository.save(newUser);
     }
 
@@ -240,5 +240,21 @@ throw new BadRequestException("Debe ingresar el email de un usuario activo");
   
     return responseOrders;
   }
+
+  async createWorker(createUserDto: CreateUserDto) : Promise<User>{ 
+    const userDb = await this.usersRepository.findOne({where:{email:createUserDto.email}})
+    console.log("Valor de user", userDb)
+
+    if(userDb){
+      throw new BadRequestException("El correo ya esta registrado");
+    }
+
+    const newUser = this.usersRepository.create({
+      ...createUserDto,
+      role:Role.Worker,
+      create_at: dayjs().format("YYYY-MM-DD")})
+    return this.usersRepository.save(newUser);
+    }
+
 
 }
