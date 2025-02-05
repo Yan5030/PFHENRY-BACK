@@ -98,12 +98,4 @@ export class AuthController {
     return this.authService.signinWithAuth0(signinWithAuth0Dto);
   }
 
-@Post('complete-profile/:id')
-async completeProfile(
-  @Param('id') id: string,
-  @Body() updateProfileDto: UpdateProfileDto,
-) {
-  const user = await this.authService.completeUserProfile(id, updateProfileDto);
-  return { message: 'Perfil completado', data: user };
-    }
 }

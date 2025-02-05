@@ -200,43 +200,45 @@ throw new BadRequestException("Debe ingresar el email de un usuario activo");
   }
   
 
-  async findOrdersByUserService( email:string){
-    const user = await this.usersRepository.findOne({where:{email},relations:{orders:{orderDetails:{combo:true,menuItem:true}}}});   
-if(!user){
-throw new BadRequestException("Debe ingresar el email de un usuario activo");
-}
+  async findOrdersByUserService(email: string) {
+    const user = await this.usersRepository.findOne({
+      where: { email },
+      relations: { orders: { orderDetails: { combo: true, menuItem: true } } },
+    });
   
-  const orders = user?.orders;
-
-  if(!orders){
-    throw new BadRequestException("El usuario no tiene ordenes");
-  } else if(orders.length === 0){
-    throw new BadRequestException("El usuario no tiene reservas");
+    if (!user) {
+      throw new BadRequestException("Debe ingresar el email de un usuario activo");
+    }
+  
+    const orders = user?.orders;
+  
+    if (!orders || orders.length === 0) {
+      throw new BadRequestException("El usuario no tiene órdenes");
+    }
+  
+    const responseOrders = orders.map(order => ({
+      id: order.id,
+      status: order.status,
+      totalPrice: order.totalPrice,
+      createdAt: order.createdAt,
+      payment_status: order.payment_status,
+      paymentMethod: order.paymentMethod,
+      comment: order.comment,
+      isActive: order.isActive,
+      orderDetails: order.orderDetails.map(detail => 
+        Object.fromEntries(
+          Object.entries({
+            id: detail.id,
+            quantity: detail.quantity,
+            subtotal: detail.subtotal,
+            combo: detail.combo || undefined,
+            menuItem: detail.menuItem || undefined,
+          }).filter(([_, value]) => value !== null && value !== undefined) // Elimina valores nulos o undefined
+        )
+      )
+    }));
+  
+    return responseOrders;
   }
-
-
-  const responseOrders = orders.map(order => ({
-    id: order.id,
-    status: order.status,
-    totalPrice: order.totalPrice,
-    createdAt: order.createdAt,
-    payment_status: order.payment_status,
-    paymentMethod: order.paymentMethod,
-    comment: order.comment,
-    isActive: order.isActive,
-    orderDetails: order.orderDetails.map(detail => ({
-      id: detail.id,
-      quantity: detail.quantity,
-      subtotal: detail.subtotal,
-      combo: detail.combo,
-      menuItem: detail.menuItem
-    }))
-  }));
-  
-
-  
-return responseOrders;
-}
-  
 
 }
