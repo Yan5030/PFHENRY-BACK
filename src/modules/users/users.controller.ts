@@ -98,9 +98,9 @@ export class UsersController {
  //@RolesDecorator(Role.Admin)
   //@UseGuards(AuthGuard,RolesGuard)
   //@ApiBearerAuth()
-    @Patch("desactivate/:id")
-async desactivateUser(@Param("id", ParseUUIDPipe) id:string){
- return await this.usersService.desactivate(id);
+    @Patch("desactivate/:email")
+async desactivateUser(@Param("email") email:string){
+ return await this.usersService.desactivate(email);
 }
 
 /*@Get(":id/reservations")
