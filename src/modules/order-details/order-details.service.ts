@@ -19,38 +19,50 @@ constructor(private readonly menuItemService : MenuItemService,
   private readonly orderRepository : OrderRepository,
 ){}
  
-  async create(createOrderDetailDto: CreateOrderDetailDto, order : Order) : Promise<OrderDetail> { 
-    const{quantity,idMenuItem,idCombo} = createOrderDetailDto;
-    
-if(!idCombo){
-  const itemSubtotal = await this.buyMenuItem(idMenuItem,quantity,order.id);
-  const {menu,subtotal}= itemSubtotal;
- 
-const orderDetail = this.orderDetailRepository.create({
-    order,
-    menuItem: menu,
-    quantity,
-    subtotal,
-  });
- 
-  return this.orderDetailRepository.save(orderDetail);
- 
-}    
-    const combo = await this.comboService.findOne(idCombo)
+async create(createOrderDetailDto: CreateOrderDetailDto, order: Order): Promise<OrderDetail> { 
+  const { quantity, idMenuItem, idCombo } = createOrderDetailDto;
+  let orderDetail: OrderDetail | null = null;
 
-await Promise.all(combo.menuItems.map( async item=> { return  await this.stockCombo(item.id,quantity,order.id)} )) //x cada item descuenta en stock
+  if (!idCombo && idMenuItem) {
+    // Comprar item del menú
+    const itemSubtotal = await this.buyMenuItem(idMenuItem, quantity, order.id);
+    const { menu, subtotal } = itemSubtotal;
 
-await Promise.all(combo.menuItems.map( async item=> { return  await this.buyMenuItem(item.id,quantity,order.id)} )) //x cada item descuenta en stock
-      const orderDetail = this.orderDetailRepository.create({
+    orderDetail = this.orderDetailRepository.create({
       order,
-      combo: combo,
+      menuItem: menu,
       quantity,
-      subtotal: (combo.price * quantity)
+      subtotal,
     });
- 
-    return this.orderDetailRepository.save(orderDetail);
- 
+
+  } else if (idCombo) {
+    // Obtener combo y descontar stock
+    const combo = await this.comboService.findOne(idCombo);
+    
+    await Promise.all(
+      combo.menuItems.map(async item => await this.stockCombo(item.id, quantity, order.id))
+    );
+    await Promise.all(
+      combo.menuItems.map(async item => await this.buyMenuItem(item.id, quantity, order.id))
+    );
+
+    orderDetail = this.orderDetailRepository.create({
+      order,
+      combo,
+      quantity,
+      subtotal: combo.price * quantity
+    });
   }
+
+  // 🚨 Si no se creó un detalle de orden válido, eliminamos la orden
+  if (!orderDetail) {
+    await this.orderRepository.delete(order.id);
+    throw new BadRequestException("No se puede crear una orden sin productos válidos.");
+  }
+
+  return this.orderDetailRepository.save(orderDetail);
+}
+
  
 async buyMenuItem(idMenuItem : string, quantity: number,orderId:string){
   const menu = await this.menuItemService.findOne(idMenuItem)
