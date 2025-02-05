@@ -21,6 +21,9 @@ export class Combo {
     from: (value: string) => parseFloat(value) // Convierte de string a number al recuperar
   }})
   price: number;
+  
+  @Column()
+  image_url: string;
 
 
   @Column({ default: true })
