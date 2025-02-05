@@ -1,69 +1,83 @@
-import { Injectable } from '@nestjs/common';
-import * as paypal from '@paypal/checkout-server-sdk' ;
-import { OrderDetailsService } from '../order-details/order-details.service'; 
-
+import {
+  ApiError,
+  CheckoutPaymentIntent,
+  Client,
+  Environment,
+  LogLevel,
+  OrderRequest,
+  OrdersController,
+} from "@paypal/paypal-server-sdk";
+import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { OrderDetailsService } from "../order-details/order-details.service";
+import { SavePaypalDto } from "./dtos/savePaypal.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { PaypalPayment } from "./entities/paypalPayment.entities";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class PayPalService {
-  private clientId = process.env.PAYPAL_CLIENT_ID;
-  private clientSecret = process.env.PAYPAL_CLIENT_SECRET;
-
-  private environment = new paypal.core.SandboxEnvironment(
-    this.clientId,
-    this.clientSecret,
-  );
-  private client = new paypal.core.PayPalHttpClient(this.environment);
+  private client: Client;
+  private ordersController: OrdersController;
 
   constructor(
-    private readonly orderDetailsService: OrderDetailsService,
-  ) {}
-
-  
-  private async getTotalPrice(orderId: string) {
-    const orderDetails = await this.orderDetailsService.findAll(); 
-
-    
-    const orderItems = orderDetails.filter(item => item.order.id === orderId);
-
-    const totalPrice = orderItems.reduce((total, item) => total + item.subtotal, 0);
-
-    return totalPrice;
-  }
-
-  async createOrder(orderId: string) {
-    const totalPrice = await this.getTotalPrice(orderId);
-
-    const request = new paypal.orders.OrdersCreateRequest();
-    request.headers['Content-Type'] = 'application/json';
-    request.requestBody({
-      intent: 'CAPTURE',
-      purchase_units: [
-        {
-          amount: {
-            currency_code: 'USD',
-            value: totalPrice.toString(), 
-          },
-        },
-      ],
+    @InjectRepository(PaypalPayment)
+    private paypalRepo: Repository<PaypalPayment>,
+    private configService: ConfigService,
+    private orderDetailsService:OrderDetailsService
+    ) {
+    this.client = new Client({
+      clientCredentialsAuthCredentials: {
+        oAuthClientId: this.configService.get<string>("PAYPAL_CLIENT_ID"),
+        oAuthClientSecret: this.configService.get<string>("PAYPAL_CLIENT_SECRET"),
+      },
+      environment: Environment.Sandbox,
+      logging: {
+        logLevel: LogLevel.Info,
+        logRequest: { logBody: true },
+        logResponse: { logHeaders: true },
+      },
     });
 
+    this.ordersController = new OrdersController(this.client);
+  }
+
+  private async getTotalPrice(orderId: string): Promise<number> {
     try {
-      const response = await this.client.execute(request);
-      console.log('createOrder', response.result);
-      return response.result;
+      console.log(`Buscando detalles de la orden con ID: ${orderId}`);
+      
+      const orderDetails = await this.orderDetailsService.findDetailsByOrderId(orderId);
+      
+      if (!orderDetails || orderDetails.length === 0) {
+        console.error(`No se encontraron detalles para la orden con ID: ${orderId}`);
+        throw new Error(`No se encontraron detalles para la orden con ID: ${orderId}`);
+      }
+      
+      console.log("Detalles de la orden encontrados:", orderDetails);
+      
+      const totalPrice = orderDetails.reduce((total, item) => {
+        const validSubtotal = typeof item.subtotal === 'number' ? item.subtotal : parseFloat(String(item.subtotal));
+        return total + validSubtotal;
+      }, 0);
+      
+      const totalPriceRounded = parseFloat(totalPrice.toFixed(2));
+      
+      console.log(`Total calculado para la orden ${orderId}: $${totalPriceRounded}`);
+      
+      return totalPriceRounded;
     } catch (error) {
-      throw new Error('Error al crear la orden, hablen con nahuel');
+      console.error(`Error en getTotalPrice para orderId ${orderId}:`, error.message);
+      throw new Error("Hubo un problema al calcular el total de la orden.");
     }
   }
-
-  async captureOrder(orderId: string) {
-    const request = new paypal.orders.OrdersCaptureRequest(orderId);
-    request.headers['Content-Type'] = 'application/json';
-
-    const response = await this.client.execute(request);
-
-    console.log('captureOrder', response.result);
-
-    return response.result;
+  async savePayment(paypalData: SavePaypalDto) {
+    const payment = this.paypalRepo.create(paypalData);
+    return await this.paypalRepo.save(payment);
   }
+
+  async getPaymentByOrderId(orderId: string): Promise<PaypalPayment | null> {
+    return await this.paypalRepo.findOne({ where: { orderId } });
+  }
+
+
 }

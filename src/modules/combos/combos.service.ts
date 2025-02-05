@@ -28,19 +28,28 @@ export class CombosService {
   }
 
   async findAll(): Promise<Combo[]> {
-    return this.combosRepository.find({ relations: ['menuItems', 'menuItems.category'] });
+    // return this.combosRepository.find({ relations: ['menuItems', 'menuItems.category'] });
+    const combos = await this.combosRepository.find({ relations: ['menuItems', 'menuItems.category'] });
+
+    return combos.map(combo => ({
+      ...combo,
+      stockCombos: Math.min(...combo.menuItems.map(item => item.stock)),
+    }))
   }
   
 
   async findOne(id: string): Promise<Combo> {
     const combo = await this.combosRepository.findOne({
       where: { id },
-      relations: ['menu_items'],
+      relations: {menuItems:true},
     });
     if (!combo) {
       throw new NotFoundException(`Combo with ID ${id} not found`);
     }
-    return combo;
+    return {
+      ...combo,
+      stockCombos: Math.min(...combo.menuItems.map(item => item.stock)),
+    }
   }
 
 
@@ -49,9 +58,18 @@ export class CombosService {
   const items = updateComboDto.items
     ? await this.getMenuItemsByIds(updateComboDto.items)
     : combo.menuItems;
-  const price = updateComboDto.price || combo.price;
-  Object.assign(combo, updateComboDto, { menuItems: items, price });
-  return this.combosRepository.save(combo);
+
+  const updateCombo = {
+    ...combo,
+    ...updateComboDto,
+    menuItems: items,
+    stockCombos: Math.min(...items.map(item => item.stock)),
+  }
+
+  return this.combosRepository.save(updateCombo);
+  // const price = updateComboDto.price || combo.price;
+  // Object.assign(combo, updateComboDto, { menuItems: items, price });
+  // return this.combosRepository.save(combo);
 }
 
 
@@ -74,4 +92,3 @@ export class CombosService {
     return items;
   }
 }
-

@@ -151,31 +151,5 @@ async signin(signinAuthDto: SigninAuthDto) {
     }
     
 
-    async completeUserProfile(id: string, updateProfileDto: UpdateProfileDto) {
-      const user = await this.usersService.findOneById(id);
     
-      if (!user) {
-        throw new BadRequestException('Usuario no encontrado');
-      }
-    
-      if (user.isComplete) {
-        throw new BadRequestException('El perfil ya está completo');
-      }
-
-      const { address, password } = updateProfileDto;
-      if (!address?.trim() || !password?.trim()) {
-        throw new BadRequestException(
-          'Es necesario completar los campos address y password'
-        );
-      }
-    
-      const updateData = {
-        address: address.trim(),
-        password: bcrypt.hashSync(password, 10), 
-        isComplete: true,
-      };
-    
-      return await this.usersService.updateById(id, updateData);
-    }
-    
-  }
+}

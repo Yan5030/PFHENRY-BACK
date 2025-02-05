@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -91,15 +91,25 @@ return userNoPassword;
      return users;
    };
 
-  async update(id: string, updateUserDto: UpdateUserDto) : Promise<User> {
-    const userDb = await this.usersRepository.findOne({where:{id}});
-  if(!userDb){
-    throw new BadRequestException("No se encontraron usuarios con la id ingresada");
+   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+    const userDb = await this.usersRepository.findOne({ where: { id } });
+  
+    if (!userDb) {
+      throw new BadRequestException("No se encontraron usuarios con la ID ingresada");
+    }
+  
+    // Solo permitimos modificar name y address
+    if (updateUserDto.name !== undefined) {
+      userDb.name = updateUserDto.name;
+    }
+    if (updateUserDto.address !== undefined) {
+      userDb.address = updateUserDto.address;
+    }
+  
+    // Guardamos los cambios en la base de datos
+    return await this.usersRepository.save(userDb);
   }
-const updateUser = Object.assign(userDb, updateUserDto); // esto me modifica el usuario que traje de bd, y pone las propiedades modificadas
-//hago esto para poder guardar los cambios de este usuario y poder retornar el usuario, sin hacer otra peticion 
-return await this.usersRepository.save(updateUser);;
-  }
+  
 
   async updateByEmail(email: string, updateUserDto: UpdateUserDto) : Promise<User> {
     const userDb = await this.usersRepository.findOne({where:{email}});
@@ -190,41 +200,45 @@ throw new BadRequestException("Debe ingresar el email de un usuario activo");
   }
   
 
-  async findOrdersByUserService( email:string){
-    const user = await this.usersRepository.findOne({where:{email},relations:{orders:{orderDetails:true}}});   
-if(!user){
-throw new BadRequestException("Debe ingresar el email de un usuario activo");
-}
-
-  const orders = user?.orders;
-
-  if(!orders){
-    throw new BadRequestException("El usuario no tiene ordenes");
-  } else if(orders.length === 0){
-    throw new BadRequestException("El usuario no tiene reservas");
+  async findOrdersByUserService(email: string) {
+    const user = await this.usersRepository.findOne({
+      where: { email },
+      relations: { orders: { orderDetails: { combo: true, menuItem: true } } },
+    });
+  
+    if (!user) {
+      throw new NotFoundException("El usuario no fue encontrado");
+    }
+  
+    const orders = user?.orders;
+  
+    if (!orders || orders.length === 0) {
+      return [];
+    }
+  
+    const responseOrders = orders.map(order => ({
+      id: order.id,
+      status: order.status,
+      totalPrice: order.totalPrice,
+      createdAt: order.createdAt,
+      payment_status: order.payment_status,
+      paymentMethod: order.paymentMethod,
+      comment: order.comment,
+      isActive: order.isActive,
+      orderDetails: order.orderDetails.map(detail => 
+        Object.fromEntries(
+          Object.entries({
+            id: detail.id,
+            quantity: detail.quantity,
+            subtotal: detail.subtotal,
+            combo: detail.combo || undefined,
+            menuItem: detail.menuItem || undefined,
+          }).filter(([_, value]) => value !== null && value !== undefined) // Elimina valores nulos o undefined
+        )
+      )
+    }));
+  
+    return responseOrders;
   }
-
-
-  const responseOrders = orders.map(order => ({
-    id: order.id,
-    status: order.status,
-    totalPrice: order.totalPrice,
-    createdAt: order.createdAt,
-    payment_status: order.payment_status,
-    paymentMethod: order.paymentMethod,
-    comment: order.comment,
-    isActive: order.isActive,
-    orderDetails: order.orderDetails.map(detail => ({
-      id: detail.id,
-      quantity: detail.quantity,
-      subtotal: detail.subtotal,
-    }))
-  }));
-  
-
-  
-return responseOrders;
-}
-  
 
 }

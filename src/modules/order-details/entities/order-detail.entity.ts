@@ -6,6 +6,7 @@ import {
 } from 'typeorm';
 import { Order } from '../../orders/entities/order.entity'; 
 import { MenuItem } from 'src/modules/menuItems/entities/menuItems.entities';
+import { Combo } from 'src/modules/combos/entities/combos.entities';
  
   
   @Entity('orders_details')
@@ -18,6 +19,9 @@ import { MenuItem } from 'src/modules/menuItems/entities/menuItems.entities';
   
      @ManyToOne(() => MenuItem, (menuItem) => menuItem.orderDetails, { onDelete: 'CASCADE' })
      menuItem: MenuItem; 
+
+     @ManyToOne(() => Combo, (combo) => combo.orderDetails, { onDelete: 'CASCADE' })
+     combo: Combo; 
   
     @Column({ type: 'int' })
     quantity: number; // Cantidad del ítem

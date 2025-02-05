@@ -55,10 +55,8 @@ export class UsersController {
   //@ApiBearerAuth()
   @Put(':id')
   async update(@Param('id', ParseUUIDPipe) id: string, @Body() updateUserDto: UpdateUserDto) {
-    
-      const updateUser = await this.usersService.update(id, updateUserDto);
-      return {message:"Usuario modificado", data:updateUser};
-   
+    const updateUser = await this.usersService.update(id, updateUserDto);
+    return { message: "Usuario modificado", data: updateUser };
   }
 
 

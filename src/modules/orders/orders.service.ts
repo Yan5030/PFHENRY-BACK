@@ -8,13 +8,15 @@ import dayjs from 'dayjs';
 import { OrderDetailsService } from '../order-details/order-details.service';
 import { OrderRepository } from './orders.repository';
 import { OrderDetail } from '../order-details/entities/order-detail.entity';
+import { NodemailerService } from '../nodemailer/nodemailer.service';
 
 @Injectable()
 export class OrdersService {
   constructor(
   private readonly orderRepository : OrderRepository,
   private readonly userService : UsersService,
-  private readonly orderDetailsService: OrderDetailsService
+  private readonly orderDetailsService: OrderDetailsService,
+  private readonly nodeMailerService: NodemailerService,
 ){}
 
 async create(createOrderDto: CreateOrderDto): Promise<Order> {
@@ -45,11 +47,18 @@ const detalleOrden = await Promise.all(MenuItems.map( async menu=>{
   
   return result;
 }))
+console.log(detalleOrden);
+
+if(detalleOrden.length === 0){
+this.remove(order.id)
+throw new BadRequestException("No hay stock suficiente");
+}
 
 const total = detalleOrden.reduce((sum, det) => sum + det.subtotal, 0);
 order.totalPrice = total;
 order.orderDetails = detalleOrden;
 
+await this.nodeMailerService.sendEmailOrden(user.email);
 return this.orderRepository.save(order);
 
   }
@@ -58,15 +67,20 @@ return this.orderRepository.save(order);
     return this.orderRepository.findOrders();
   }
 
+  async findAllActives(): Promise<Order[]> {
+    return this.orderRepository.findAllActives();
+    
+  }
+
   async findOne(id: string, user: any): Promise<Order> {
     const order = await this.orderRepository.findOrderById(id);
 
     if (!order) {
-      throw new NotFoundException("La orden con ID ${id} no existe.");
+      throw new NotFoundException(`La orden con ID ${id} no existe.`);
     }
-    if (user.role !== 'worker'||user.role !== 'admin' || order.user !== user.id) {
-      throw new NotFoundException('No tienes permisos para ver esta orden.');
-    }
+    //if (user.role !== 'worker'||user.role !== 'admin' || order.user !== user.id) {
+     // throw new NotFoundException('No tienes permisos para ver esta orden.');
+    //}
 
     return order;
   }
@@ -83,8 +97,20 @@ return this.orderRepository.save(order);
     return this.orderRepository.save(order);
   }
 
-  async remove(id: string): Promise<void> {
-    const order = await this.orderRepository.findOrderById(id);
-    await this.orderRepository.remove(order);
+  async updatePaymentStatus(orderId: string, status: PaymentStatus) {
+    const order = await this.orderRepository.findOne({where: {id: orderId}});
+    if (!order) {
+      throw new NotFoundException(`Orden con ID ${orderId} no encontrada`);
+    }
+
+    order.payment_status = status;
+    await this.orderRepository.save(order);
+
+    return { message: `Orden ${orderId} actualizada a ${status}` };
   }
+
+  async remove(id: string): Promise<void> {
+    await this.orderRepository.delete(id);
+  }
+  
 }

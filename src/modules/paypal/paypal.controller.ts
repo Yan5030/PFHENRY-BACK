@@ -1,18 +1,14 @@
-import { Controller, Post, Body, Param } from "@nestjs/common";
+import { Controller, Post, Param, BadRequestException, Body } from "@nestjs/common";
 import { PayPalService } from "./paypal.service";
+import { SavePaypalDto } from "./dtos/savePaypal.dto";
 
-
-@Controller('paypal')
+@Controller("paypal")
 export class PayPalController {
   constructor(private readonly payPalService: PayPalService) {}
 
-  @Post('create-order/:orderId')
-  async createOrder(@Param("orderId") orderId: string) {
-    return this.payPalService.createOrder(orderId);
+  @Post("savePayment")
+  async savePayment(@Body() paypalData: SavePaypalDto) {
+    return this.payPalService.savePayment(paypalData);
   }
 
-  @Post('orders/:orderId/capture')
-  async captureOrder(@Param('orderId') orderId: string) {
-    return this.payPalService.captureOrder(orderId);
-  }
 }
