@@ -14,7 +14,7 @@ export class CreateComboDto {
   @IsNotEmpty()
   name: string;
 
-  image: string;
+  image_url: string;
 
   @ApiProperty({
     description:"Descripcion del combo",
