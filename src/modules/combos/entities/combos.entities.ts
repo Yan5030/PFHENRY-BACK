@@ -22,6 +22,8 @@ export class Combo {
   }})
   price: number;
 
+  image: string;
+
 
   @Column({ default: true })
   isActive: boolean;

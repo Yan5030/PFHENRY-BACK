@@ -80,10 +80,10 @@ export class MenuItemService implements OnModuleInit {
   
   private async preloadCombos(): Promise<void> {
     const hogwartsHouseCombos = [
-      { name: 'Gryffindor Combo', price: 27.36, description: 'Un combo lleno de valor y coraje.' },
-      { name: 'Hufflepuff Combo', price: 24.99, description: 'Un combo lleno de lealtad y trabajo duro.' },
-      { name: 'Ravenclaw Combo', price: 16.50, description: 'Un combo lleno de sabiduría e ingenio.' },
-      { name: 'Slytherin Combo', price: 10.07, description: 'Un combo lleno de ambición y astucia.' },
+      { name: 'Gryffindor Combo', price: 27.36, description: 'Un combo lleno de valor y coraje.',image: "https://i.postimg.cc/Ls5qLFJ9/gryffindor.png" },
+      { name: 'Hufflepuff Combo', price: 24.99, description: 'Un combo lleno de lealtad y trabajo duro.',image: "https://i.postimg.cc/Qd6jrB0m/hufflepuff.png" },
+      { name: 'Ravenclaw Combo', price: 16.50, description: 'Un combo lleno de sabiduría e ingenio.',image: "https://i.postimg.cc/RC1GFwKM/ravenclaw.png" },
+      { name: 'Slytherin Combo', price: 10.07, description: 'Un combo lleno de ambición y astucia.', image: "https://i.postimg.cc/3wpxh86c/slyterin.png" },
     ];
   
     for (const comboData of hogwartsHouseCombos) {
