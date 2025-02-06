@@ -18,9 +18,9 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   synchronize: true,
  /*  dropSchema: true, */
   logging: true,
-  //  ssl: { 
-  //    rejectUnauthorized: false, // Render requiere esto para conexiones seguras
-  //  },}
+    ssl: { 
+      rejectUnauthorized: false, // Render requiere esto para conexiones seguras
+    }
 // ssl: false,
 // };
 }
