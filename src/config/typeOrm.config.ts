@@ -24,3 +24,4 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
 // ssl: false,
 // };
 }
+
