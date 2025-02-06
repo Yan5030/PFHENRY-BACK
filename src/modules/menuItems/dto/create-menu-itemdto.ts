@@ -51,11 +51,11 @@ export class CreateMenuItemDto {
   @Length(0, 255)
   image_url?: string; 
 
-  @ApiProperty({
-    description: 'ID opcional de la categoría del ítem del menú',
-    example: 'f5c9b2bb-3b0d-48a7-85fd-b1156fd888a4',
-    required: false,
+  @ApiProperty({ 
+    description: 'Nombre de la categoría asociada', 
+    example: 'Comida Rápida' 
   })
   @IsOptional()
+  @IsString()
   category: string; 
 }

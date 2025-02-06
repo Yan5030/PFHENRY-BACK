@@ -8,6 +8,7 @@ import { UpdateMenuItemDto } from './dto/update-product-dto';
 import { Category } from '../categories/entities/category.entity';
 import { CreateCategoryDto } from '../categories/dto/create-category.dto';
 import { Combo } from '../combos/entities/combos.entities';
+import { CategoryResponseDTO } from '../categories/dto/categoryResponse.dto';
 
 @Injectable()
 export class MenuItemService implements OnModuleInit {
@@ -59,7 +60,7 @@ export class MenuItemService implements OnModuleInit {
       }
   
       const categoryEntity = category
-        ? await this.categoryRepository.findOne({ where: { name: category } })
+        ? await this.categoryRepository.findOne({ where: { name: category.trim() } })
         : null;
   
       if (!categoryEntity) {
@@ -162,7 +163,7 @@ export class MenuItemService implements OnModuleInit {
     const { category, ...menuItemDto } = createMenuItemDto;
 
     const categoryEntity = category
-      ? await this.categoryRepository.findOne({ where: { name: category } })
+      ? await this.categoryRepository.findOne({ where: { name: category.trim() } })
       : null;
 
     if (!categoryEntity) {
@@ -177,29 +178,53 @@ export class MenuItemService implements OnModuleInit {
     return await this.menuItemRepository.save(menuItem);
   }
 
-  async update(id: string, updateMenuItemDto: UpdateMenuItemDto): Promise<MenuItem> {
-    const { category, ...menuItemDto } = updateMenuItemDto;
-console.log(updateMenuItemDto);
-console.log(id);
+  async updateMenuItem(id: string, updateMenuItemDto: UpdateMenuItemDto) {
+    const { category, ...menuItemData } = updateMenuItemDto;
 
-
-    const categoryEntity = category
-      ? await this.categoryRepository.findOne({ where: { name: category } })
-      : null;
-
-    const menuItem = await this.menuItemRepository.preload({
-      id,
-      ...menuItemDto,
-    //  category: categoryEntity,
+    // Buscar el menuItem existente
+    const menuItem = await this.menuItemRepository.findOne({
+        where: { id },
+        relations: ['category'], // Asegurar que la categoría se carga
     });
 
     if (!menuItem) {
-      throw new NotFoundException(`MenuItem con id ${id} no econtrado`);
+        throw new NotFoundException(`El menú con id ${id} no existe`);
     }
-console.log(menuItem);
 
-    return await this.menuItemRepository.save(menuItem);
-  }
+    let categoryEntity: Category | null = null;
+
+    // Si el usuario proporciona una categoría, verificar si existe o crearla
+    if (category) {
+        categoryEntity = await this.categoryRepository.findOne({ where: { name: category } });
+
+        if (!categoryEntity) {
+            // Si la categoría no existe, la creamos
+            categoryEntity = this.categoryRepository.create({ name: category, icon: 'default-icon' }); // Puedes cambiar 'default-icon'
+            await this.categoryRepository.save(categoryEntity);
+        }
+    }
+
+    // Actualizar el menuItem
+    const updatedMenuItem = await this.menuItemRepository.save({
+        ...menuItem,
+        ...menuItemData,
+        category: categoryEntity || menuItem.category, // Si no se envía categoría, mantener la existente
+    });
+
+    // Retornar el objeto con la estructura correcta
+    return {
+        id: updatedMenuItem.id,
+        name: updatedMenuItem.name,
+        description: updatedMenuItem.description,
+        price: updatedMenuItem.price,
+        image_url: updatedMenuItem.image_url,
+        stock: updatedMenuItem.stock,
+        isActive: updatedMenuItem.isActive,
+        category: updatedMenuItem.category
+            ? new CategoryResponseDTO(updatedMenuItem.category)
+            : null, // Si no tiene categoría
+    };
+}
 
   async deactivate(id: string): Promise<MenuItem> {
     const menuItem = await this.findOne(id);
