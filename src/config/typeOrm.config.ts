@@ -21,5 +21,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
    ssl: { 
      rejectUnauthorized: false, // Render requiere esto para conexiones seguras
    },}
- // ssl: false,
+
+//ssl: false,
+
 //};
