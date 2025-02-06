@@ -53,25 +53,46 @@ export class CombosService {
   }
 
 
- async update(id: string, updateComboDto: UpdateComboDto): Promise<Combo> {
+//  async update(id: string, updateComboDto: UpdateComboDto): Promise<Combo> {
+//   const combo = await this.findOne(id);
+//   const items = updateComboDto.items
+//     ? await this.getMenuItemsByIds(updateComboDto.items)
+//     : combo.menuItems;
+
+//   const updateCombo = {
+//     ...combo,
+//     ...updateComboDto,
+//     menuItems: items,
+//     stockCombos: Math.min(...items.map(item => item.stock)),
+//   }
+
+//   return this.combosRepository.save(updateCombo);
+//   // const price = updateComboDto.price || combo.price;
+//   // Object.assign(combo, updateComboDto, { menuItems: items, price });
+//   // return this.combosRepository.save(combo);
+// }
+async update(id: string, updateComboDto: Partial<UpdateComboDto>): Promise<Combo> {
   const combo = await this.findOne(id);
+
+  if (!combo) {
+    throw new NotFoundException(`Combo con ID ${id} no encontrado`);
+  }
+
+  // Obtener los nuevos items si se envían en la actualización
   const items = updateComboDto.items
     ? await this.getMenuItemsByIds(updateComboDto.items)
     : combo.menuItems;
 
+  // Crear un objeto con solo los campos permitidos
   const updateCombo = {
     ...combo,
     ...updateComboDto,
     menuItems: items,
-    stockCombos: Math.min(...items.map(item => item.stock)),
-  }
+    stockCombos: items.length > 0 ? Math.min(...items.map(item => item.stock)) : combo.stockCombos,
+  };
 
   return this.combosRepository.save(updateCombo);
-  // const price = updateComboDto.price || combo.price;
-  // Object.assign(combo, updateComboDto, { menuItems: items, price });
-  // return this.combosRepository.save(combo);
 }
-
 
   async deactivate(id: string): Promise<void> {
     const combo = await this.findOne(id);
