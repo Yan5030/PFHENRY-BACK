@@ -25,10 +25,26 @@ export class CombosController {
     return this.combosService.findOne(id);
   }
 
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateComboDto: UpdateComboDto) {
+  //   return this.combosService.update(id, updateComboDto);
+  // }
+
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateComboDto: UpdateComboDto) {
-    return this.combosService.update(id, updateComboDto);
-  }
+async update(
+  @Param('id') id: string,
+  @Body() updateComboDto: Partial<UpdateComboDto> // Permite solo algunos campos
+) {
+  const allowedFields = ['menuItems', 'name', 'description'];
+  const filteredDto = Object.keys(updateComboDto)
+    .filter(key => allowedFields.includes(key))
+    .reduce((obj, key) => {
+      obj[key] = updateComboDto[key];
+      return obj;
+    }, {} as Partial<UpdateComboDto>);
+
+  return this.combosService.update(id, filteredDto);
+}
 
   @Patch(':id/deactivate')
   deactivate(@Param('id') id: string) {

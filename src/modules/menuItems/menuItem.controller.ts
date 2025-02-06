@@ -23,7 +23,7 @@ export class MenuItemController {
     @Param('id') id: string,
     @Body() updateMenuItemDto: UpdateMenuItemDto,
   ) {
-    return this.menuItemService.update(id, updateMenuItemDto);
+    return this.menuItemService.updateMenuItem(id, updateMenuItemDto);
   }
 
   @Patch(':id/deactivate')
