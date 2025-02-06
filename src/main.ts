@@ -35,7 +35,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   app.enableCors({
-    origin: 'https://pf-henry-front-k4frm1731-nahudavila12s-projects.vercel.app', 
+    origin: ['https://pf-henry-front-k4frm1731-nahudavila12s-projects.vercel.app','http://localhost:3001', 'https://pf-henry-front-eight.vercel.app/',], 
     methods: ['GET', 'POST', 'PUT', 'DELETE', "PATCH"],
     allowedHeaders: 'Content-type, Authorization',
     credentials: true, 
