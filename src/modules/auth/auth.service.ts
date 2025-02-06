@@ -151,5 +151,42 @@ async signin(signinAuthDto: SigninAuthDto) {
     }
     
 
+    async signupWorker(createUserDto: CreateUserDto): Promise<User> {
+      const useremail = await this.usersService.getOneByEmail(createUserDto.email);
+      if (useremail) {
+        throw new BadRequestException('El correo ya se encuentra registrado');
+      }
+      if (createUserDto.password !== createUserDto.ConfirmPassword) {
+        throw new BadRequestException("password y confirm password deben ser iguales");
+      }
+     
+  
+     const hashedPassword = bcrypt.hashSync(createUserDto.password, 10);
+  
+     if(!hashedPassword){
+      throw new BadRequestException('Error al encriptar la contraseña');
+    }
+     
+    const isComplete = 
+    createUserDto.email.trim() !== '' &&
+      createUserDto.password.trim() !== '' &&
+      createUserDto.name.trim() !== '' &&
+      (createUserDto.address?.trim() || '') !== '' &&  // Si el campo address es obligatorio, verifica que no esté vacío
+      createUserDto.ConfirmPassword.trim() !== '';
+  
+  const userSave = await this.usersService.createWorker({
+    ...createUserDto,
+    password: hashedPassword,
+    address: createUserDto.address?.trim() || '',
+    isComplete: isComplete
+  });
+  
+  await this.nodemailerService.sendEmail(createUserDto.email);
+    
+    return userSave;
+  }
+  
+
+
     
 }
