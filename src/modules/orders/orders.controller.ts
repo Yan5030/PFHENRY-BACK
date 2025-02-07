@@ -11,6 +11,7 @@ import {
   ParseUUIDPipe,
   HttpException,
   Patch,
+  UseGuards,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -21,15 +22,18 @@ import { UpdateOrderStatusDto } from './dto/update-orderStatus.dto';
 import { PaymentStatus } from 'src/enum/payment-status.enum';
 
 import { Order } from './entities/order.entity';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
-  //@RolesDecorator(Role.User,Role.Admin,Role.Worker)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+  @RolesDecorator(Role.User,Role.Admin,Role.Worker)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createOrderDto: CreateOrderDto) {
@@ -56,9 +60,9 @@ export class OrdersController {
     };
   }
 
-  //@RolesDecorator(Role.Admin,Role.Worker)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+  @RolesDecorator(Role.Admin,Role.Worker)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
   @Get()
   async findAll() {
     const orders = await this.ordersService.findAll();
@@ -67,9 +71,10 @@ export class OrdersController {
       orders,
     };
   }
-//@RolesDecorator(Role.Admin,Role.Worker)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+
+@RolesDecorator(Role.Admin,Role.Worker)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
   @Get('findAllActives')
   async findAllActives() {
     const orders = await this.ordersService.findAllActives();
@@ -89,9 +94,9 @@ export class OrdersController {
   }
 
 
-  //@RolesDecorator(Role.Admin,Role.Worker,Role.User)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+  @RolesDecorator(Role.Admin,Role.Worker,Role.User)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string, @Request() req:any) {
     const order = await this.ordersService.findOne(id, req.user);
@@ -102,7 +107,6 @@ export class OrdersController {
   }
 
   @Patch(':id/status')
-  //@RolesDecorator(Role.Admin, Role.Worker) // Solo admin y worker pueden usar este endpoint
   async updateOrderStatus(
     @Param('id') id: string,
     @Body() updateStatusDto: UpdateOrderStatusDto, // Usamos el DTO aquí
@@ -122,7 +126,6 @@ export class OrdersController {
   }
   
   @Delete(':id')
-  //@RolesDecorator(Role.Admin)
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseUUIDPipe) id: string) {
     await this.ordersService.remove(id);
