@@ -98,7 +98,9 @@ export class AuthController {
     return this.authService.signinWithAuth0(signinWithAuth0Dto);
   }
 
-
+  @RolesDecorator(Role.Admin)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
   @Post('signup/worker')
   async signupWorker(@Body() createUserDto: CreateUserDto) { 
       const user = await this.authService.signupWorker(createUserDto);

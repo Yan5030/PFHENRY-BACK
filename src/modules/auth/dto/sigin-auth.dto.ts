@@ -1,7 +1,7 @@
 // import { PartialType } from '@nestjs/mapped-types';
 // import { CreateAuthDto } from './create-auth.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsOptional, IsString, Length, MaxLength, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, IsStrongPassword, Length, MaxLength, MinLength } from 'class-validator';
 import { CreateUserDto } from 'src/modules/users/dto/create-user.dto';
 
 
@@ -26,7 +26,7 @@ export class SigninAuthDto{
         })
      @IsString()
         @IsNotEmpty()
-        //@IsStrongPassword()
+        @IsStrongPassword()
         @MinLength(8)
     password: string;
 

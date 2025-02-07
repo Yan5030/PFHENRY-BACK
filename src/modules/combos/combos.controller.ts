@@ -1,19 +1,23 @@
 
 
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { CombosService } from './combos.service';
 import { CreateComboDto } from './dto/create-combos.dto';
 import { UpdateComboDto } from './dto/update-combos.dto';
-import { ApiBody } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import { RolesDecorator } from 'src/decorators/roles.decorator';
+import { Role } from 'src/enum/roles.enum';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 
 @Controller('combos')
 export class CombosController {
   constructor(private readonly combosService: CombosService) {}
 
- //@RolesDecorator(Role.Admin)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+ @RolesDecorator(Role.Admin)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
   @Post()
   create(@Body() createComboDto: CreateComboDto) {
     return this.combosService.create(createComboDto);
@@ -29,17 +33,9 @@ export class CombosController {
     return this.combosService.findOne(id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateComboDto: UpdateComboDto) {
-  //   return this.combosService.update(id, updateComboDto);
-  // }
-
-  //import { ApiBody } from '@nestjs/swagger';
-
-
-  //@RolesDecorator(Role.Admin,Role.Worker)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+  @RolesDecorator(Role.Admin,Role.Worker)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
 @Patch(':id')
 @ApiBody({
   schema: {
@@ -75,9 +71,9 @@ async update(
 }
 
 
-//@RolesDecorator(Role.Admin,Role.Worker)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+@RolesDecorator(Role.Admin,Role.Worker)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
   @Patch(':id/deactivate')
   deactivate(@Param('id') id: string) {
     return this.combosService.deactivate(id);
