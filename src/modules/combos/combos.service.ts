@@ -28,7 +28,7 @@ export class CombosService {
   }
 
   async findAll(): Promise<Combo[]> {
-    // return this.combosRepository.find({ relations: ['menuItems', 'menuItems.category'] });
+  
     const combos = await this.combosRepository.find({ relations: ['menuItems', 'menuItems.category'] });
 
     return combos.map(combo => ({
@@ -53,37 +53,19 @@ export class CombosService {
   }
 
 
-//  async update(id: string, updateComboDto: UpdateComboDto): Promise<Combo> {
-//   const combo = await this.findOne(id);
-//   const items = updateComboDto.items
-//     ? await this.getMenuItemsByIds(updateComboDto.items)
-//     : combo.menuItems;
-
-//   const updateCombo = {
-//     ...combo,
-//     ...updateComboDto,
-//     menuItems: items,
-//     stockCombos: Math.min(...items.map(item => item.stock)),
-//   }
-
-//   return this.combosRepository.save(updateCombo);
-//   // const price = updateComboDto.price || combo.price;
-//   // Object.assign(combo, updateComboDto, { menuItems: items, price });
-//   // return this.combosRepository.save(combo);
-// }
 async update(id: string, updateComboDto: Partial<UpdateComboDto>): Promise<Combo> {
   const combo = await this.findOne(id);
   if (!combo) {
-    throw new NotFoundException(`Combo con ID ${id} no encontrado`);
+    throw new NotFoundException(`Combo whit ID ${id} not found`);
   }
 
-  // Obtener los nuevos items solo si se envían en la actualización
+  
   if (updateComboDto.items) {
     const itemIds = updateComboDto.items;
     combo.menuItems = await this.getMenuItemsByIds(itemIds);
   }
 
-  // Actualizar solo los campos permitidos
+  
   combo.name = updateComboDto.name ?? combo.name;
   combo.description = updateComboDto.description ?? combo.description;
 

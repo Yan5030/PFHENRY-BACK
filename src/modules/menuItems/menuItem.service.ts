@@ -35,7 +35,7 @@ export class MenuItemService implements OnModuleInit {
       
       const existingCategory = await this.categoryRepository.findOne({ where: { name: categoryData.name } });
       if (existingCategory) {
-        console.log(`La categoría "${categoryData.name}" ya existe. No se creará.`);
+        console.log(`The category "${categoryData.name}" already exists. It will not be created.`);
         continue;
       }
   
@@ -43,19 +43,19 @@ export class MenuItemService implements OnModuleInit {
       await this.categoryRepository.save(category);
     }
   
-    console.log('Categories se precargaron correctamente.');
+    console.log('Categories were preloaded correctly.');
   }
   
   private async seedMenuItems(): Promise<void> {
     const menuItemsData: CreateMenuItemDto[] = JSON.parse(fs.readFileSync('menuItem.json', 'utf8'));
-  
+   
     for (const menuItemData of menuItemsData) {
       const { category, ...menuItemDto } = menuItemData;
   
      
       const existingMenuItem = await this.menuItemRepository.findOne({ where: { name: menuItemDto.name } });
       if (existingMenuItem) {
-        console.log(`El menú item "${menuItemDto.name}" ya existe. No se creará.`);
+        console.log(`The menu item "${menuItemDto.name}" already exists. It will not be created.`);
         continue;
       }
   
@@ -64,7 +64,7 @@ export class MenuItemService implements OnModuleInit {
         : null;
   
       if (!categoryEntity) {
-        console.log(`La categoría "${category}" no existe. El item no se creará.`);
+        console.log(`Category "${category}" does not exist. The item will not be created.`);
         continue;
       }
   
@@ -76,7 +76,7 @@ export class MenuItemService implements OnModuleInit {
       await this.menuItemRepository.save(menuItem);
     }
   
-    console.log('Menu items precargados correctamente.');
+    console.log('Menu items preloaded correctly.');
   }
   
   private async preloadCombos(): Promise<void> {
@@ -91,16 +91,16 @@ export class MenuItemService implements OnModuleInit {
     
       const existingCombo = await this.combosRepository.findOne({ where: { name: comboData.name } });
       if (existingCombo) {
-        console.log(`El combo "${comboData.name}" ya existe. No se creará.`);
+        console.log(`The combo "${comboData.name}" already exists. It will not be created.`);
         continue;
       }
   
       const combo = this.combosRepository.create(comboData);
       await this.combosRepository.save(combo);
-      console.log(`Combo "${comboData.name}" creado exitosamente, pero sin items asociados.`);
+      console.log(`Combo "${comboData.name}" created successfully, but without associated items.`);
     }
   
-    console.log('Combos precargados correctamente.');
+    console.log('Properly preloaded combos.');
   }
   
   private async associateMenuItemsToCombos(): Promise<void> {
@@ -138,9 +138,9 @@ export class MenuItemService implements OnModuleInit {
       if (items.length > 0) {
         combo.menuItems = items;
         await this.combosRepository.save(combo);
-        console.log(`Items asociados al combo "${combo.name}" correctamente.`);
+        console.log(`Items associated with the combo "${combo.name}" correctly.`);
       } else {
-        console.log(`No se encontraron items para asociar al combo "${combo.name}".`);
+        console.log(`No items were found to associate with the combo "${combo.name}".`);
       }
     }
   }
@@ -151,7 +151,7 @@ export class MenuItemService implements OnModuleInit {
       itemIds.map(async (itemId: string) => {
         const item = await this.menuItemRepository.findOne({ where: { id: itemId } });
         if (!item) {
-          throw new NotFoundException(`MenuItem con id ${itemId} no encontrado`);
+          throw new NotFoundException(`MenuItem with id ${itemId} not found`);
         }
         return item;
       }),
@@ -181,37 +181,37 @@ export class MenuItemService implements OnModuleInit {
   async updateMenuItem(id: string, updateMenuItemDto: UpdateMenuItemDto) {
     const { category, ...menuItemData } = updateMenuItemDto;
 
-    // Buscar el menuItem existente
+  
     const menuItem = await this.menuItemRepository.findOne({
         where: { id },
-        relations: ['category'], // Asegurar que la categoría se carga
+        relations: ['category'], 
     });
 
     if (!menuItem) {
-        throw new NotFoundException(`El menú con id ${id} no existe`);
+        throw new NotFoundException(`Menu with id ${id} does not exist`);
     }
 
     let categoryEntity: Category | null = null;
 
-    // Si el usuario proporciona una categoría, verificar si existe o crearla
+  
     if (category) {
         categoryEntity = await this.categoryRepository.findOne({ where: { name: category } });
 
         if (!categoryEntity) {
-            // Si la categoría no existe, la creamos
-            categoryEntity = this.categoryRepository.create({ name: category, icon: 'default-icon' }); // Puedes cambiar 'default-icon'
+           
+            categoryEntity = this.categoryRepository.create({ name: category, icon: 'default-icon' }); 
             await this.categoryRepository.save(categoryEntity);
         }
     }
 
-    // Actualizar el menuItem
+    
     const updatedMenuItem = await this.menuItemRepository.save({
         ...menuItem,
         ...menuItemData,
-        category: categoryEntity || menuItem.category, // Si no se envía categoría, mantener la existente
+        category: categoryEntity || menuItem.category, 
     });
 
-    // Retornar el objeto con la estructura correcta
+    
     return {
         id: updatedMenuItem.id,
         name: updatedMenuItem.name,
@@ -222,7 +222,7 @@ export class MenuItemService implements OnModuleInit {
         isActive: updatedMenuItem.isActive,
         category: updatedMenuItem.category
             ? new CategoryResponseDTO(updatedMenuItem.category)
-            : null, // Si no tiene categoría
+            : null, 
     };
 }
 
@@ -239,14 +239,14 @@ export class MenuItemService implements OnModuleInit {
       });
 
       if (!menuItem) {
-        throw new NotFoundException(`MenuItem con id ${update.menuItemId} no encontrado`);
+        throw new NotFoundException(`MenuItem with id ${update.menuItemId} not found`);
       }
 
       menuItem.stock = update.stock;
       await this.menuItemRepository.save(menuItem);
     }
 
-    return { success: true, message: 'Stock actualizado correctamente' };
+    return { success: true, message: 'Stock updated successfully' };
   }
 
   async findAll(): Promise<MenuItem[]> {
@@ -263,7 +263,7 @@ export class MenuItemService implements OnModuleInit {
     });
 
     if (!menuItem) {
-      throw new NotFoundException(`MenuItem con id ${id} no encontrado`);
+      throw new NotFoundException(`MenuItem with id ${id} not found`);
     }
 
     return menuItem;

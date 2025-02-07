@@ -14,7 +14,7 @@ import {
   UnauthorizedException
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from '../users/dto/create-user.dto'; // Mantener el DTO de Jhon
+import { CreateUserDto } from '../users/dto/create-user.dto';  
 import { SigninAuthDto } from './dto/sigin-auth.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { RolesDecorator } from 'src/decorators/roles.decorator';
@@ -54,7 +54,7 @@ export class AuthController {
     }
  
     if (!token) {
-      return { isValid: false, message: 'Token no proporcionado o inválido' };
+      return { isValid: false, message: 'Token not provided or invalid' };
     }
  
     try {
@@ -70,7 +70,7 @@ export class AuthController {
   @Post('signup')
   async signup(@Body() createUserDto: CreateUserDto) { 
       const user = await this.authService.signup(createUserDto);
-      return { message: 'Registro exitoso', data: user };
+      return { message: 'Successful registration', data: user };
   }
 
   @Post('signupWithAuth0')
@@ -79,16 +79,16 @@ export class AuthController {
        const user = await this.authService.registerWithAuth0(createUserDto);
        console.log(user);
        
-       return { message: 'Usuario registrado con Auth0', data: user };
+       return { message: 'User registered with Auth0', data: user };
      } catch (error) {
-       throw new BadRequestException('Error al registrar el usuario', error);
+       throw new BadRequestException('Error registering user', error);
      }
    }
   
   @Post('signin')
   async signin(@Body() signinDto: SigninAuthDto) {
     const responseLogin = await this.authService.signin(signinDto);
-    //response trae un objeto, donde tiene el token, y los datos del usuario
+  
 
     return {data:responseLogin}
   }
@@ -102,7 +102,7 @@ export class AuthController {
   @Post('signup/worker')
   async signupWorker(@Body() createUserDto: CreateUserDto) { 
       const user = await this.authService.signupWorker(createUserDto);
-      return { message: 'Registro exitoso', data: user };
+      return { message: 'Successful registration', data: user };
   }
 
 

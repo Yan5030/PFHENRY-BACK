@@ -9,31 +9,44 @@ import { Review } from "src/modules/review/entities/review.entity";
 export class User {
 @PrimaryGeneratedColumn("uuid")
 id :string = uuid();
+
 @Column({ unique: true, nullable: true }) 
 auth0Id?: string;
+
 @Column()
 name: string;
+
 @Column()
 email: string;
 @Column({ default: '', nullable: true })
+
 password: string;
+
 @Column({ default: '', nullable: true })
 address: string;
+
 @Column({default:"https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black-thumbnail.png"})
 image_url: string;
+
 @Column({ default: false }) 
 isComplete: boolean; 
+
 @Column({type:"enum",enum:Role ,default:Role.User})
 role: Role;
+
 @Column({type:"date", default: () => 'CURRENT_DATE' })
 create_at : string
+
 @OneToMany(()=>Reservation,(reservation)=>reservation.userId)
 reservations:Reservation[]
-@OneToMany(() => Order, (order) => order.user) // Relación con Order
-orders: Order[]; // Un usuario puede tener varias órdenes
-@OneToMany(() => Review, (review) => review.user, { cascade: true }) // Relación con Review
-reviews: Review[]; // Un usuario puede tener varias reviews
+
+@OneToMany(() => Order, (order) => order.user)  
+orders: Order[]; 
+
+@OneToMany(() => Review, (review) => review.user, { cascade: true }) 
+reviews: Review[]; 
+
 @Column({ type: 'boolean', default: true })
-    isActive: boolean; //borrado logico
+    isActive: boolean; 
 }
 

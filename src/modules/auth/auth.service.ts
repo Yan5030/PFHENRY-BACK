@@ -40,7 +40,7 @@ export class AuthService {
   createUserDto.email.trim() !== '' &&
     createUserDto.password.trim() !== '' &&
     createUserDto.name.trim() !== '' &&
-    (createUserDto.address?.trim() || '') !== '' &&  // Si el campo address es obligatorio, verifica que no esté vacío
+    (createUserDto.address?.trim() || '') !== '' && 
     createUserDto.ConfirmPassword.trim() !== '';
 
 const userSave = await this.usersService.create({
@@ -81,16 +81,16 @@ async signin(signinAuthDto: SigninAuthDto) {
     const { email, password } = signinAuthDto;
     const user = await this.usersService.getOneByEmail(email);
     if (!user) {
-      throw new BadRequestException('Credenciales incorrectas');
+      throw new BadRequestException('Incorrect credentials');
     }
 
     const validPassword = bcrypt.compareSync(password, user.password);
     if (!validPassword) {
-      throw new BadRequestException('Credenciales incorrectas');
+      throw new BadRequestException('Incorrect credentials');
     }
 
     if(user.isActive === false){
-      throw new BadRequestException('Su cuenta fue dada de baja.');
+      throw new BadRequestException('Your account was terminated.');
     }
 
     const payload = {
@@ -106,8 +106,8 @@ async signin(signinAuthDto: SigninAuthDto) {
     return { token:token, user:responseUser,loggin};
     
     } catch (error) {
-      console.error('Error en signin:', error.message);
-      throw new BadRequestException('Error al iniciar sesión');
+      console.error('Error in signin:', error.message);
+      throw new BadRequestException('Login error');
       }
     
     async signinWithAuth0(signinWithAuth0Dto: SigninWithAuth0Dto) {
@@ -115,38 +115,38 @@ async signin(signinAuthDto: SigninAuthDto) {
         const { auth0Id } = signinWithAuth0Dto;
     
         if (!auth0Id) {
-          throw new BadRequestException('El campo auth0Id es requerido');
+          throw new BadRequestException('The auth0Id field is required');
         }
     
-        // Buscar usuario por auth0Id
+      
         const user = await this.usersService.getOneByAuth0Id(auth0Id);
         if (!user) {
-          throw new UnauthorizedException('Credenciales incorrectas');
+          throw new UnauthorizedException('Incorrect credentials');
         }
     
-        // Crear el payload del token
+       
         const payload = {
           sub: user.id,
           id: user.id,
           email: user.email,
-          roles: [user.role], // Asegúrate de que `role` esté definido en la entidad User
+          roles: [user.role], 
         };
     
-        // Generar el token JWT
+      
         const token = this.jwtService.sign(payload);
     
-        // Construir el ResponseUserDto con los datos del usuario
+     
         const responseUser = new ResponseUserDto(user);
     
-        // Respuesta final
+      
         return {
           token,
           user: responseUser,
           loggin: true,
         };
       } catch (error) {
-        console.error('Error en signinWithAuth0:', error.message);
-        throw new BadRequestException('Error al iniciar sesión');
+        console.error('Error in signinWithAuth0:', error.message);
+        throw new BadRequestException('Login error with Auth0');
       }
     }
     
@@ -154,24 +154,24 @@ async signin(signinAuthDto: SigninAuthDto) {
     async signupWorker(createUserDto: CreateUserDto): Promise<User> {
       const useremail = await this.usersService.getOneByEmail(createUserDto.email);
       if (useremail) {
-        throw new BadRequestException('El correo ya se encuentra registrado');
+        throw new BadRequestException('The email is already registered');
       }
       if (createUserDto.password !== createUserDto.ConfirmPassword) {
-        throw new BadRequestException("password y confirm password deben ser iguales");
+        throw new BadRequestException("password and confirm password must be the same");
       }
      
   
      const hashedPassword = bcrypt.hashSync(createUserDto.password, 10);
   
      if(!hashedPassword){
-      throw new BadRequestException('Error al encriptar la contraseña');
+      throw new BadRequestException('Error encrypting password');
     }
      
     const isComplete = 
     createUserDto.email.trim() !== '' &&
       createUserDto.password.trim() !== '' &&
       createUserDto.name.trim() !== '' &&
-      (createUserDto.address?.trim() || '') !== '' &&  // Si el campo address es obligatorio, verifica que no esté vacío
+      (createUserDto.address?.trim() || '') !== '' && 
       createUserDto.ConfirmPassword.trim() !== '';
   
   const userSave = await this.usersService.createWorker({

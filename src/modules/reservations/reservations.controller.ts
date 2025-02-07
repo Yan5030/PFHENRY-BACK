@@ -14,7 +14,7 @@ export class ReservationsController {
   @Post("create/:id")
   async create(@Param("id", ParseUUIDPipe) id:string,@Body() createReservationDto:CreateReservationDto) {
     const reservation = await this.reservationsService.create(id,createReservationDto);
-    return {message:"Reserva creada",data:reservation}
+    return {message:"Reserve created",data:reservation}
   }
 
   //@RolesDecorator(Role.Admin,Role.Worker)
@@ -41,7 +41,7 @@ export class ReservationsController {
   @Put(':id')
  async update(@Param('id', ParseUUIDPipe) id: string, @Body() updateReservationDto: UpdateReservationDto) {
     const updateReservation = await this.reservationsService.update(id, updateReservationDto);
-    return {message: "Reserva modificada",data:updateReservation}
+    return {message: "Reserve modified",data:updateReservation}
   }
 
   //@RolesDecorator(Role.User,Role.Admin,Role.Worker)
@@ -50,6 +50,6 @@ export class ReservationsController {
   @Put('cancelled/:id')
  async cancelledReservation(@Param("id", ParseUUIDPipe) id: string) {
    const updateReservation = await this.reservationsService.cancelled(id);
-    return {message: "Reserva cancelada",data:updateReservation}
+    return {message: "Reserve cancelled",data:updateReservation}
   }
 }

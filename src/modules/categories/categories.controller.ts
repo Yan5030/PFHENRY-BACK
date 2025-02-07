@@ -30,6 +30,6 @@ export class CategoriesController {
   @Delete(':id')
   delete(@Param('id') id: string) {
     const delet = this.categoriesService.deleteCategory(id);
-    return {message: `Categoria con id: ${id} se elimino exitosamente`};
+    return {message: `Category with id: ${id} was successfully deleted`};
   }
 }

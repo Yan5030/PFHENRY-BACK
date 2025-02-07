@@ -15,7 +15,7 @@ import { Combo } from 'src/modules/combos/entities/combos.entities';
     id: string;
   
     @ManyToOne(() => Order, (order) => order.orderDetails, { onDelete: 'CASCADE' })
-    order: Order; // Relación con la orden principal
+    order: Order;
   
      @ManyToOne(() => MenuItem, (menuItem) => menuItem.orderDetails, { onDelete: 'CASCADE' })
      menuItem: MenuItem; 
@@ -24,10 +24,10 @@ import { Combo } from 'src/modules/combos/entities/combos.entities';
      combo: Combo; 
   
     @Column({ type: 'int' })
-    quantity: number; // Cantidad del ítem
+    quantity: number; 
   
   
     @Column({ type: 'decimal', precision: 10, scale: 2 })
-    subtotal: number; // Subtotal del ítem
+    subtotal: number;
   }
   

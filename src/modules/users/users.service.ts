@@ -18,7 +18,7 @@ export class UsersService {
 
   async seedUsers(): Promise<void> {
     try {
-      // Leer el archivo JSON
+     
       const usersData: CreateUserDto[] = JSON.parse(
         fs.readFileSync('users.json', 'utf8'),
       );
@@ -30,12 +30,12 @@ export class UsersService {
 
         if (existingUser) {
           console.log(
-            `El usuario con el email ${userData.email} ya existe. Se omite.`,
+            `The user with the email ${userData.email} already exists. It is omitted.`,
           );
           continue;
         }
 
-        // Hash de la contraseña si está presente
+       
         if (userData.password) {
           userData.password = await bcrypt.hash(userData.password, 10);
         }
@@ -46,22 +46,22 @@ export class UsersService {
         });
 
         await this.usersRepository.save(newUser);
-        console.log(`Usuario ${userData.name} agregado exitosamente.`);
+        console.log(`User ${userData.name} successfully added.`);
       }
     } catch (error) {
-      console.error('Error al cargar los usuarios:', error.message);
+      console.error('Error loading users:', error.message);
       throw new BadRequestException(
-        'Error al cargar los usuarios desde el archivo JSON.',
+        'Error loading users from JSON file.',
       );
     }
   }
 
   async create(createUserDto: CreateUserDto) : Promise<User>{ 
     const userDb = await this.usersRepository.findOne({where:{email:createUserDto.email}})
-    console.log("Valor de user", userDb)
+    console.log("User value", userDb)
 
     if(userDb){
-      throw new BadRequestException("El correo ya esta registrado");
+      throw new BadRequestException("The email is already registered");
     }
 
     const newUser = this.usersRepository.create({
@@ -80,7 +80,7 @@ export class UsersService {
   async findOneById(id: string) : Promise<ResponseUserDto> {
   const userDb = await this.usersRepository.findOne({where:{id}})
   if(!userDb){
-    throw new BadRequestException("No se encuentran usuarios con la id ingresada.");
+    throw new BadRequestException("No users with the entered id are found.");
   }
 const userNoPassword = new ResponseUserDto(userDb);
 return userNoPassword;
@@ -95,10 +95,10 @@ return userNoPassword;
     const userDb = await this.usersRepository.findOne({ where: { id } });
   
     if (!userDb) {
-      throw new BadRequestException("No se encontraron usuarios con la ID ingresada");
+      throw new BadRequestException("No users found with the entered ID");
     }
   
-    // Solo permitimos modificar name y address
+   
     if (updateUserDto.name !== undefined) {
       userDb.name = updateUserDto.name;
     }
@@ -106,7 +106,7 @@ return userNoPassword;
       userDb.address = updateUserDto.address;
     }
   
-    // Guardamos los cambios en la base de datos
+   
     return await this.usersRepository.save(userDb);
   }
   
@@ -114,10 +114,10 @@ return userNoPassword;
   async updateByEmail(email: string, updateUserDto: UpdateUserDto) : Promise<User> {
     const userDb = await this.usersRepository.findOne({where:{email}});
   if(!userDb){
-    throw new BadRequestException("No se encontraron usuarios con la id ingresada");
+    throw new BadRequestException("No users were found with the entered id");
   }
-const updateUser = Object.assign(userDb, updateUserDto); // esto me modifica el usuario que traje de bd, y pone las propiedades modificadas
-//hago esto para poder guardar los cambios de este usuario y poder retornar el usuario, sin hacer otra peticion 
+const updateUser = Object.assign(userDb, updateUserDto); 
+
 return await this.usersRepository.save(updateUser);;
 
   }
@@ -137,7 +137,7 @@ return userDb;
 async updateRol(id: string, newRole: string): Promise<User>  {
   const userDb = await this.usersRepository.findOne({where:{id}});
 if(!userDb){
-  throw new BadRequestException("No se encontraron usuarios con la id ingresada");
+  throw new BadRequestException("No users were found with the entered id");
 }
 
 let rol:Role;
@@ -149,7 +149,7 @@ rol = Role.Worker
   rol = Role.User
 }
 else{
-  throw new BadRequestException("El rol ingresado es incorrecto, ingrese otro rol");
+  throw new BadRequestException("The role entered is incorrect, please enter another role");
 }
 
 const updateRoleUser = {
@@ -171,14 +171,14 @@ return await this.usersRepository.save(updateRoleUser);;
   async findReservationsByUserService( email:string): Promise<Reservation[]>{
       const user = await this.usersRepository.findOne({where:{email},relations:{reservations:true}});   
 if(!user){
-throw new BadRequestException("Debe ingresar el email de un usuario activo");
+throw new BadRequestException("You must enter the email of an active user");
 }
 
     const reservations = user?.reservations;
     if(!reservations){
-      throw new BadRequestException("El usuario no tiene reservas");
+      throw new BadRequestException("The user has no reservations");
     } else if(reservations.length === 0){
-      throw new BadRequestException("El usuario no tiene reservas");
+      throw new BadRequestException("The user has no reservations");
     }
   return reservations;
   }
@@ -191,10 +191,10 @@ throw new BadRequestException("Debe ingresar el email de un usuario activo");
     const user = await this.usersRepository.findOne({ where: { id } });
   
     if (!user) {
-      throw new BadRequestException('Usuario no encontrado');
+      throw new BadRequestException('User not found');
     }
   
-    // Actualizar los datos
+    
     Object.assign(user, updateData);
     return await this.usersRepository.save(user);
   }
@@ -207,7 +207,7 @@ throw new BadRequestException("Debe ingresar el email de un usuario activo");
     });
   
     if (!user) {
-      throw new NotFoundException("El usuario no fue encontrado");
+      throw new NotFoundException("User not found");
     }
   
     const orders = user?.orders;
@@ -233,7 +233,7 @@ throw new BadRequestException("Debe ingresar el email de un usuario activo");
             subtotal: detail.subtotal,
             combo: detail.combo || undefined,
             menuItem: detail.menuItem || undefined,
-          }).filter(([_, value]) => value !== null && value !== undefined) // Elimina valores nulos o undefined
+          }).filter(([_, value]) => value !== null && value !== undefined) 
         )
       )
     }));
@@ -243,10 +243,10 @@ throw new BadRequestException("Debe ingresar el email de un usuario activo");
 
   async createWorker(createUserDto: CreateUserDto) : Promise<User>{ 
     const userDb = await this.usersRepository.findOne({where:{email:createUserDto.email}})
-    console.log("Valor de user", userDb)
+    console.log("User value", userDb)
 
     if(userDb){
-      throw new BadRequestException("El correo ya esta registrado");
+      throw new BadRequestException("The email is already registered");
     }
 
     const newUser = this.usersRepository.create({
