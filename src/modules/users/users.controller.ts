@@ -19,9 +19,9 @@ export class UsersController {
     private readonly fileUploadService : FileUploadService,
   ) {}
 
-  //@RolesDecorator(Role.Worker,Role.Admin)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+  @RolesDecorator(Role.Worker,Role.Admin)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
   @Get()
   async findAllActivate() {
     const users= await this.usersService.findAll();
@@ -29,9 +29,9 @@ export class UsersController {
   }
 
 
-  //@RolesDecorator(Role.Admin)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+  @RolesDecorator(Role.Admin)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
   @Get("/findAllUsers")
   async findAllAdmin() {
     const users= await this.usersService.findAllAdmin();
@@ -39,9 +39,9 @@ export class UsersController {
   }
 
 
- //@RolesDecorator(Role.User,Role.Worker,Role.Admin)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+ @RolesDecorator(Role.User,Role.Worker,Role.Admin)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
     const updateUser = await this.usersService.findOneById(id)
@@ -50,9 +50,9 @@ export class UsersController {
   }
 
 
-   //@RolesDecorator(Role.User,Role.Worker,Role.Admin)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+   @RolesDecorator(Role.User,Role.Worker,Role.Admin)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
   @Put(':id')
   async update(@Param('id', ParseUUIDPipe) id: string, @Body() updateUserDto: UpdateUserDto) {
     const updateUser = await this.usersService.update(id, updateUserDto);
@@ -60,9 +60,9 @@ export class UsersController {
   }
 
 
- //@RolesDecorator(Role.User,Role.Worker,Role.Admin)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+ @RolesDecorator(Role.User,Role.Worker,Role.Admin)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
   @Post(':email/upload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
@@ -95,9 +95,9 @@ export class UsersController {
       }
 
 
- //@RolesDecorator(Role.Admin)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+ @RolesDecorator(Role.Admin)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
     @Patch("desactivate/:email")
 async desactivateUser(@Param("email") email:string){
  return await this.usersService.desactivate(email);
@@ -111,9 +111,9 @@ return {data:reservations}
 }
 */
 
- //@RolesDecorator(Role.User,Role.Admin,Role.Worker)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+ @RolesDecorator(Role.User,Role.Admin,Role.Worker)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
 @Get("reservations/:email")
 async findReservationsByUserEmail(@Param("email") email:string){
 const reservations = await this.usersService.findReservationsByUserService(email);
@@ -121,9 +121,9 @@ return {data:reservations}
 
 }
 
-//@RolesDecorator(Role.User,Role.Admin,Role.Worker)
-  //@UseGuards(AuthGuard,RolesGuard)
-  //@ApiBearerAuth()
+@RolesDecorator(Role.User,Role.Admin,Role.Worker)
+  @UseGuards(AuthGuard,RolesGuard)
+  @ApiBearerAuth()
 @Get("orders/:email")
 async findOrdersByUserEmail(@Param("email") email:string){
 const orders = await this.usersService.findOrdersByUserService(email);
