@@ -11,6 +11,9 @@ import { ApiBody } from '@nestjs/swagger';
 export class CombosController {
   constructor(private readonly combosService: CombosService) {}
 
+ //@RolesDecorator(Role.Admin)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
   @Post()
   create(@Body() createComboDto: CreateComboDto) {
     return this.combosService.create(createComboDto);
@@ -33,6 +36,10 @@ export class CombosController {
 
   //import { ApiBody } from '@nestjs/swagger';
 
+
+  //@RolesDecorator(Role.Admin,Role.Worker)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
 @Patch(':id')
 @ApiBody({
   schema: {
@@ -68,6 +75,9 @@ async update(
 }
 
 
+//@RolesDecorator(Role.Admin,Role.Worker)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
   @Patch(':id/deactivate')
   deactivate(@Param('id') id: string) {
     return this.combosService.deactivate(id);
