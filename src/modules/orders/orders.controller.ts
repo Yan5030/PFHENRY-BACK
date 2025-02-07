@@ -89,7 +89,7 @@ export class OrdersController {
   }
 
 
-  //@RolesDecorator(Role.Admin,Role.Worker)
+  //@RolesDecorator(Role.Admin,Role.Worker,Role.User)
   //@UseGuards(AuthGuard,RolesGuard)
   //@ApiBearerAuth()
   @Get(':id')

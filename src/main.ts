@@ -36,7 +36,7 @@ async function bootstrap() {
 
   app.enableCors({
 
-    origin: ['http://localhost:3001','https://pf-henry-front-k4frm1731-nahudavila12s-projects.vercel.app'], 
+    origin: true, 
 
     methods: ['GET', 'POST', 'PUT', 'DELETE', "PATCH"],
     allowedHeaders: 'Content-type, Authorization',

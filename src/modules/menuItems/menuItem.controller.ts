@@ -9,6 +9,9 @@ import { UpdateMenuItemDto } from './dto/update-product-dto';
 export class MenuItemController {
   constructor(private readonly menuItemService: MenuItemService) {}
 
+  //@RolesDecorator(Role.Admin)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
   @Post()
   @ApiResponse({ status: 201, description: 'Ítem del menú creado exitosamente' })
   @ApiBody({ type: CreateMenuItemDto })
@@ -16,6 +19,9 @@ export class MenuItemController {
     return this.menuItemService.create(createMenuItemDto);
   }
 
+  //@RolesDecorator(Role.Admin,Role.Worker)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
   @Patch(':id')
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, description: 'Ítem del menú actualizado exitosamente' })
@@ -26,6 +32,9 @@ export class MenuItemController {
     return this.menuItemService.updateMenuItem(id, updateMenuItemDto);
   }
 
+  //@RolesDecorator(Role.Admin,Role.Worker)
+  //@UseGuards(AuthGuard,RolesGuard)
+  //@ApiBearerAuth()
   @Patch(':id/deactivate')
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, description: 'Ítem del menú desactivado exitosamente' })
