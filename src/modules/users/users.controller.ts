@@ -39,7 +39,7 @@ export class UsersController {
   }
 
 
- //@RolesDecorator(Role.User)
+ //@RolesDecorator(Role.User,Role.Worker,Role.Admin)
   //@UseGuards(AuthGuard,RolesGuard)
   //@ApiBearerAuth()
   @Get(':id')
@@ -50,7 +50,7 @@ export class UsersController {
   }
 
 
-   //@RolesDecorator(Role.User)
+   //@RolesDecorator(Role.User,Role.Worker,Role.Admin)
   //@UseGuards(AuthGuard,RolesGuard)
   //@ApiBearerAuth()
   @Put(':id')
@@ -60,7 +60,7 @@ export class UsersController {
   }
 
 
- //@RolesDecorator(Role.User)
+ //@RolesDecorator(Role.User,Role.Worker,Role.Admin)
   //@UseGuards(AuthGuard,RolesGuard)
   //@ApiBearerAuth()
   @Post(':email/upload')
