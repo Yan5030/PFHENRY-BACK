@@ -91,7 +91,7 @@ export class UsersController {
   @Put("updateRole/:id")
   async updateRoleUser(@Param("id", ParseUUIDPipe) id: string, @Body() updateRole :UpdateRoleUserDto ){
     const updateUser = await this.usersService.updateRol(id,updateRole.role);
-    return {message:"El rol del usuario fue cambiado con exito", data:updateUser}
+    return {message:"The user's role was changed successfully", data:updateUser}
       }
 
 

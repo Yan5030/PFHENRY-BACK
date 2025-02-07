@@ -14,11 +14,10 @@ export class Combo {
   @Column()
   description: string;
 
-  //@Column('decimal', { precision: 10, scale: 2 })
-  //price: number;
+
   @Column('decimal', { precision: 10, scale: 2, transformer: {
-    to: (value: number) => value, // Guarda el número sin modificaciones
-    from: (value: string) => parseFloat(value) // Convierte de string a number al recuperar
+    to: (value: number) => value, 
+    from: (value: string) => parseFloat(value) 
   }})
   price: number;
   

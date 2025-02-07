@@ -1,4 +1,4 @@
-//orders.repository.ts
+
 
 import { Repository, DataSource } from 'typeorm';
 import { Injectable } from '@nestjs/common';
@@ -16,7 +16,7 @@ export class OrderRepository extends Repository<Order> {
 
   async findAllActives(): Promise<Order[]> {
     return this.find({
-      where: { isActive: true },  // Filtra solo las órdenes activas
+      where: { isActive: true },  
       relations: {
         orderDetails: { menuItem: true, combo: true },
         user: true,

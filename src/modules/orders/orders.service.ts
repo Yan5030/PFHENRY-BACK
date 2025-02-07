@@ -24,10 +24,10 @@ async create(createOrderDto: CreateOrderDto): Promise<Order> {
 
   const user = await this.userService.findOneById(idUser);
   if(!user){
-    throw new BadRequestException("No se encontro ese usuario");
+    throw new BadRequestException("That user was not found");
   }
   if (!Array.isArray(MenuItems) || MenuItems.length === 0) {
-    throw new BadRequestException("MenuItems debe ser un array no vacío");
+    throw new BadRequestException("MenuItems must be a non-empty array");
   }
 
   const createOrder = this.orderRepository.create({
@@ -51,7 +51,7 @@ console.log(detalleOrden);
 
 if(detalleOrden.length === 0){
 this.remove(order.id)
-throw new BadRequestException("No hay stock suficiente");
+throw new BadRequestException("There is not enough stock");
 }
 
 const total = detalleOrden.reduce((sum, det) => sum + det.subtotal, 0);
@@ -76,11 +76,9 @@ return this.orderRepository.save(order);
     const order = await this.orderRepository.findOrderById(id);
 
     if (!order) {
-      throw new NotFoundException(`La orden con ID ${id} no existe.`);
+      throw new NotFoundException(`The order with ID ${id} does not exist.`);
     }
-    //if (user.role !== 'worker'||user.role !== 'admin' || order.user !== user.id) {
-     // throw new NotFoundException('No tienes permisos para ver esta orden.');
-    //}
+  
 
     return order;
   }
@@ -91,7 +89,7 @@ return this.orderRepository.save(order);
       throw new NotFoundException(`Order with ID ${orderId} not found`);
     }
     order.status = status;
-    if (status === OrderStatus.ENTREGADO) {
+    if (status === OrderStatus.DELIVERED) {
       order.isActive = false; 
     }
     return this.orderRepository.save(order);
@@ -100,13 +98,13 @@ return this.orderRepository.save(order);
   async updatePaymentStatus(orderId: string, status: PaymentStatus) {
     const order = await this.orderRepository.findOne({where: {id: orderId}});
     if (!order) {
-      throw new NotFoundException(`Orden con ID ${orderId} no encontrada`);
+      throw new NotFoundException(`Order with ID ${orderId} not found`);
     }
 
     order.payment_status = status;
     await this.orderRepository.save(order);
 
-    return { message: `Orden ${orderId} actualizada a ${status}` };
+    return { message: `Order ${orderId} updated to ${status}` };
   }
 
   async remove(id: string): Promise<void> {

@@ -7,12 +7,12 @@ export class NodemailerService {
   private transporter: nodemailer.Transporter;
 
   constructor() {
-    // Configuración del transportador de nodemailer
+    
     this.transporter = nodemailer.createTransport({
-      service: 'gmail', // Cambiar si usas otro proveedor
+      service: 'gmail', 
       auth: {
-        user: 'info.barhogwarts@gmail.com', // Configurar en variables de entorno
-        pass: 'uyexvioevtxcrryz', // Contraseña o token de aplicación
+        user: 'info.barhogwarts@gmail.com', 
+        pass: 'uyexvioevtxcrryz',
       },
     });
   }
@@ -265,8 +265,8 @@ a[x-apple-data-detectors],
 
       console.log('Message sent: %s', info.messageId);
     } catch (error) {
-      console.error('Error al enviar el email:', error);
-      throw new ConflictException('Error al enviar email');
+      console.error('Error sending email:', error);
+      throw new ConflictException('Error sending email');
     }
   }
   async sendEmailReservation(email: string, ): Promise<void> {
@@ -519,8 +519,8 @@ a[x-apple-data-detectors],
 
       console.log('Message sent: %s', info.messageId);
     } catch (error) {
-      console.error('Error al enviar el email:', error);
-      throw new ConflictException('Error al enviar email');
+      console.error('Error sending email:', error);
+      throw new ConflictException('Error sending email');
     }
   }
 
@@ -751,8 +751,8 @@ a[x-apple-data-detectors],
 
       console.log('Message sent: %s', info.messageId);
     } catch (error) {
-      console.error('Error al enviar el email:', error);
-      throw new ConflictException('Error al enviar email');
+      console.error('Error sending email:', error);
+      throw new ConflictException('Error sending email');
     }
   }
 }

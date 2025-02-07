@@ -13,7 +13,7 @@ export class MenuItemController {
   //@UseGuards(AuthGuard,RolesGuard)
   //@ApiBearerAuth()
   @Post()
-  @ApiResponse({ status: 201, description: 'Ítem del menú creado exitosamente' })
+  @ApiResponse({ status: 201, description: 'Menu item successfully created' })
   @ApiBody({ type: CreateMenuItemDto })
   create(@Body() createMenuItemDto: CreateMenuItemDto) {
     return this.menuItemService.create(createMenuItemDto);
@@ -24,7 +24,7 @@ export class MenuItemController {
   //@ApiBearerAuth()
   @Patch(':id')
   @ApiParam({ name: 'id', type: String })
-  @ApiResponse({ status: 200, description: 'Ítem del menú actualizado exitosamente' })
+  @ApiResponse({ status: 200, description: 'Menu item successfully updated' })
   update(
     @Param('id') id: string,
     @Body() updateMenuItemDto: UpdateMenuItemDto,
@@ -37,7 +37,7 @@ export class MenuItemController {
   //@ApiBearerAuth()
   @Patch(':id/deactivate')
   @ApiParam({ name: 'id', type: String })
-  @ApiResponse({ status: 200, description: 'Ítem del menú desactivado exitosamente' })
+  @ApiResponse({ status: 200, description: 'Menu item successfully deactivated' })
   deactivate(@Param('id') id: string) {
     return this.menuItemService.deactivate(id);
   }
@@ -50,14 +50,14 @@ export class MenuItemController {
   }
 
   @Get()
-  @ApiResponse({ status: 200, description: 'Lista de todos los ítems del menú' })
+  @ApiResponse({ status: 200, description: 'List of all menu items' })
   findAll() {
     return this.menuItemService.findAll();
   }
 
   @Get(':id')
   @ApiParam({ name: 'id', type: String })
-  @ApiResponse({ status: 200, description: 'Detalle del ítem del menú encontrado' })
+  @ApiResponse({ status: 200, description: 'Detail of the menu item found' })
   findOne(@Param('id') id: string) {
     return this.menuItemService.findOne(id);
   }

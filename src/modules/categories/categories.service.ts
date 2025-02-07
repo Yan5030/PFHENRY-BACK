@@ -25,7 +25,7 @@ export class CategoriesService {
       relations: ['menuItems']
      });
      if (!category) {
-       throw new NotFoundException(`La categoria con el ID: ${id} no fue encontrada`);  
+       throw new NotFoundException(`The category with the ID: ${id} was not found`);  
      }
      return category;
    }
@@ -35,7 +35,7 @@ export class CategoriesService {
 
      const existingCategory = await this.categoriesRepository.findOne({ where: { name } });
      if(existingCategory){
-       throw new BadRequestException(`La categoria con el nombre "${name}" ya existe`);
+       throw new BadRequestException(`The category with the name "${name}" already exists`);
      }
 
      const newCategory = this.categoriesRepository.create(createCategoryDto)
@@ -46,7 +46,7 @@ export class CategoriesService {
   async updateCategory(id: string, updateCategoryDto: UpdateCategoryDto): Promise<Category> {
     const category = await this.findCategoryById(id);
      if (!category) {
-       throw new NotFoundException(`Categoria con el id: ${id} no fue encontrada`);  
+       throw new NotFoundException(`Category with id: ${id} was not found`);  
      }
      const updatedCategory = Object.assign(category, updateCategoryDto);
 

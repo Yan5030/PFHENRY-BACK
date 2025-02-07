@@ -19,7 +19,7 @@ auth0Id: string | null = null;
     @IsNotEmpty()
     @MinLength(3)
     @MaxLength(80)
-    @Transform(({ value }) => value.trim()) // Elimina espacios del principio y del final
+    @Transform(({ value }) => value.trim())
     name:string;
 
 

@@ -1,8 +1,7 @@
 import { Controller, HttpCode, Param, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileUploadService } from './file-upload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-//import { ImagesUploadPipe } from 'src/pipes/images-upload/images-upload.pipe';
-//import { AuthGuard } from 'src/guards/auth.guard';
+
 import { ApiTags } from '@nestjs/swagger';
 import { ImagesUploadPipe } from 'src/pipes/images-upload.pipe';
 

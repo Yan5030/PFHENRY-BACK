@@ -9,7 +9,7 @@ export class CreateOrderDto {
     example: "123e4567-e89b-12d3-a456-426614174000",
   })
   @IsString()
-  idUser: string; // order
+  idUser: string; 
 
 
 
@@ -19,7 +19,7 @@ export class CreateOrderDto {
     example: [PaymentMethod.Cash, PaymentMethod.PayPal ]
   })
   @IsEnum(PaymentMethod)
-  paymentMethod: PaymentMethod; // order
+  paymentMethod: PaymentMethod;
 
 
 
@@ -28,7 +28,7 @@ export class CreateOrderDto {
     type: [CreateOrderDetailDto],
   })
   @IsArray()
-  MenuItems: CreateOrderDetailDto[]; // orderDet
+  MenuItems: CreateOrderDetailDto[]; 
 
   @ApiProperty({
     description:"Añade algun comentario para el pedido",

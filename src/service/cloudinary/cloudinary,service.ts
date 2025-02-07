@@ -16,7 +16,7 @@ export class CloudinaryService {
 
     async uploadFile(buffer:Buffer, originalName?:string) :Promise<string>{
         const options: UploadApiOptions = {
-        folder : "uploads", // si no existe la carpeta la crea.
+        folder : "uploads",
         public_id: originalName,
         RESOURCE_TYPE:"AUTO",
         };
@@ -28,7 +28,7 @@ export class CloudinaryService {
         error? reject(error) : resolve(result.secure_url);
         },
         );
-        stream.write(buffer); // para sobrescribir
+        stream.write(buffer);
         stream.end();
         } )
         }

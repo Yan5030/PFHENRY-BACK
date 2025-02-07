@@ -19,14 +19,13 @@ private readonly nodemailerService:NodemailerService,
 ){}
 
  async create(id:string,createReservationDto:CreateReservationDto) {
- //todo el manejo de fecha y tiempo lo guarde en un middleware, y lo puse solo para este controlador
+
 
 const create_at = dayjs().format("YYYY-MM-DD");
 
-const user = await this.usersService.findOneById(id); //supongo que el usuario se enviara por param, 
-// sacando el del token el id de usuario logueado
+const user = await this.usersService.findOneById(id); 
 const newReservation = this.reservationRepository.create({...createReservationDto,create_at:create_at,userId:user});
-//return newReservation; para pruebas
+
 
 await this.nodemailerService.sendEmail(user.email);
 
@@ -41,7 +40,7 @@ return this.reservationRepository.save(newReservation);
   async findOneById(id: string) {
     const reservation = await this.reservationRepository.findOne({where:{id}})
     if(!reservation){
-      throw new BadRequestException("No hay reservas con la id ingresada");
+      throw new BadRequestException("There are no reservations with the id entered");
     }
     return reservation;
   }
@@ -49,7 +48,7 @@ return this.reservationRepository.save(newReservation);
   async update(id: string, updateReservationDto: UpdateReservationDto) {
     const reservation = await this.reservationRepository.findOne({where:{id}})
     if(!reservation){
-throw new BadRequestException("El id ingresado no es correcto");
+throw new BadRequestException("The id entered is not correct");
     }
     const updateReservation = Object.assign(reservation, updateReservationDto);
     return this.reservationRepository.save(updateReservation);

@@ -17,7 +17,7 @@ export class ReviewService {
   async create(userId: string, createReviewDto: CreateReviewDto) {
     const user = await this.userRepository.findOne({where: {id: userId}});
     if (!user) {
-      throw new BadRequestException('Usuario no encontrado');
+      throw new BadRequestException('User not found');
     }
   
     const review = this.reviewRepository.create({
@@ -44,7 +44,7 @@ export class ReviewService {
   async findOne(id: string) {
     const review = await this.reviewRepository.findOne({where: {id}, relations: ['user']});
     if (!review) {
-      throw new BadRequestException('Reseña no encontrada');
+      throw new BadRequestException('Review not found');
     }
 
     return {
@@ -55,11 +55,11 @@ export class ReviewService {
   async findByUserId(userId: string) {
     const user = await this.userRepository.findOne({
       where: { id: userId },
-      relations: ['reviews'], // Incluimos las reseñas relacionadas
+      relations: ['reviews'], 
     });
   
     if (!user) {
-      throw new BadRequestException('Usuario no encontrado');
+      throw new BadRequestException('User not found');
     }
     console.log(user.reviews);
     return user.reviews;
@@ -69,7 +69,7 @@ export class ReviewService {
      const review = await this.reviewRepository.findOne({where: {id: reviewId, user: {id: userId}}, relations: ['user']});
 
      if (!review) {
-       throw new BadRequestException('Usuario no encontrado o no pertenece al usuario');
+       throw new BadRequestException('User not found or does not belong to the user');
      }
     
      const updateReview = this.reviewRepository.merge(review, updateReviewDto);

@@ -15,12 +15,12 @@ export class ReviewController {
   @ApiBearerAuth()
   @Post()
   async create(@Req() req, @Body() createReviewDto: CreateReviewDto) {
-    const userId = req.user.id; // Obtenemos el ID del usuario autenticado
+    const userId = req.user.id; 
     try {
       return this.reviewService.create(userId, createReviewDto);  
     } catch (error) {
       throw new HttpException(
-        error.message || 'Error al crear la reseña',
+        error.message || 'Error creating review',
         HttpStatus.BAD_REQUEST
       )
     }
@@ -43,7 +43,7 @@ export class ReviewController {
     return await this.reviewService.findByUserId(userId);
   } catch (error) {
     throw new HttpException(
-      error.message || 'Error al obtener las reseñas del usuario',
+      error.message || 'Error getting user reviews',
       HttpStatus.BAD_REQUEST
     );
   }
@@ -53,12 +53,12 @@ export class ReviewController {
    @ApiBearerAuth()
    @Put(":reviewId")
    async update(@Req() req, @Param('reviewId') reviewId: string, @Body() updateReviewDto: UpdateReviewDto) {
-     const userId = req.user.id; // Obtenemos el ID del usuario autenticado
+     const userId = req.user.id; 
      try {
        return await this.reviewService.update(userId, reviewId, updateReviewDto);
      } catch (error) {
        throw new HttpException(
-         error.message || 'Error al actualizar la reseña',
+         error.message || 'Error updating review',
          HttpStatus.BAD_REQUEST
        )
      }
